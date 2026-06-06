@@ -77,6 +77,20 @@ mkdirSync(destDir, { recursive: true });
 console.log(`  copying...`);
 cpSync(distSource, destDir, { recursive: true });
 
+// 2b. Slidev exporteert standaard `_redirects` met `/*  /index.html  200` (een
+// SPA-fallback bedoeld voor wanneer de deck als root-app draait) en een eigen
+// `404.html`. In onze sub-route setup zou Cloudflare die _redirects site-wide
+// kunnen interpreteren met als gevolg dat /about, /, etc. allemaal de slidev
+// homepage gaan serveren. Weghalen.
+const slidevDroppings = ['_redirects', '404.html'];
+for (const f of slidevDroppings) {
+  const p = join(destDir, f);
+  if (existsSync(p)) {
+    rmSync(p, { force: true });
+    console.log(`  removed slidev-default ${f} (root-fallback, niet voor sub-route hosting)`);
+  }
+}
+
 // 3. Patch index.html voor base-path /<route>/
 const indexHtmlPath = join(destDir, 'index.html');
 if (existsSync(indexHtmlPath)) {
