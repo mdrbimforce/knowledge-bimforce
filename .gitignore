@@ -26,8 +26,17 @@ Thumbs.db
 *.swp
 *.swo
 
-# imported slidev decks — outputs van het build-script
-# Niet committen omdat ze gegenereerd worden uit leja-marketing.
-# Bij deploy bouwen we ze daar opnieuw en draaien import-slidev-deck.mjs.
-public/leja/
-public/decks/
+# imported slidev decks — outputs van het build-script (scripts/import-slidev-deck.mjs)
+#
+# Voor MVP committen we de gegenereerde files WEL — Cloudflare Pages doet
+# zelf geen slidev-build (heeft geen toegang tot private leja-marketing repo),
+# dus de built deck moet als statisch artefact in deze repo zitten om op
+# /leja te kunnen serveren.
+#
+# Workflow bij deck-update:
+#   1. cd ../leja-marketing && npm run build:leja-intro
+#   2. cd ../knowledge-bimforce && npm run import:leja-deck
+#   3. git add public/leja && git commit -m "deck: update leja-self-introduction"
+#   4. git push  → Cloudflare Pages deployt automatisch
+#
+# Later automatiseren via GitHub Actions (zie quest-110 step-06).
