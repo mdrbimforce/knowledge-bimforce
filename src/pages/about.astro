@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const aboutEntry = await getEntry('pages', 'about');
+if (!aboutEntry) {
+  throw new Error('About page content niet gevonden in src/content/pages/about.md');
+}
+const { Content } = await aboutEntry.render();
+const { title, description } = aboutEntry.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="prose prose-lg max-w-none prose-headings:font-bold prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-3xl prose-p:text-navy/85 prose-a:text-teal-deep prose-strong:text-navy prose-hr:my-12">
+    <Content />
+  </article>
+</BaseLayout>

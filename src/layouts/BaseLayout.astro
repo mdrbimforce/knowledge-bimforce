@@ -1,0 +1,81 @@
+---
+import '../styles/globals.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description = 'bimforce — knowledge en software voor de gebouwde omgeving. GRiDS, Leja, NLRS, IFC, IDS, Linked Data in praktijk.',
+  ogImage = '/og-default.png',
+  noIndex = false,
+} = Astro.props;
+
+const fullTitle = title === 'knowledge.bimforce.com'
+  ? title
+  : `${title} — knowledge.bimforce.com`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {noIndex && <meta name="robots" content="noindex,nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).toString()} />
+    <meta property="og:locale" content="nl_NL" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-white text-navy">
+    <header class="border-b border-grey-light/40 bg-white">
+      <div class="mx-auto max-w-5xl px-6 py-5 flex items-center justify-between">
+        <a href="/" class="no-underline">
+          <span class="text-navy font-bold tracking-tight text-lg">knowledge.bimforce.com</span>
+        </a>
+        <nav>
+          <ul class="flex gap-7 text-sm">
+            <li><a href="/about" class="hover:text-teal-deep no-underline">Over bimforce</a></li>
+            <li><a href="/leja" class="hover:text-teal-deep no-underline">Hallo, ik ben Leja</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-6 py-12">
+      <slot />
+    </main>
+
+    <footer class="border-t border-grey-light/40 mt-24">
+      <div class="mx-auto max-w-5xl px-6 py-8 text-sm text-grey-mid flex flex-col sm:flex-row justify-between gap-3">
+        <div>
+          <b class="text-navy">bimforce</b> — Martijn de Riet · sinds 2016
+        </div>
+        <div>
+          <a href="mailto:leja@bimforce.com" class="hover:text-teal-deep">leja@bimforce.com</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

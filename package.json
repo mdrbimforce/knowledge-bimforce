@@ -1,0 +1,24 @@
+{
+  "name": "knowledge-bimforce",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "knowledge.bimforce.com — bimforce's publieke werkbank. Astro static site met Content Collections voor pages/posts/docs/reflecties, plus slidev-builds als sub-routes onder /leja en /decks/.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "import:leja-deck": "node scripts/import-slidev-deck.mjs leja-self-introduction-2026-06 leja"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.7",
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^5.1.4",
+    "tailwindcss": "^3.4.16"
+  }
+}

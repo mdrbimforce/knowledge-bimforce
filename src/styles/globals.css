@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-navy: #1c2a41;
+    --color-steel: #475365;
+    --color-teal: #00a8a8;
+    --color-teal-deep: #0c6980;
+    --color-teal-soft: #c0f0f7;
+    --color-white: #fdfdfd;
+  }
+
+  html {
+    color: var(--color-navy);
+    background: var(--color-white);
+    font-family: 'Myriad Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100dvh;
+    line-height: 1.55;
+  }
+
+  /* Heading-stack: ruimer regelhoogte op de display-grootten */
+  h1 { line-height: 1.1; font-weight: 700; }
+  h2 { line-height: 1.2; font-weight: 700; }
+  h3 { line-height: 1.3; font-weight: 600; }
+
+  a {
+    color: var(--color-teal-deep);
+    text-underline-offset: 2px;
+  }
+  a:hover {
+    color: var(--color-teal);
+  }
+}

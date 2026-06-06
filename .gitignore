@@ -1,0 +1,33 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+.env.*.local
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# imported slidev decks — outputs van het build-script
+# Niet committen omdat ze gegenereerd worden uit leja-marketing.
+# Bij deploy bouwen we ze daar opnieuw en draaien import-slidev-deck.mjs.
+public/leja/
+public/decks/
