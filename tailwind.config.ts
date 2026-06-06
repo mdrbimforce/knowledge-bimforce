@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
 
 // Design tokens — gedeeld met leja-marketing decks (Ultimate, Leja-self-introduction)
 // voor visuele continuïteit tussen site en presentaties.
@@ -58,5 +59,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [typography],
 } satisfies Config;
