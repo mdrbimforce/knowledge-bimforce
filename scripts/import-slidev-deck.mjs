@@ -91,43 +91,30 @@ for (const f of slidevDroppings) {
   }
 }
 
-// 3. Patch index.html voor base-path /<route>/
+// 3. Sanity-check base-path
+//
+// VEREIST: leja-marketing's slidev-build voor deze deck MOET draaien met
+//   `slidev build ... --base /<route>/`
+// Dan zet slidev de juiste basis in alle gegenereerde paden (HTML, CSS, JS-bundles).
+//
+// Eerdere versies van dit script post-process'ten de paden hier zelf. Dat brak op het
+// moment dat slidev's --base óók correct was: gepatchte paden werden /<route>/<route>/...
+// (zwart scherm, alle JS-modules 404). De post-process is verwijderd; slidev's eigen
+// --base is de single source of truth.
+//
+// Verifieer dat de gegenereerde HTML een /<route>/ prefix heeft op script-src en wees
+// luid wanneer dat NIET het geval is.
 const indexHtmlPath = join(destDir, 'index.html');
 if (existsSync(indexHtmlPath)) {
-  let html = readFileSync(indexHtmlPath, 'utf8');
-
-  // Slidev gebruikt absolute paden /assets/... — die moeten /<route>/assets/... worden
-  // wanneer de deck onder een sub-route gehost is.
+  const html = readFileSync(indexHtmlPath, 'utf8');
   const basePath = `/${route}/`;
-
-  const replacements = [
-    [/(src|href)="\/(?!\/)/g, `$1="${basePath}`],          // src="/foo" -> src="/<route>/foo"
-    [/url\(\/(?!\/)/g, `url(${basePath}`],                 // CSS url(/foo) -> url(/<route>/foo)
-    [/from\s+"\/(?!\/)/g, `from "${basePath}`],            // dynamic imports
-  ];
-  let patched = 0;
-  for (const [pattern, replacement] of replacements) {
-    const before = html;
-    html = html.replace(pattern, replacement);
-    if (html !== before) patched++;
-  }
-
-  writeFileSync(indexHtmlPath, html);
-  console.log(`  patched index.html base-paths (${patched} pattern-groups)`);
-}
-
-// 4. Patch CSS bestanden voor relative asset-paden
-const assetsDir = join(destDir, 'assets');
-if (existsSync(assetsDir)) {
-  const cssFiles = readdirSync(assetsDir).filter((f) => f.endsWith('.css'));
-  for (const cssFile of cssFiles) {
-    const cssPath = join(assetsDir, cssFile);
-    let css = readFileSync(cssPath, 'utf8');
-    const before = css;
-    css = css.replace(/url\(\/(?!\/)/g, `url(/${route}/`);
-    if (css !== before) {
-      writeFileSync(cssPath, css);
-      console.log(`  patched ${cssFile}`);
+  const sample = html.match(/src="([^"]+\.js)"/);
+  if (sample) {
+    if (sample[1].startsWith(basePath)) {
+      console.log(`  ✓ base-path OK in index.html (sample: ${sample[1]})`);
+    } else {
+      console.warn(`  ⚠  WAARSCHUWING: script-src start NIET met ${basePath} — sample: ${sample[1]}`);
+      console.warn(`     Rebuild de deck in leja-marketing met --base ${basePath} flag.`);
     }
   }
 }
