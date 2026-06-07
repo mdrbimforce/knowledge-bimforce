@@ -49,31 +49,45 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body class="bg-white text-navy">
-    <header class="border-b border-grey-light/40 bg-white">
-      <div class="mx-auto max-w-5xl px-6 py-5 flex items-center justify-between">
-        <a href="/" class="no-underline">
-          <span class="text-navy font-bold tracking-tight text-lg">knowledge.bimforce.com</span>
+    <header class="bg-white border-b border-grey-light/40">
+      <div class="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3 no-underline">
+          <img src="/logos/bimforce-logo.png" alt="bimforce" class="h-9 w-auto" />
+          <span class="hidden sm:inline text-grey-mid text-sm border-l border-grey-light/60 pl-3">knowledge</span>
         </a>
         <nav>
-          <ul class="flex gap-7 text-sm">
-            <li><a href="/about" class="hover:text-teal-deep no-underline">Over bimforce</a></li>
-            <li><a href="/leja" class="hover:text-teal-deep no-underline">Hallo, ik ben Leja</a></li>
+          <ul class="flex gap-6 sm:gap-8 text-sm font-medium uppercase tracking-wide">
+            <li><a href="/about" class="hover:text-bf-red no-underline transition-colors">Over bimforce</a></li>
+            <li><a href="/leja" class="hover:text-bf-red no-underline transition-colors">Hallo, ik ben Leja</a></li>
           </ul>
         </nav>
       </div>
+      <div class="h-1 bg-bf-red"></div>
     </header>
 
-    <main class="mx-auto max-w-3xl px-6 py-12">
-      <slot />
-    </main>
+    {/* full-width slot voor heros en kleur-banden die over volle breedte gaan
+        (homepage hero, marketing-secties). Pagina's met markdown-content
+        gebruiken de default-slot hieronder die binnen een max-w-3xl container valt. */}
+    {Astro.slots.has('full') && <slot name="full" />}
 
-    <footer class="border-t border-grey-light/40 mt-24">
-      <div class="mx-auto max-w-5xl px-6 py-8 text-sm text-grey-mid flex flex-col sm:flex-row justify-between gap-3">
-        <div>
-          <b class="text-navy">bimforce</b> — Martijn de Riet · sinds 2016
+    {Astro.slots.has('default') && (
+      <main class="mx-auto max-w-3xl px-6 py-12">
+        <slot />
+      </main>
+    )}
+
+    <footer class="mt-24 bg-navy text-white">
+      <div class="mx-auto max-w-6xl px-6 py-10 flex flex-col sm:flex-row justify-between gap-6 items-start sm:items-center">
+        <div class="flex items-center gap-4">
+          <img src="/logos/bimforce-dot-red.png" alt="" class="h-10 w-auto" />
+          <div class="text-sm leading-snug">
+            <div class="font-bold text-white">bimforce</div>
+            <div class="opacity-70">Martijn de Riet · sinds 2016</div>
+          </div>
         </div>
-        <div>
-          <a href="mailto:leja@bimforce.com" class="hover:text-teal-deep">leja@bimforce.com</a>
+        <div class="text-sm">
+          <a href="mailto:leja@bimforce.com" class="text-white hover:text-bf-red-coral underline underline-offset-2">leja@bimforce.com</a>
+          <span class="opacity-60 ml-2">— gelezen door Leja, beantwoord door Martijn</span>
         </div>
       </div>
     </footer>

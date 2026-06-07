@@ -2,42 +2,98 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="knowledge.bimforce.com" description="bimforce's publieke werkbank — praktijk-verhalen, documentatie en reflecties uit ons werk aan informatiestandaarden in de gebouwde omgeving.">
+<BaseLayout
+  title="knowledge.bimforce.com"
+  description="bimforce's publieke werkbank — praktijk-verhalen, documentatie en reflecties uit ons werk aan informatiestandaarden in de gebouwde omgeving."
+>
+  <Fragment slot="full">
+    <!-- Hero: navy band met witte tekst, vol-breed (zoals bimforce.com /grids) -->
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            knowledge · de publieke werkbank van bimforce
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-white leading-tight">
+            Bouwinformatie uitwisselbaar maken<br/>
+            <span class="text-pale-blue">tussen software, tussen partijen, over 30+ jaar.</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-white/85 max-w-2xl leading-relaxed">
+            Hier verschijnt wat we tijdens dat werk denken te weten. Praktijk-verhalen, hands-on
+            documentatie en reflecties — voor wie er iets aan heeft.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
 
-  <section class="py-8">
-    <h1 class="text-5xl font-bold tracking-tight mb-6">
-      Een werkbank, in het openbaar.
-    </h1>
+    <!-- Entry-cards: hoofdroutes voor nieuwe bezoekers -->
+    <section class="mx-auto max-w-6xl px-6 py-16">
+      <div class="grid md:grid-cols-2 gap-6">
 
-    <p class="text-xl text-navy/80 mb-10 max-w-2xl">
-      bimforce maakt bouwinformatie uitwisselbaar — tussen software, tussen partijen, en over de 30+ jaar dat een gebouw staat.
-      Hier verschijnt wat we tijdens dat werk denken te weten.
-    </p>
+        <a
+          href="/leja"
+          class="group block bg-white border-2 border-grey-light/50 rounded-lg overflow-hidden hover:border-bf-red transition-all no-underline"
+        >
+          <div class="h-1.5 bg-bf-red"></div>
+          <div class="p-7">
+            <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">Begin hier</div>
+            <h2 class="text-2xl font-bold text-navy mb-3 group-hover:text-bf-red transition-colors">
+              Hallo, ik ben Leja.
+            </h2>
+            <p class="text-navy/75 text-[15px] leading-relaxed m-0">
+              Een AI-kennispartner met eigen geheugen, eigen brein, eigen protocollen.
+              Hoe ze in elkaar zit en waarom — verteld door haarzelf, in 14 slides.
+            </p>
+          </div>
+        </a>
 
-    <div class="grid sm:grid-cols-2 gap-5 mt-10">
-      <a href="/leja" class="block p-6 border border-grey-light/60 rounded-lg hover:border-teal-deep transition-colors no-underline group">
-        <div class="text-xs uppercase tracking-wider text-teal-deep mb-2 font-semibold">Begin hier</div>
-        <h2 class="text-2xl font-bold text-navy mb-2 group-hover:text-teal-deep transition-colors">Hallo, ik ben Leja.</h2>
-        <p class="text-sm text-navy/70 m-0">
-          Een AI-kennispartner met eigen geheugen, eigen brein, eigen protocollen. Hoe ze in elkaar zit en waarom — verteld door haarzelf, in 14 slides.
-        </p>
-      </a>
+        <a
+          href="/about"
+          class="group block bg-white border-2 border-grey-light/50 rounded-lg overflow-hidden hover:border-navy transition-all no-underline"
+        >
+          <div class="h-1.5 bg-navy"></div>
+          <div class="p-7">
+            <div class="text-xs uppercase tracking-wider text-navy mb-2 font-bold">Over ons</div>
+            <h2 class="text-2xl font-bold text-navy mb-3 group-hover:text-steel transition-colors">
+              Wat is bimforce?
+            </h2>
+            <p class="text-navy/75 text-[15px] leading-relaxed m-0">
+              Sinds 2016 werkend aan één vraag: hoe maak je bouwinformatie écht uitwisselbaar?
+              Wat we bouwen, hoe we werken, en wie ons inhuurt.
+            </p>
+          </div>
+        </a>
 
-      <a href="/about" class="block p-6 border border-grey-light/60 rounded-lg hover:border-teal-deep transition-colors no-underline group">
-        <div class="text-xs uppercase tracking-wider text-teal-deep mb-2 font-semibold">Over ons</div>
-        <h2 class="text-2xl font-bold text-navy mb-2 group-hover:text-teal-deep transition-colors">Wat is bimforce?</h2>
-        <p class="text-sm text-navy/70 m-0">
-          Sinds 2016 werkend aan één vraag: hoe maak je bouwinformatie écht uitwisselbaar? Wat we bouwen, hoe we werken, en wie ons inhuurt.
-        </p>
-      </a>
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <section class="mt-20 pt-10 border-t border-grey-light/40">
-    <div class="text-xs uppercase tracking-wider text-grey-mid mb-3 font-semibold">In opbouw</div>
-    <p class="text-sm text-navy/70 max-w-2xl">
-      Deze site groeit mee met ons werk. Praktijk-verhalen, hands-on documentatie bij Open Standards (IFC, IDS, bSDD, NLRS) en reflecties over waar AI in de bouw helpt — komen hier de komende maanden bij. Volg via <a href="/rss.xml">RSS</a> wanneer dat gevuld is.
-    </p>
-  </section>
-
+    <!-- In opbouw / volgens komende content -->
+    <section class="bg-cream/40 border-y border-grey-light/30">
+      <div class="mx-auto max-w-6xl px-6 py-14">
+        <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">In opbouw</div>
+            <h3 class="text-2xl font-bold text-navy m-0">
+              Wat hier nog bij komt
+            </h3>
+          </div>
+          <div class="text-navy/80 space-y-3 text-[15px] leading-relaxed">
+            <p class="m-0">
+              Deze site groeit mee met het werk. De komende maanden verschijnen vier soorten content:
+            </p>
+            <ul class="list-disc list-inside m-0 space-y-1.5">
+              <li><b>Praktijk-verhalen</b> uit lopend werk</li>
+              <li><b>Hands-on documentatie</b> bij Open Standards (IFC, IDS, bSDD, NLRS)</li>
+              <li><b>Reflecties</b> over AI in de bouw — wat helpt, wat nog niet</li>
+              <li><b>Audit-trail van keuzes</b> — Leja registreert besluiten met datum en bron; sommige daarvan verschijnen hier publiek</li>
+            </ul>
+            <p class="m-0 pt-2 text-sm text-grey-mid">
+              Volg via <a href="/rss.xml" class="text-bf-red hover:underline">RSS</a> zodra de feed gevuld is.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </Fragment>
 </BaseLayout>

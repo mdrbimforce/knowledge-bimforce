@@ -8,14 +8,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        // GRiDS-palette (donker, structureel)
-        navy: '#1c2a41',
-        steel: '#475365',
+        // Bimforce primary palette (uit 2017 kleurenboek)
+        // Reds — signature, gebruikt als accent en in hero-bands
+        'bf-red': {
+          DEFAULT: '#BB0303',  // dominant red (publicaties-pagina, signature)
+          dark: '#7A303D',     // muted dark red — kan als hover of secondary
+          bright: '#FF3333',   // bright callout-red
+          coral: '#E65F59',    // softer coral
+        },
+
+        // Navy/steel — gedeeld met GRiDS-palette
+        navy: '#1c2a41',       // close to bimforce 1B2A41
+        steel: '#475365',      // close to bimforce 525A6D
+        'steel-blue': '#657082',
         'grey-mid': '#747d8b',
         'grey-light': '#bbbfc6',
         white: '#fdfdfd',
 
-        // OpenAssembly-palette (accent, teal-family)
+        // Warm neutrals — bimforce 2017 palette tans
+        tan: '#C9B49F',
+        beige: '#DECFBA',
+        cream: '#F4F6F1',
+
+        // Light accents
+        'light-blue': '#9BACB3',
+        'pale-blue': '#ABC8D8',
+        'off-white': '#E7ECEF',
+
+        // OpenAssembly-palette (accent, teal-family) — gedeeld met decks
         teal: '#00a8a8',
         'teal-deep': '#0c6980',
         'teal-soft': '#c0f0f7',
