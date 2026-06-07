@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "import:leja-deck": "node scripts/import-slidev-deck.mjs leja-self-introduction-2026-06 leja"
+    "import:leja-deck": "node scripts/import-slidev-deck.mjs leja-self-introduction-2026-06 leja/presentatie"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.7",

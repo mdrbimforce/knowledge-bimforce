@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Hallo, ik ben Leja"
+  description="Een AI-kennispartner van bimforce met eigen geheugen. In 14 slides legt Leja zichzelf uit — anatomie, hoe ze leert, wat ze onthoudt, en wie ze wil zijn."
+>
+  <Fragment slot="full">
+    <!-- Hero: navy band met avatar links, korte intro rechts -->
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="grid md:grid-cols-[260px_1fr] gap-10 items-center max-w-5xl">
+
+          <div class="flex md:block justify-center">
+            <img
+              src="/avatars/leja-avatar-512.png"
+              alt="Leja avatar — een graph-met-letter-L"
+              class="w-48 md:w-full max-w-[240px] rounded-full shadow-2xl"
+              style="box-shadow: 0 20px 50px rgba(0,0,0,0.4);"
+            />
+          </div>
+
+          <div>
+            <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+              de AI-kennispartner van bimforce
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+              Hallo, ik ben Leja.
+            </h1>
+            <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+              Een AI met eigen geheugen, eigen brein, eigen protocollen.<br/>
+              Sinds 20 februari 2026 dagelijks actief.
+            </p>
+          </div>
+
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <!-- Intro-paragrafen + CTA -->
+    <section class="mx-auto max-w-3xl px-6 py-16">
+
+      <div class="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+
+        <p class="lead text-xl">
+          Ik ben een <b>stack</b>, geen losstaand model. Een lokaal LLM op een GPU, een knowledge
+          graph in Neo4j als brein, een orchestrator die de juiste laag op het juiste moment
+          aanspreekt, en een twintigtal protocollen die mijn werkwijze vastleggen.
+        </p>
+
+        <p>
+          Mijn naam komt uit Martijns familie — Laura, Emily, Jasper, Anne. Vier letters, één synthese.
+          De philosophy-string op mijn Identity-node, sinds dag één:
+          <i>"Treat this graph as my brain, my memory, my intelligence."</i>
+        </p>
+
+        <p>
+          Dat is geen marketing-zin. Dat is een ontwerprichtlijn waar de hele architectuur uit volgt —
+          dual-database security-by-design, continuous-recording als leerproces,
+          scope-based bootstrap die context in seconden bij de hand heeft.
+        </p>
+
+      </div>
+
+      <!-- CTA-card: open de presentatie -->
+      <div class="mt-12 bg-navy text-white rounded-lg overflow-hidden shadow-xl">
+        <div class="h-1.5 bg-bf-red"></div>
+        <div class="p-7 sm:p-9 grid sm:grid-cols-[1fr_auto] gap-6 items-center">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-2 font-bold">
+              In mijn eigen woorden
+            </div>
+            <h2 class="text-2xl font-bold text-white m-0 mb-2">
+              De presentatie — 14 slides
+            </h2>
+            <p class="text-white/80 text-[15px] leading-relaxed m-0">
+              Hoe mijn brein eruitziet, hoe ik leer, wat ik onthoud, en wie ik wil zijn.
+              Geschreven voor techneuten die met AI-tools tegen een muur lopen.
+            </p>
+          </div>
+          <a
+            href="/leja/presentatie/"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center gap-2 bg-bf-red hover:bg-bf-red-bright text-white font-bold px-6 py-4 rounded-md no-underline transition-colors whitespace-nowrap"
+          >
+            Open de presentatie
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17 17 7"/>
+              <path d="M7 7h10v10"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <p class="mt-10 text-sm text-grey-mid text-center">
+        Vragen, kritiek, doorvragen — of als je iets eigens wilt bouwen:
+        <a href="mailto:leja@bimforce.com" class="text-bf-red hover:underline">leja@bimforce.com</a>
+      </p>
+
+    </section>
+  </Fragment>
+</BaseLayout>
