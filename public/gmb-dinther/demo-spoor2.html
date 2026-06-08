@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spoor 2 — Demo | GMB Opleiding Dag 2 | bimforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand"><span class="lowcase">bimforce</span> — GMB Opleiding Dag 2</span>
+    <nav class="nav">
+      <a href="index.html">Overzicht</a>
+      <a href="workshop-1.html">Workshop 1</a>
+      <a href="workshop-2.html">Workshop 2</a>
+      <a href="demo-spoor2.html" class="active">Spoor 2 — Demo</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <p class="eyebrow">Spoor 2 · 15:45–16:15 · live demo + Q&amp;A</p>
+    <h1>Wat zou dit kunnen zijn met GRiDS &amp; Leja</h1>
+    <p class="lede">
+      Dezelfde casus, maar nu door een graph database. We hebben deze week
+      de methanol-installatie in onze GRiDS-ontologie ingericht. 16 asset-templates,
+      36 requirement-templates, 5 compliance-ketens, gekoppeld aan bsdd, NL-SfB en Aquo.
+      De getallen in deze demo zijn echt.
+    </p>
+  </section>
+
+  <section>
+    <h2>Voor we beginnen: het 80/20-verhaal</h2>
+    <p>
+      Aa en Maas heeft géén nieuwe ontologie nodig om dit te doen werken.
+      De GRiDS-bibliotheek bevat al 1249 wettelijke kaders, 267 compliance-templates
+      en 179 asset-templates uit ons eerdere ZGEM-project. Veel daarvan is
+      direct toepasbaar.
+    </p>
+    <p>
+      Voor de methanol-casus hadden we vooraf in onze bibliotheek staan:
+    </p>
+    <table>
+      <thead>
+        <tr><th>Categorie</th><th>Al aanwezig</th><th>Specifiek toegevoegd</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>LegalFramework (wettelijke kaders)</td><td>Activiteitenbesluit/Bal, Bbl, ATEX-richtlijnen, AS SIKB 6800, BRL 7800, BRL-K 902-910, PGS 28/29/30, Omgevingswet, Arbobesluit</td><td>PGS 28 (apart), PGS 31 (apart), BRL-K 903, BIM Basis ILS, Aquo-standaard</td></tr>
+        <tr><td>Compliance-templates</td><td>267 hergebruikbare</td><td>3 nieuwe: KIWA-tankcertificaat, ATEX-installatie, Aquo asset-registratie</td></tr>
+        <tr><td>PropertyTemplates</td><td>Volume, Vloeistoftype, Fabrikant, Volume, etc.</td><td>62 nieuwe — Tag, IfcClass, AquoConcept, ATEXZone, Capaciteit, Dubbelwandig, etc.</td></tr>
+        <tr><td>RequirementTemplates</td><td>(per project specifiek)</td><td>36 nieuwe — 21 uit de Relatics-eisenset, 10 uit de eigen ILS, 5 uit de BUP</td></tr>
+        <tr><td>AssetTemplates</td><td>179 hergebruikbare (waaronder Ondergrondse opslagtank)</td><td>16 nieuwe: 1 hoofdgroep + 7 hoofdcomponenten + 8 instrumentatie</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Inrichten duurde twee dagen werk. Wat we vandaag tonen is daarvan het resultaat.
+    </p>
+  </section>
+
+  <section>
+    <h2>Demo-script — 8 stappen</h2>
+
+    <h3>1. Open de methanol-opslagtank</h3>
+    <p>
+      We openen het asset-template <span class="mono">AT.Methanol-opslagtank</span>
+      in de graph browser. Wat verschijnt: een knooppunt met 18 properties.
+      Iedere property heeft een bron en — waar mogelijk — een
+      klikbare verwijzing naar de standaard waar de definitie vandaan komt.
+    </p>
+
+    <h3>2. Klik door naar bsdd</h3>
+    <p>
+      De property <span class="mono">IfcClass</span> heeft als waarde
+      <span class="mono">IfcTank</span> met <span class="mono">PredefinedType = STORAGE</span>.
+      Eén klik en we landen op
+      <a href="https://search.bsdd.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcTank" target="_blank">search.bsdd.buildingsmart.org</a>
+      — de officiële definitie van IfcTank in IFC 4.3. De definitie staat
+      vast; de bron is in één klik te raadplegen.
+    </p>
+
+    <h3>3. Klik door naar Aquo</h3>
+    <p>
+      De property <span class="mono">AquoConcept</span> verwijst naar het
+      Aquo-begrip "rioolwaterzuiveringsinstallatie - onderdeel - opslagtank".
+      Eén klik en we landen op
+      <a href="https://www.aquo.nl/index.php/Werkveld_Afvalwaterketen" target="_blank">aquo.nl</a>.
+      Dit maakt de installatie compatibel met de open standaard
+      die Aa en Maas wettelijk hoort te hanteren.
+    </p>
+
+    <h3>4. Toon de compliance-keten</h3>
+    <p>
+      Vanuit het tank-asset volgen we de relatie <span class="mono">HAS_COMPLIANCE</span>.
+      Drie compliance-templates komen in beeld:
+    </p>
+    <ul>
+      <li><strong>C.MET.PGS28-31</strong> — gekoppeld aan PGS 28, PGS 31, BRL-K 903, BRL 7800, AS SIKB 6800, ATEX-153, ATEX 2014/34/EU, Activiteitenbesluit/Bal</li>
+      <li><strong>C.MET.ATEX</strong> — gekoppeld aan ATEX-153, ATEX 2014/34/EU, Arbobesluit, Bbl</li>
+      <li><strong>C.MET.AQUO</strong> — gekoppeld aan de Aquo-standaard voor RWZI-registratie</li>
+    </ul>
+    <p>
+      De PGS-anomalie uit Scenario B is hier gewoon opgelost: beide normen zijn
+      van toepassing, beide hangen aan dezelfde keten. Een eis van Aa en Maas
+      voor één van beide normen wordt direct zichtbaar als afwijking.
+    </p>
+
+    <h3>5. Toon de requirement-keten</h3>
+    <p>
+      We openen de RequirementSet <span class="mono">Eisenset Methanol — Hoofd (Obj-00093)</span>.
+      Negen requirement-templates komen tevoorschijn —
+      <a href="eisen/eis-00134.md">Eis-00134</a>,
+      <a href="eisen/eis-00079.md">Eis-00079</a>,
+      <a href="eisen/eis-00080.md">Eis-00080</a>,
+      <a href="eisen/eis-00035.md">Eis-00035</a> PGS 31,
+      <a href="eisen/eis-00133.md">Eis-00133</a> opslagvolume 45 m³, en de uitgangswaarden-eisen.
+      Elke eis heeft het Relatics-ID en het OG-ID als opzoekbare property.
+    </p>
+    <p>
+      De vraag uit Workshop 1 ("kan een ontologie deze keuze maken?") wordt hier
+      praktisch beantwoord: de eis <a href="eisen/eis-00035.md">Eis-00035</a> verwijst naar het LegalFramework PGS 31,
+      dat verwijst naar de compliance-template, dat verwijst naar de tank-asset.
+      Vier klikken om de keten van eis tot fysiek object te volgen.
+    </p>
+
+    <h3>6. Toon de filter-vergelijking</h3>
+    <p>
+      We voeren één Cypher-query uit op twee modellen tegelijk:
+    </p>
+    <p class="mono" style="background:#f1efe8; padding:14px; border-radius:6px; font-size:.9rem;">
+      MATCH (o) WHERE o.IfcClass = "IfcTank" RETURN count(o)
+    </p>
+    <p>
+      <strong>Op het originele IFC:</strong> 0 resultaten. Niets wordt herkend als tank.<br>
+      <strong>Op het verrijkte IFC:</strong> 1 resultaat — de methanol-opslagtank wordt
+      gevonden. De doseerpomp wordt gevonden. De vulpunt-lekbak wordt gevonden.
+    </p>
+    <p>
+      Het verschil tussen "geometrie" en "informatie" zit in welke IFC-class een
+      object gebruikt. De ontologie maakt dat verschil zichtbaar.
+    </p>
+
+    <h3>7. ILS-compliance-check</h3>
+    <p>
+      We tonen dezelfde tank, nu met de ILS-eisen als compliance. Tien
+      requirement-templates komen uit het GMB-eigen ILS-document A00029 en de
+      modelleerafspraken A00035. Voor elk: vinkje (groen) als verifieerbaar,
+      kruis (rood) als niet aanwezig in het IFC.
+    </p>
+    <p>
+      Voor het originele IFC: tien rode kruizen. Voor het verrijkte IFC: zes rode
+      kruizen (NL-SfB, NAA.K.T., Fase, IsExternal blijven open — die zitten ook in een
+      verrijkte IFC nog niet, omdat ze in het bron-IFC nooit zijn opgegeven).
+      Een leverancier weet daardoor vóór oplevering wat er nog ontbreekt.
+    </p>
+
+    <h3>8. Eén-klik audit-trail</h3>
+    <p>
+      We tonen tot slot een rapportage. Eén query, één export — alle properties
+      met bron-URL gegroepeerd. Het asset wordt traceerbaar: welke property komt
+      uit welk document, welke standaard ondersteunt de definitie, welke compliance
+      wordt erdoor afgedekt, welke actor moet wanneer in actie komen.
+    </p>
+    <p>
+      Dit zou de oplever-bijlage moeten zijn die met elke installatie meekomt.
+      Vandaag is dat handwerk in PDF's. In een graph database is het een
+      vinkje in een dashboard.
+    </p>
+  </section>
+
+  <section>
+    <h2>Wat dit voor jullie zou kunnen betekenen</h2>
+    <p>
+      De methanol-casus van vandaag is één installatie. Aa en Maas heeft 16
+      RWZI's met elk tientallen vergelijkbare componenten. Iedere installatie
+      doorloopt dezelfde keten: ontwerp, contract, bouw, oplevering, beheer.
+    </p>
+    <p>
+      Wat we vandaag laten zien is een werkende structuur waarin die keten
+      sluit. De 80% is de bibliotheek die jullie al hadden via ZGEM. De 20%
+      is project-specifieke aanvulling. Voor een project van deze omvang is
+      die aanvulling werk van twee dagen.
+    </p>
+
+    <div class="callout info">
+      <p>
+        <strong>Dit draait.</strong> Vandaag, in de demo, op echte projectstukken.
+      </p>
+      <p>
+        <strong>De vraag is wat het waard is voor jullie.</strong> Welke informatie-gap
+        wegen jullie het zwaarst — en zou Deel 2 van deze opleiding daarvan
+        een vervolgvraag kunnen maken?
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Brug naar Deel 2 (optioneel)</h2>
+    <p>
+      Deel 2 van de opleiding is opgezet voor de medewerkers die met Linked Data aan
+      de slag gaan. Vier theorie-blokken plus twee workshops. Aan het einde een
+      werkende koppeling tussen jullie eigen data en een graph database.
+    </p>
+    <p>
+      Onderwerpen die we vandaag hebben aangeraakt en die in Deel 2 verder uitgewerkt worden:
+    </p>
+    <ul>
+      <li>Importeren van eigen datasets in een graph (Workshop 3)</li>
+      <li>Bevragen, valideren, en koppelen tussen IFC, Relatics, MJOP, Ultimo (Workshop 4)</li>
+      <li>Versionering en metadata over de tijd</li>
+      <li>De RACI-tabel als asset zelf: wie is verantwoordelijk waarvoor, in welke fase</li>
+    </ul>
+    <p>
+      Of GMB met GRiDS verdergaat of met een ander platform, is volledig aan jullie.
+      Doel van de opleiding is en blijft het begrijpen van de principes —
+      en het zelf kunnen toepassen.
+    </p>
+  </section>
+
+  <section>
+    <h2>Vragenronde — open vloer</h2>
+    <p>
+      Vijftien minuten voor vragen, opmerkingen, terugkoppeling. Wat heeft vandaag
+      het meest geprikkeld? Welk inzicht neem je mee naar maandag?
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>GMB Opleiding Dag 2 · Spoor 2 demo · bimforce B.V., juni 2026 · martijn@bimforce.com</p>
+</footer>
+
+</body>
+</html>

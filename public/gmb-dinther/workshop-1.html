@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workshop 1 — Valkuilen | GMB Opleiding Dag 2 | bimforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand"><span class="lowcase">bimforce</span> — GMB Opleiding Dag 2</span>
+    <nav class="nav">
+      <a href="index.html">Overzicht</a>
+      <a href="workshop-1.html" class="active">Workshop 1</a>
+      <a href="workshop-2.html">Workshop 2</a>
+      <a href="demo-spoor2.html">Spoor 2 — Demo</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <p class="eyebrow">Workshop 1 · 09:15–12:15 · subgroepen + plenair</p>
+    <h1>Valkuilen van informatiebeheer — wat gaat er mis en waarom?</h1>
+    <p class="lede">
+      Vijf scenario's uit de echte methanol-casus. Alles wat hier staat komt
+      direct uit de aangeleverde projectstukken. Per scenario: wat staat in
+      welk document, wat schuurt, wat zijn de gevolgen.
+    </p>
+  </section>
+
+  <section>
+    <h2>Werkvorm</h2>
+    <ol>
+      <li><strong>09:15–09:45</strong> · plenaire introductie van de vijf bronnen en de centrale vraag.</li>
+      <li><strong>09:45–10:30</strong> · vier subgroepen pakken elk één scenario (A t/m D). 10 minuten in groep, 5 minuten terugkoppeling per groep.</li>
+      <li><strong>10:45–12:00</strong> · plenaire diepteduik op scenario E (de IFC en de eigen ILS) en wat dat zegt over consistentie versus consequenties.</li>
+      <li><strong>12:00–12:15</strong> · reflectie — wat zou jullie eigen project hier nu mee doen?</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>De vijf scenario's</h2>
+    <p>Klik elke kaart om te openen. Iedere kaart bevat de bron-citaten, de groepsvragen en achtergrond voor de facilitator.</p>
+
+    <ul class="scenarios">
+
+      <!-- Scenario A: Locatie -->
+      <li class="A">
+        <details>
+          <summary>
+            <span class="scenario-label">A</span>
+            Eén project, drie verschillende locaties
+          </summary>
+          <div class="scenario-body">
+            <h4>Wat zien we?</h4>
+            <div class="source-grid">
+              <div class="source">
+                <div class="from">IFC-bestand · projectnaam</div>
+                <blockquote>"RWZI Den Bosch – Nutriëntenfilter"<br>adres: Treurenburg 4, 's-Hertogenbosch</blockquote>
+                <div class="ref">IFCPROJECT, IFCBUILDING, IFCPOSTALADDRESS</div>
+              </div>
+              <div class="source">
+                <div class="from">Reehorst-offerte NOV.4704-rev.02</div>
+                <blockquote>"Project: Afvalwater behandeling<br>Locatie: RWZI Dinther"</blockquote>
+                <div class="ref">pagina 1 t/m 5</div>
+              </div>
+              <div class="source">
+                <div class="from">UO-spec Relatics · projectinfo</div>
+                <blockquote>"Projectnaam: Dinther – Nutriëntenverwijdering<br>Bouwlocatie: Nieuwe steeg 2, 5473 Heeswijk-Dinther"</blockquote>
+                <div class="ref">A00095 UO §projectinformatie</div>
+              </div>
+            </div>
+
+            <h4>Wat is hier aan de hand?</h4>
+            <p>
+              Treurenburg in Den Bosch is het kantoor van Waterschap Aa en Maas. De RWZI staat in
+              Dinther (gemeente Bernheze), 25 km verderop. De IFC heeft het kantooradres
+              meegekregen als project-locatie — vermoedelijk via Revit shared-coordinates. De
+              twee andere documenten kennen het juiste adres.
+            </p>
+
+            <h4>Groepsvragen</h4>
+            <ol class="questions">
+              <li>Stel: alleen het IFC wordt opgenomen in het asset-systeem van Aa en Maas. Welke locatie wordt straks gemonitord, welke gemeente verleent de vergunning, welke veiligheidsregio is verantwoordelijk?</li>
+              <li>Een asset-property "locatie" in een graph database hangt aan welk veld in welk bron-document? Op welk document zou je willen vertrouwen — en waarom is dat document moeilijker te krijgen dan het IFC?</li>
+              <li>Wat als de inkoper deze offerte tekent op "Dinther", de modelleur zijn IFC oplevert met "Den Bosch", en de asset-manager beide krijgt? Wanneer ontdekken we het probleem?</li>
+            </ol>
+
+            <div class="callout">
+              <strong>Voor de facilitator:</strong> dit scenario opent de discussie over single source of truth. Vermijd het pad
+              "het IFC moet gewoon kloppen" — leid het naar "wie controleert dit voor oplevering, en
+              tegen welk referentiekader?"
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <!-- Scenario B: PGS -->
+      <li class="B">
+        <details>
+          <summary>
+            <span class="scenario-label">B</span>
+            PGS 28, PGS 31, of allebei? Drie documenten kiezen drie kanten.
+          </summary>
+          <div class="scenario-body">
+            <h4>Wat zien we?</h4>
+            <div class="source-grid">
+              <div class="source">
+                <div class="from">Reehorst-offerte · onderwerp</div>
+                <blockquote>"Inrichting van KIWA gecertificeerde ondergrondse tankinstallatie voor de opslag van Methanol overeenkomstig de wettelijk geldende voorschriften PGS31 en de BRL SIKB 7800."</blockquote>
+                <div class="ref">openingsbrief, item 1 t/m 8 — alleen PGS31</div>
+              </div>
+              <div class="source">
+                <div class="from">UO-spec §2.3 voorschriften</div>
+                <blockquote>"De methanolopslagtank wordt geplaatst op een betonnen fundatieplaat. Deze tank wordt afgedekt met een terp. De gehele methanol opslag en doseer installatie dient daarom te voldoen aan PGS28/PGS31."</blockquote>
+                <div class="ref">A00095 §2.3 · beide normen</div>
+              </div>
+              <div class="source">
+                <div class="from">Eisenset Eis-00035</div>
+                <blockquote>"De installatie dient te voldoen aan de PGS 31 'overige gevaarlijke vloeistoffen'."</blockquote>
+                <div class="ref">Databronnen.xlsx · alleen PGS31</div>
+              </div>
+            </div>
+
+            <h4>Wat is hier aan de hand?</h4>
+            <p>
+              PGS 28 dekt ondergrondse opslag van brandbare vloeistoffen. PGS 31 dekt
+              bovengrondse opslag van overige gevaarlijke vloeistoffen. Methanol is op de
+              grens (vlampunt 12 °C, brandbaar én toxisch). Een dubbelwandige tank op een terp
+              is technisch bovengronds, juridisch ambigu. Drie documenten kiezen drie posities;
+              geen document verklaart waarom.
+            </p>
+
+            <h4>Groepsvragen</h4>
+            <ol class="questions">
+              <li>Welk keuringsregime hoort bij PGS 28 versus PGS 31? Wat betekent het verschil voor jaarlijkse inspectie, certificaten, en bij welke incident-categorie de veiligheidsregio betrokken raakt?</li>
+              <li>Stel: er is gekozen voor "voldoen aan beide". Wie controleert dat? Wat als er een conflict tussen PGS 28 en PGS 31 ontstaat op een specifieke checkitem — wie beslist?</li>
+              <li>Een ontologie waarin alle PGS-normen, BRL's en wetgeving zijn vastgelegd kan deze keuze niet maken. Maar wat kan zo'n ontologie wel doen om dit soort dubbelzinnigheid vóór oplevering te signaleren?</li>
+            </ol>
+
+            <div class="callout">
+              <strong>Voor de facilitator:</strong> kerngedachte uitleggen: de wet kiest niet vanzelf,
+              een ontologie kiest ook niet — maar een ontologie maakt zichtbaar dát er gekozen
+              moet worden. Dat is waar GRiDS de RACI-tabel afdwingt.
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <!-- Scenario C: Kosten -->
+      <li class="C">
+        <details>
+          <summary>
+            <span class="scenario-label">C</span>
+            Welke leverancier — Reehorst of Van der Hout?
+          </summary>
+          <div class="scenario-body">
+            <h4>Wat zien we?</h4>
+            <div class="source-grid">
+              <div class="source">
+                <div class="from">Reehorst-offerte · totaalbedrag</div>
+                <blockquote>"Totaal: € 201.024,–"<br>Reehorst Dordrecht als ondertekenaar</blockquote>
+                <div class="ref">8 items inclusief tank, installatie, engineering, in bedrijfname</div>
+              </div>
+              <div class="source">
+                <div class="from">Calculatie xlsx · hoofdpost</div>
+                <blockquote>"OA methanolinstallatie · 280.000<br><em>Offerte v/d Hout als uitgangspunt aangehouden, de 30k UO kosten erbij.</em>"</blockquote>
+                <div class="ref">tabblad Calculatie, code 89057</div>
+              </div>
+              <div class="source">
+                <div class="from">Calculatie · totaal</div>
+                <blockquote>"METHANOLDOSERINGSINSTALLATIE · Totaal: € 283.072"</blockquote>
+                <div class="ref">verschil met Reehorst: € 82.048</div>
+              </div>
+            </div>
+
+            <h4>Wat is hier aan de hand?</h4>
+            <p>
+              GMB heeft een aanvraag bij Reehorst lopen (offerte in onze stukken). GMB heeft
+              ook een offerte van Van der Hout (niet bijgesloten). In de calculatie is de
+              Van-der-Hout-prijs als basis gebruikt. De gedeelde Reehorst-offerte zit dus niet
+              in de calculatie — en omgekeerd. Op het oog twee verschillende leveranciers voor
+              hetzelfde stuk werk, met 41 procent verschil in prijs.
+            </p>
+
+            <h4>Groepsvragen</h4>
+            <ol class="questions">
+              <li>Met welke leverancier hebben we contractueel een binding? Hoe lees je dat uit deze documentenset? Welk document zou doorslaggevend zijn — en waar zou je willen kijken om dat zeker te weten?</li>
+              <li>Het verschil van € 82.048 heeft een oorsprong — in scope, in kwaliteit, of in marktwerking. Hoe vergelijk je Reehorst en Van der Hout inhoudelijk als je alleen één van beide offertes hebt? Welke datavelden zou je willen opvragen?</li>
+              <li>Op welk moment in de keten (calculatie → inkoop → contract → uitvoering → oplevering) zou dit type discrepantie horen op te vallen? Wat gebeurt er als het pas bij oplevering ontdekt wordt?</li>
+            </ol>
+
+            <div class="callout">
+              <strong>Voor de facilitator:</strong> dit scenario gaat over governance — wie heeft
+              welke beslis-informatie waar. De truc: breng het terug naar "wat zou je
+              willen weten als je de inkoop tekent?" Dan komt vanzelf de
+              informatie-behoefte naar boven die een graph kan invullen.
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <!-- Scenario D: Nooddouche -->
+      <li class="D">
+        <details>
+          <summary>
+            <span class="scenario-label">D</span>
+            Een scope-wijziging die alleen in een e-mail leeft
+          </summary>
+          <div class="scenario-body">
+            <h4>Wat zien we?</h4>
+            <div class="source-grid">
+              <div class="source">
+                <div class="from">Reehorst-offerte · item 6a</div>
+                <blockquote>Nood-oogdouche genoemd als optie in de aanbieding.</blockquote>
+                <div class="ref">prijsopgave Matcon MB2000\MB75</div>
+              </div>
+              <div class="source">
+                <div class="from">Calculatie xlsx · regel</div>
+                <blockquote>"L/a nood/ oogdouche · 1 st · € 1.042"</blockquote>
+                <div class="ref">post staat nog actief in calculatie</div>
+              </div>
+              <div class="source">
+                <div class="from">UO bijlage 4 · e-mail 7-11-2025</div>
+                <blockquote>"Aanvullingen:<br>(…)<br>· <strong>Nooddouche uit de aanbieding laten</strong><br>· Doseerleiding 105 meter (grootste gedeelte ondergrond)"</blockquote>
+                <div class="ref">Jeroen van Lanen aan Reehorst</div>
+              </div>
+              <div class="source">
+                <div class="from">IFC-bestand · ifcRelaggregates</div>
+                <blockquote>Nood-Oogdouche staat geïnstantieerd in het 3D-model (#5194564 + bijbehorende leidingwerk en haspel).</blockquote>
+                <div class="ref">7 building element proxies, één is de nooddouche</div>
+              </div>
+            </div>
+
+            <h4>Wat is hier aan de hand?</h4>
+            <p>
+              De nooddouche staat in vier bronnen op vier manieren: als optie in de
+              inkoop-offerte, als post in de calculatie, als "eruit laten" in een e-mail,
+              en als gemodelleerd object in het IFC. Geen document is leidend — en de
+              wijziging vindt plaats per e-mail aan één persoon.
+            </p>
+
+            <h4>Groepsvragen</h4>
+            <ol class="questions">
+              <li>Hoe weet jij over één jaar dat de nooddouche wel of niet is geleverd? Op basis van welk document? Wie heeft die e-mail van 7 november nog?</li>
+              <li>Een scope-wijziging via e-mail is gangbaar. Wat zou er moeten gebeuren om die e-mail te vertalen naar een aanpassing in het IFC, de calculatie en het contract? Wie heeft die plicht?</li>
+              <li>Stel: bij oplevering staat de nooddouche er niet, maar het IFC en de calculatie zeggen van wel. Hoe los je dat op — en wie betaalt?</li>
+            </ol>
+
+            <div class="callout">
+              <strong>Voor de facilitator:</strong> dit raakt het thema "uitzondering en cumulatieve effecten"
+              uit Workshop 1B. Eén scope-wijziging per e-mail is werkbaar. Honderd
+              scope-wijzigingen per e-mail over twee jaar is onhandelbaar. Welke drempel
+              zit daartussenin?
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <!-- Scenario E: IFC vs ILS -->
+      <li class="E">
+        <details>
+          <summary>
+            <span class="scenario-label">E</span>
+            Het IFC voldoet niet aan de eigen ILS van GMB
+          </summary>
+          <div class="scenario-body">
+            <h4>Wat zien we?</h4>
+            <div class="source-grid">
+              <div class="source">
+                <div class="from">BUP A00008 · BIM-doelen</div>
+                <blockquote>"Het toevoegen van relevante data aan de objecten in de 3D-modellen. Dusdanig dat dit aansluit bij het assetsysteem van Aa &amp; Maas."</blockquote>
+                <div class="ref">v3.0, 06-03-2025</div>
+              </div>
+              <div class="source">
+                <div class="from">ILS Revit A00029 · uitgangspunt</div>
+                <blockquote>"Deze ILS is gebaseerd op de BIM-basis ILS van digiGO."<br>"Bij gebruik van Revit dient de IFC export te voldoen aan de BIM-basis ILS."</blockquote>
+                <div class="ref">pagina 2, expliciete eis</div>
+              </div>
+              <div class="source">
+                <div class="from">Modelleerafspraken A00035 · Family Category</div>
+                <blockquote>"Objecten in de Family Category - Generic Model zijn NIET toegestaan." (<a href="eisen/ils-09.md">ILS-09</a>, <a href="eisen/ils-05.md">ILS-05</a>)</blockquote>
+                <div class="ref">eigen GMB-regel — leidt tot IfcBuildingElementProxy bij IFC-export</div>
+              </div>
+              <div class="source">
+                <div class="from">IFC-bestand · feitelijke inhoud</div>
+                <blockquote>7 van de 7 methanol-installatie-objecten staan als <span class="mono">IfcBuildingElementProxy</span> in het model.<br>Eén property per asset: <span class="mono">Reference = &lt;naam&gt;</span>. Verder geen volume, geen materiaal, geen Aquo-functienaam, geen NL-SfB-code, geen ATEX-zone.</blockquote>
+                <div class="ref">script-analyse, alle 8 IfcBuildingElementProxy entiteiten</div>
+              </div>
+              <div class="source">
+                <div class="from">ILS Solidworks/Inventor A00028 · eerlijk</div>
+                <blockquote>"Het is vooralsnog NIET mogelijk om vanuit Solidworks en/of Inventor een IFC conform BIM basis ILS te exporteren. Na conversie naar Autodesk Revit is betreffende Revit-bestand eveneens NIET conform BIM basis ILS."</blockquote>
+                <div class="ref">erkenning in het ILS zelf — A00028 pagina 2</div>
+              </div>
+            </div>
+
+            <h4>Wat is hier aan de hand?</h4>
+            <p>
+              GMB heeft een uitgebreid BUP, twee ILS-documenten en een modelleerafspraak. Daarin
+              staat helder welke informatie het IFC moet bevatten. Tegelijk erkent het sub-ILS
+              van Solidworks/Inventor dat zijn eigen export-keten dat niet kan leveren. Resultaat:
+              het IFC voldoet zichtbaar niet aan het eigen kader — en niemand heeft dat bij
+              oplevering teruggekoppeld.
+            </p>
+            <p>
+              De getallen: 13 van de 15 verwachte tank-properties uit de GRiDS-ontologie zijn
+              niet in te vullen vanuit dit IFC. 15 van de 16 belangrijke Relatics-eisen zijn niet
+              uit het IFC te verifiëren. Eén eis (afstand vulaansluiting) is geometrisch
+              meetbaar — de rest staat in andere documenten of nergens.
+            </p>
+
+            <h4>Plenaire vragen voor de diepteduik</h4>
+            <ol class="questions">
+              <li>Wat ga jij doen als deze IFC bij jullie eigen project binnenkomt voor as-built? Welke checks doe je? Wat eis je terug?</li>
+              <li>Hoe weet je vooraf — bij contract — welke property je gaat missen bij oplevering? Welke documenten regelen dat nu wel of niet?</li>
+              <li>Een ontologie kan deze leemte vooraf zichtbaar maken. Wat betekent dat voor de inkoop-clausule? Voor het BUP? Voor de informatie-eisen aan de toeleverancier?</li>
+              <li>Cumulatieve effect: 80 vergelijkbare opleveringen over 5 jaar. Wat gebeurt er met het asset-managementsysteem? Met de keuringscyclus? Met de aanbestedingen voor onderhoud?</li>
+            </ol>
+
+            <div class="callout warn">
+              <strong>Belangrijke nuance:</strong> dit scenario beschrijft een patroon dat in heel
+              Nederland speelt. Het ILS A00028 erkent het probleem zelf. Wat we vandaag
+              laten zien is hoe je hier vooraf op stuurt — bij contract, vóór oplevering.
+            </div>
+
+            <div class="callout">
+              <strong>Voor de facilitator:</strong> dit is het scenario waar Workshop 2 aansluit. Vijf rollen
+              gaan straks dezelfde casus bekijken vanuit hun eigen informatie-vraag. Bewaar
+              tijd voor vraag 4 — daar zit de overgang naar de spoor-2 demo.
+            </div>
+          </div>
+        </details>
+      </li>
+
+    </ul>
+  </section>
+
+  <section>
+    <h2>Reflectie aan het einde van Workshop 1</h2>
+    <p>
+      We hebben vijf praktijksituaties gezien die niemand zo heeft bedacht — ze
+      zaten in de aangeleverde documenten. Drie open vragen voor de groep voor we de lunch ingaan:
+    </p>
+    <ol class="questions">
+      <li>Welk van deze vijf scenario's herken je het scherpst uit jullie eigen projectpraktijk?</li>
+      <li>Wat is op jullie projecten de afspraak over wie als eerste op zo'n discrepantie zou moeten reageren?</li>
+      <li>Welk informatie-element zou — als het er was geweest — drie van deze vijf scenario's onmiddellijk hebben gesignaleerd?</li>
+    </ol>
+  </section>
+
+  <section style="margin-top: 64px;">
+    <h2>Door naar Workshop 2</h2>
+    <p>
+      Vanmiddag pakken vijf rollen dezelfde casus op vanuit hun eigen perspectief.
+      <a href="workshop-2.html">Naar Workshop 2 →</a>
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>GMB Opleiding Dag 2 · Workshop 1 · bimforce B.V., juni 2026</p>
+</footer>
+
+</body>
+</html>
