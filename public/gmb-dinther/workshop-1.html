@@ -82,15 +82,15 @@
             <p>
               Treurenburg in Den Bosch is het kantoor van Waterschap Aa en Maas. De RWZI staat in
               Dinther (gemeente Bernheze), 25 km verderop. De IFC heeft het kantooradres
-              meegekregen als project-locatie — vermoedelijk via Revit shared-coordinates. De
+              meegekregen als project-locatie — vermoedelijk via Revit Shared Parameters. De
               twee andere documenten kennen het juiste adres.
             </p>
 
             <h4>Groepsvragen</h4>
             <ol class="questions">
               <li>Stel: alleen het IFC wordt opgenomen in het asset-systeem van Aa en Maas. Welke locatie wordt straks gemonitord, welke gemeente verleent de vergunning, welke veiligheidsregio is verantwoordelijk?</li>
-              <li>Een asset-property "locatie" in een graph database hangt aan welk veld in welk bron-document? Op welk document zou je willen vertrouwen — en waarom is dat document moeilijker te krijgen dan het IFC?</li>
-              <li>Wat als de inkoper deze offerte tekent op "Dinther", de modelleur zijn IFC oplevert met "Den Bosch", en de asset-manager beide krijgt? Wanneer ontdekken we het probleem?</li>
+              <li>Zijn dit alle bronnen waar de locatie vastligt? Welke is leidend? Hoe is het proces van afstemming ingericht?</li>
+              <li>Wat als de inkoper deze offerte tekent op "Dinther", de modelleur zijn IFC oplevert met "Den Bosch", en de asset-manager beide krijgt? Welke problemen ontstaan hier mogelijk? En wanneer ontdekken we die?</li>
             </ol>
 
             <div class="callout">
@@ -133,7 +133,8 @@
             <p>
               PGS 28 dekt ondergrondse opslag van brandbare vloeistoffen. PGS 31 dekt
               bovengrondse opslag van overige gevaarlijke vloeistoffen. Methanol is op de
-              grens (vlampunt 12 °C, brandbaar én toxisch). Een dubbelwandige tank op een terp
+              grens (vlampunt 12 °C — bron: <a href="https://nl.wikipedia.org/wiki/Methanol" target="_blank">Wikipedia: Methanol</a>;
+              brandbaar én toxisch). Een dubbelwandige tank op een terp
               is technisch bovengronds, juridisch ambigu. Drie documenten kiezen drie posities;
               geen document verklaart waarom.
             </p>
@@ -148,7 +149,7 @@
             <div class="callout">
               <strong>Voor de facilitator:</strong> kerngedachte uitleggen: de wet kiest niet vanzelf,
               een ontologie kiest ook niet — maar een ontologie maakt zichtbaar dát er gekozen
-              moet worden. Dat is waar GRiDS de RACI-tabel afdwingt.
+              moet worden.
             </div>
           </div>
         </details>
@@ -255,10 +256,9 @@
             </ol>
 
             <div class="callout">
-              <strong>Voor de facilitator:</strong> dit raakt het thema "uitzondering en cumulatieve effecten"
-              uit Workshop 1B. Eén scope-wijziging per e-mail is werkbaar. Honderd
-              scope-wijzigingen per e-mail over twee jaar is onhandelbaar. Welke drempel
-              zit daartussenin?
+              <strong>Voor de facilitator:</strong> dit raakt het thema "uitzondering en cumulatieve
+              effecten". Eén scope-wijziging per e-mail is werkbaar. Honderd scope-wijzigingen
+              per e-mail over twee jaar is onhandelbaar. Welke drempel zit daartussenin?
             </div>
           </div>
         </details>
@@ -292,7 +292,7 @@
               <div class="source">
                 <div class="from">IFC-bestand · feitelijke inhoud</div>
                 <blockquote>7 van de 7 methanol-installatie-objecten staan als <span class="mono">IfcBuildingElementProxy</span> in het model.<br>Eén property per asset: <span class="mono">Reference = &lt;naam&gt;</span>. Verder geen volume, geen materiaal, geen Aquo-functienaam, geen NL-SfB-code, geen ATEX-zone.</blockquote>
-                <div class="ref">script-analyse, alle 8 IfcBuildingElementProxy entiteiten</div>
+                <div class="ref">script-analyse — 7 methanol-instances + 7 type-entiteiten in dit IFC (+ 2 betonplaat-entries, niet meegerekend)</div>
               </div>
               <div class="source">
                 <div class="from">ILS Solidworks/Inventor A00028 · eerlijk</div>
@@ -310,10 +310,11 @@
               oplevering teruggekoppeld.
             </p>
             <p>
-              De getallen: 13 van de 15 verwachte tank-properties uit de GRiDS-ontologie zijn
-              niet in te vullen vanuit dit IFC. 15 van de 16 belangrijke Relatics-eisen zijn niet
-              uit het IFC te verifiëren. Eén eis (afstand vulaansluiting) is geometrisch
-              meetbaar — de rest staat in andere documenten of nergens.
+              In ordegrootte: het overgrote deel van de verwachte tank-properties uit de
+              GRiDS-ontologie is niet in te vullen vanuit dit IFC, en vrijwel alle eisen uit
+              de Relatics-set zijn niet rechtstreeks uit het IFC te verifiëren. Eén eis
+              (afstand vulaansluiting tot opslagtank — <a href="eisen/eis-00081.md">Eis-00081</a>)
+              is geometrisch meetbaar. De rest staat in andere documenten of nergens.
             </p>
 
             <h4>Plenaire vragen voor de diepteduik</h4>
@@ -321,7 +322,7 @@
               <li>Wat ga jij doen als deze IFC bij jullie eigen project binnenkomt voor as-built? Welke checks doe je? Wat eis je terug?</li>
               <li>Hoe weet je vooraf — bij contract — welke property je gaat missen bij oplevering? Welke documenten regelen dat nu wel of niet?</li>
               <li>Een ontologie kan deze leemte vooraf zichtbaar maken. Wat betekent dat voor de inkoop-clausule? Voor het BUP? Voor de informatie-eisen aan de toeleverancier?</li>
-              <li>Cumulatieve effect: 80 vergelijkbare opleveringen over 5 jaar. Wat gebeurt er met het asset-managementsysteem? Met de keuringscyclus? Met de aanbestedingen voor onderhoud?</li>
+              <li>Cumulatieve effect (orde van grootte): in de richting van 80 vergelijkbare opleveringen over 5 jaar — 16 RWZI's, gemiddeld één deelproject per jaar per RWZI. Wat gebeurt er met het asset-managementsysteem? Met de keuringscyclus? Met de aanbestedingen voor onderhoud?</li>
             </ol>
 
             <div class="callout warn">

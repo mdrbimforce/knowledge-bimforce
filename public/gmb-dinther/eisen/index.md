@@ -79,6 +79,35 @@ project zetten.
 - [BUP-04 — Uittrekstaten uit 3D-model](bup-04.md)
 - [BUP-05 — Informatieleveringen weekcyclus](bup-05.md)
 
+## Verrijkte V&V-eisen (graph-gekoppeld)
+
+Negen sleutel-eisen plus één bonus zijn in `neo4j-leja` (version
+`gmb_dinther_v1`) gekoppeld via Mapping aan een Filter en een Bron-document.
+Deze koppeling vormt de V&V-keten die in spoor 2 van workshop 1 live
+gedemonstreerd wordt: graph → Filter → IfcClass-set in het IFC-model →
+match/mismatch met Asset-properties.
+
+De 7 eisen die al een markdown hadden zijn ter plekke verrijkt met een
+V&V-sectie. De 3 ILS/BUP-eisen die nieuwe markdowns nodig hadden zijn als
+`*-e*.md` toegevoegd om naast de bestaande generieke ILS-/BUP-eisen te
+kunnen leven.
+
+### Eisen uit Eisenset (verrijkt)
+
+- [Eis-00035 — PGS 31](eis-00035.md) → `F.PGS31.Tankinstallatie`
+- [Eis-00079 — Constructie](eis-00079.md) → `F.Spatial.NutrientenfilterZone`
+- [Eis-00080 — Op terp](eis-00080.md) → `F.Spatial.OpTerp`
+- [Eis-00133 — Volume 45 m³](eis-00133.md) → `F.Tank.Opslag45m3`
+- [Eis-00135 — Doseerpompen (showcase 4 deeleisen)](eis-00135.md) → `F.Tag.Doseerpomp`
+- [Eis-00645 — ATEX uitgangswaardes](eis-00645.md) → `F.ATEX.Zone1of2`
+- [Eis-00650 — Kathodische bescherming](eis-00650.md) → `F.Tank.KathodischeBescherming`
+
+### Nieuwe V&V-eisen (graph-gestuurd)
+
+- [ILS-E01 — IFC entity-class conform BIM Basis ILS](ils-e01.md) → `F.IfcClass.NietProxy`
+- [ILS-E07 — Revit Family Category niet Generic Model](ils-e07.md) → `F.IfcClass.GenericModelCheck`
+- [BUP-E04 — 3D-modeldata sluit aan op WAM asset-systeem](bup-e04.md) → `F.Property.WAMAssetID`
+
 ## Reproduceerbaarheid
 
 - **Relatics-eisen**: generator `gen_eisen_md.py` in de map daarboven. Bron:
@@ -89,3 +118,6 @@ project zetten.
   - A00029.pdf` versie 3.0 (06-03-2025).
 - **BUP-eisen**: handmatig geëxtraheerd uit `Z_DI_3114NT_ALG_RP_CO_BUP (BIM
   uitvoeringsplan) - A00008.pdf` versie 3.0 (06-03-2025).
+- **Verrijkte V&V-eisen**: generator `gen_enriched_eisen.py` in de map
+  daarboven. Bron: `neo4j-leja` (10 RequirementTemplates met
+  `version='gmb_dinther_v1'` en HAS_MAPPING → Mapping → HAS_FILTER → Filter).
