@@ -1,0 +1,1351 @@
+node {
+  diameter: 50px;
+  color: #a3a3a3;
+  border-color: #525252;
+  border-width: 2px;
+  text-color-internal: #111827;
+  font-size: 10px;
+  caption: "{name}";
+}
+
+relationship {
+  color: #d4d4d4;
+  shaft-width: 1px;
+  font-size: 8px;
+  padding: 3px;
+  text-color-external: #525252;
+  text-color-internal: #FFFFFF;
+  caption: "<type>";
+}
+
+node.Company {
+  color: #171717;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 80px;
+  caption: "{name}";
+}
+
+node.Department {
+  color: #262626;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 74px;
+  caption: "{name}";
+}
+
+node.Actor {
+  color: #525252;
+  border-color: #262626;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.Role {
+  color: #d4d4d4;
+  border-color: #737373;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{name}";
+}
+
+node.Users {
+  color: #27272a;
+  border-color: #18181b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.UserSet {
+  color: #52525b;
+  border-color: #27272a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.User {
+  color: #a1a1aa;
+  border-color: #52525b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.UserTemplate {
+  color: #e4e4e7;
+  border-color: #a1a1aa;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Projects {
+  color: #991b1b;
+  border-color: #7f1d1d;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.ProjectSet {
+  color: #dc2626;
+  border-color: #991b1b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Project {
+  color: #f87171;
+  border-color: #dc2626;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.ProjectTemplate {
+  color: #fecaca;
+  border-color: #f87171;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Locations {
+  color: #292524;
+  border-color: #1c1917;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.LocationSet {
+  color: #57534e;
+  border-color: #292524;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Location {
+  color: #a8a29e;
+  border-color: #57534e;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.LocationTemplate {
+  color: #e7e5e4;
+  border-color: #a8a29e;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Assets {
+  color: #9a3412;
+  border-color: #7c2d12;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.AssetSet {
+  color: #ea580c;
+  border-color: #9a3412;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Asset {
+  color: #fb923c;
+  border-color: #ea580c;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.AssetTemplate {
+  color: #fed7aa;
+  border-color: #fb923c;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.InitialCost {
+  color: #92400e;
+  border-color: #78350f;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.ReplacementCost {
+  color: #b45309;
+  border-color: #78350f;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.RenovationCost {
+  color: #d97706;
+  border-color: #92400e;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.OperationalMaintenanceCost {
+  color: #fbbf24;
+  border-color: #d97706;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.OperationalEnergyCost {
+  color: #fcd34d;
+  border-color: #f59e0b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.ResidualValue {
+  color: #fde68a;
+  border-color: #fbbf24;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.TOs {
+  color: #854d0e;
+  border-color: #713f12;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.TOSet {
+  color: #ca8a04;
+  border-color: #854d0e;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.TO {
+  color: #facc15;
+  border-color: #ca8a04;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.TOTemplate {
+  color: #fef08a;
+  border-color: #facc15;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Classificationsets {
+  color: #3f6212;
+  border-color: #365314;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.ClassificationsetSet {
+  color: #65a30d;
+  border-color: #3f6212;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Classificationset {
+  color: #a3e635;
+  border-color: #65a30d;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.ClassificationsetTemplate {
+  color: #d9f99d;
+  border-color: #a3e635;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Classification {
+  color: #bef264;
+  border-color: #84cc16;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 42px;
+  caption: "{name}";
+}
+
+node.Labels {
+  color: #166534;
+  border-color: #14532d;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.LabelSet {
+  color: #16a34a;
+  border-color: #166534;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Label {
+  color: #4ade80;
+  border-color: #16a34a;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.LabelTemplate {
+  color: #bbf7d0;
+  border-color: #4ade80;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Properties {
+  color: #065f46;
+  border-color: #064e3b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.PropertySet {
+  color: #059669;
+  border-color: #065f46;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Property {
+  color: #34d399;
+  border-color: #059669;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.PropertyTemplate {
+  color: #a7f3d0;
+  border-color: #34d399;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Value {
+  color: #d1fae5;
+  border-color: #6ee7b7;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{value}";
+}
+
+node.Compliance {
+  color: #155e75;
+  border-color: #164e63;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 52px;
+  caption: "{name}";
+}
+
+node.Check {
+  color: #0891b2;
+  border-color: #155e75;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.CheckItem {
+  color: #22d3ee;
+  border-color: #0891b2;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.ManualOverride {
+  color: #67e8f9;
+  border-color: #06b6d4;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "<id>";
+}
+
+node.ComplianceTemplate {
+  color: #a5f3fc;
+  border-color: #22d3ee;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Frameworks {
+  color: #075985;
+  border-color: #0c4a6e;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.FrameworkSet {
+  color: #0284c7;
+  border-color: #075985;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.LegalFramework {
+  color: #38bdf8;
+  border-color: #0284c7;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.Requirements {
+  color: #1e40af;
+  border-color: #1e3a8a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.RequirementSet {
+  color: #2563eb;
+  border-color: #1e40af;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Requirement {
+  color: #60a5fa;
+  border-color: #2563eb;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.RequirementTemplate {
+  color: #bfdbfe;
+  border-color: #60a5fa;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.RequirementItem {
+  color: #93c5fd;
+  border-color: #3b82f6;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.Objects {
+  color: #3730a3;
+  border-color: #312e81;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.ObjectSet {
+  color: #4f46e5;
+  border-color: #3730a3;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Object {
+  color: #818cf8;
+  border-color: #4f46e5;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.ObjectTemplate {
+  color: #c7d2fe;
+  border-color: #818cf8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Models {
+  color: #5b21b6;
+  border-color: #4c1d95;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.ModelSet {
+  color: #7c3aed;
+  border-color: #5b21b6;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Model {
+  color: #a78bfa;
+  border-color: #7c3aed;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.ModelTemplate {
+  color: #ddd6fe;
+  border-color: #a78bfa;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.IfcClassifications {
+  color: #6b21a8;
+  border-color: #581c87;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 56px;
+  caption: "{name}";
+}
+
+node.IfcClassification {
+  color: #7e22ce;
+  border-color: #581c87;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{code}";
+}
+
+node.IfcClass {
+  color: #9333ea;
+  border-color: #6b21a8;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.IfcPropertyset {
+  color: #c084fc;
+  border-color: #9333ea;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{name}";
+}
+
+node.IfcProperty {
+  color: #d8b4fe;
+  border-color: #a855f7;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{name}";
+}
+
+node.IfcAttribute {
+  color: #e9d5ff;
+  border-color: #c084fc;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{name}";
+}
+
+node.Filters {
+  color: #86198f;
+  border-color: #701a75;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.FilterSet {
+  color: #c026d3;
+  border-color: #86198f;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Filter {
+  color: #e879f9;
+  border-color: #c026d3;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.FilterTemplate {
+  color: #f5d0fe;
+  border-color: #e879f9;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Mappings {
+  color: #9d174d;
+  border-color: #831843;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.MappingSet {
+  color: #db2777;
+  border-color: #9d174d;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Mapping {
+  color: #f472b6;
+  border-color: #db2777;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.MappingTemplate {
+  color: #fbcfe8;
+  border-color: #f472b6;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Exports {
+  color: #9f1239;
+  border-color: #881337;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.ExportSet {
+  color: #e11d48;
+  border-color: #9f1239;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.Export {
+  color: #fb7185;
+  border-color: #e11d48;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.ExportTemplate {
+  color: #fecdd3;
+  border-color: #fb7185;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Files {
+  color: #1e293b;
+  border-color: #0f172a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.Document {
+  color: #334155;
+  border-color: #0f172a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.FileSet {
+  color: #475569;
+  border-color: #1e293b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.File {
+  color: #94a3b8;
+  border-color: #475569;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{filename}";
+}
+
+node.Image {
+  color: #cbd5e1;
+  border-color: #64748b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{imageextension}";
+}
+
+node.FileTemplate {
+  color: #e2e8f0;
+  border-color: #94a3b8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.Concept {
+  color: #0d9488;
+  border-color: #115e59;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{concept}";
+}
+
+node.Restpunt {
+  color: #ef4444;
+  border-color: #b91c1c;
+  border-width: 4px;
+  text-color-internal: #111827;
+  diameter: 48px;
+  caption: "{name}";
+}
+
+node._CSVGEN {
+  color: #e5e7eb;
+  border-color: #9ca3af;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 24px;
+  caption: "{name}";
+}
+
+relationship.HAS_DEPARTMENT {
+  color: #262626;
+  shaft-width: 3px;
+  text-color-external: #262626;
+}
+
+relationship.HAS_USERS {
+  color: #27272a;
+  shaft-width: 2px;
+  text-color-external: #27272a;
+}
+
+relationship.HAS_USERSET {
+  color: #52525b;
+  shaft-width: 1px;
+  text-color-external: #3f3f46;
+}
+
+relationship.HAS_USER {
+  color: #a1a1aa;
+  shaft-width: 2px;
+  text-color-external: #3f3f46;
+}
+
+relationship.HAS_USERTEMPLATE {
+  color: #e4e4e7;
+  shaft-width: 1px;
+  text-color-external: #3f3f46;
+}
+
+relationship.HAS_ROLE {
+  color: #d4d4d4;
+  shaft-width: 1px;
+  text-color-external: #404040;
+}
+
+relationship.HAS_ACTOR {
+  color: #525252;
+  shaft-width: 1px;
+  text-color-external: #404040;
+}
+
+relationship.HAS_PROJECTS {
+  color: #991b1b;
+  shaft-width: 2px;
+  text-color-external: #991b1b;
+}
+
+relationship.HAS_PROJECTSET {
+  color: #dc2626;
+  shaft-width: 1px;
+  text-color-external: #b91c1c;
+}
+
+relationship.HAS_PROJECT {
+  color: #f87171;
+  shaft-width: 2px;
+  text-color-external: #b91c1c;
+}
+
+relationship.HAS_PROJECTTEMPLATE {
+  color: #fecaca;
+  shaft-width: 1px;
+  text-color-external: #b91c1c;
+}
+
+relationship.HAS_LOCATIONS {
+  color: #292524;
+  shaft-width: 2px;
+  text-color-external: #292524;
+}
+
+relationship.HAS_LOCATIONSET {
+  color: #57534e;
+  shaft-width: 1px;
+  text-color-external: #44403c;
+}
+
+relationship.HAS_LOCATION {
+  color: #a8a29e;
+  shaft-width: 2px;
+  text-color-external: #44403c;
+}
+
+relationship.HAS_LOCATIONTEMPLATE {
+  color: #e7e5e4;
+  shaft-width: 1px;
+  text-color-external: #44403c;
+}
+
+relationship.HAS_ASSETS {
+  color: #9a3412;
+  shaft-width: 2px;
+  text-color-external: #9a3412;
+}
+
+relationship.HAS_ASSETSET {
+  color: #ea580c;
+  shaft-width: 1px;
+  text-color-external: #c2410c;
+}
+
+relationship.HAS_ASSET {
+  color: #fb923c;
+  shaft-width: 2px;
+  text-color-external: #c2410c;
+}
+
+relationship.HAS_ASSETTEMPLATE {
+  color: #fed7aa;
+  shaft-width: 1px;
+  text-color-external: #c2410c;
+}
+
+relationship.HAS_COST {
+  color: #f59e0b;
+  shaft-width: 2px;
+  text-color-external: #b45309;
+}
+
+relationship.HAS_TOS {
+  color: #854d0e;
+  shaft-width: 2px;
+  text-color-external: #854d0e;
+}
+
+relationship.HAS_TOSET {
+  color: #ca8a04;
+  shaft-width: 1px;
+  text-color-external: #a16207;
+}
+
+relationship.HAS_TO {
+  color: #facc15;
+  shaft-width: 2px;
+  text-color-external: #a16207;
+}
+
+relationship.HAS_TOTEMPLATE {
+  color: #fef08a;
+  shaft-width: 1px;
+  text-color-external: #a16207;
+}
+
+relationship.HAS_CLASSIFICATIONSETS {
+  color: #3f6212;
+  shaft-width: 2px;
+  text-color-external: #3f6212;
+}
+
+relationship.HAS_CLASSIFICATIONSETSET {
+  color: #65a30d;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_CLASSIFICATIONSET {
+  color: #a3e635;
+  shaft-width: 2px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_CLASSIFICATIONSETTEMPLATE {
+  color: #d9f99d;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_CLASSIFICATION {
+  color: #84cc16;
+  shaft-width: 2px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_LABELS {
+  color: #166534;
+  shaft-width: 2px;
+  text-color-external: #166534;
+}
+
+relationship.HAS_LABELSET {
+  color: #16a34a;
+  shaft-width: 1px;
+  text-color-external: #15803d;
+}
+
+relationship.HAS_LABEL {
+  color: #4ade80;
+  shaft-width: 2px;
+  text-color-external: #15803d;
+}
+
+relationship.HAS_LABELTEMPLATE {
+  color: #bbf7d0;
+  shaft-width: 1px;
+  text-color-external: #15803d;
+}
+
+relationship.HAS_PROPERTIES {
+  color: #065f46;
+  shaft-width: 2px;
+  text-color-external: #065f46;
+}
+
+relationship.HAS_PROPERTYSET {
+  color: #059669;
+  shaft-width: 1px;
+  text-color-external: #047857;
+}
+
+relationship.HAS_PROPERTY {
+  color: #34d399;
+  shaft-width: 2px;
+  text-color-external: #047857;
+}
+
+relationship.HAS_PROPERTYTEMPLATE {
+  color: #a7f3d0;
+  shaft-width: 1px;
+  text-color-external: #047857;
+}
+
+relationship.HAS_VALUE {
+  color: #6ee7b7;
+  shaft-width: 1px;
+  text-color-external: #047857;
+}
+
+relationship.HAS_COMPLIANCE {
+  color: #155e75;
+  shaft-width: 2px;
+  text-color-external: #155e75;
+}
+
+relationship.HAS_COMPLIANCETEMPLATE {
+  color: #a5f3fc;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_CHECK {
+  color: #0891b2;
+  shaft-width: 2px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_CHECKITEM {
+  color: #22d3ee;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_MANUALOVERRIDE {
+  color: #67e8f9;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_FRAMEWORKS {
+  color: #075985;
+  shaft-width: 2px;
+  text-color-external: #075985;
+}
+
+relationship.HAS_FRAMEWORKSET {
+  color: #0284c7;
+  shaft-width: 1px;
+  text-color-external: #0369a1;
+}
+
+relationship.HAS_LEGALFRAMEWORK {
+  color: #38bdf8;
+  shaft-width: 2px;
+  text-color-external: #0369a1;
+}
+
+relationship.HAS_REQUIREMENTS {
+  color: #1e40af;
+  shaft-width: 2px;
+  text-color-external: #1e40af;
+}
+
+relationship.HAS_REQUIREMENTSET {
+  color: #2563eb;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.HAS_REQUIREMENTTEMPLATE {
+  color: #bfdbfe;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.HAS_REQUIREMENTITEM {
+  color: #93c5fd;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.HAS_OBJECTS {
+  color: #3730a3;
+  shaft-width: 2px;
+  text-color-external: #3730a3;
+}
+
+relationship.HAS_OBJECTSET {
+  color: #4f46e5;
+  shaft-width: 1px;
+  text-color-external: #4338ca;
+}
+
+relationship.HAS_OBJECT {
+  color: #818cf8;
+  shaft-width: 2px;
+  text-color-external: #4338ca;
+}
+
+relationship.HAS_OBJECTTEMPLATE {
+  color: #c7d2fe;
+  shaft-width: 1px;
+  text-color-external: #4338ca;
+}
+
+relationship.HAS_MODELS {
+  color: #5b21b6;
+  shaft-width: 2px;
+  text-color-external: #5b21b6;
+}
+
+relationship.HAS_MODELSET {
+  color: #7c3aed;
+  shaft-width: 1px;
+  text-color-external: #6d28d9;
+}
+
+relationship.HAS_MODEL {
+  color: #a78bfa;
+  shaft-width: 2px;
+  text-color-external: #6d28d9;
+}
+
+relationship.HAS_MODELTEMPLATE {
+  color: #ddd6fe;
+  shaft-width: 1px;
+  text-color-external: #6d28d9;
+}
+
+relationship.HAS_TYPE {
+  color: #a855f7;
+  shaft-width: 1px;
+  text-color-external: #7e22ce;
+}
+
+relationship.HAS_ATTRIBUTE {
+  color: #d8b4fe;
+  shaft-width: 1px;
+  text-color-external: #7e22ce;
+}
+
+relationship.IFC_DECOMPOSITION {
+  color: #7e22ce;
+  shaft-width: 2px;
+  text-color-external: #7e22ce;
+}
+
+relationship.IFC_CLASSIFICATIONS {
+  color: #9333ea;
+  shaft-width: 2px;
+  text-color-external: #7e22ce;
+}
+
+relationship.HAS_FILTERS {
+  color: #86198f;
+  shaft-width: 2px;
+  text-color-external: #86198f;
+}
+
+relationship.HAS_FILTERSET {
+  color: #c026d3;
+  shaft-width: 1px;
+  text-color-external: #a21caf;
+}
+
+relationship.HAS_FILTER {
+  color: #e879f9;
+  shaft-width: 2px;
+  text-color-external: #a21caf;
+}
+
+relationship.HAS_FILTERTEMPLATE {
+  color: #f5d0fe;
+  shaft-width: 1px;
+  text-color-external: #a21caf;
+}
+
+relationship.HAS_MAPPINGS {
+  color: #9d174d;
+  shaft-width: 2px;
+  text-color-external: #9d174d;
+}
+
+relationship.HAS_MAPPINGSET {
+  color: #db2777;
+  shaft-width: 1px;
+  text-color-external: #be185d;
+}
+
+relationship.HAS_MAPPING {
+  color: #f472b6;
+  shaft-width: 2px;
+  text-color-external: #be185d;
+}
+
+relationship.HAS_MAPPINGTEMPLATE {
+  color: #fbcfe8;
+  shaft-width: 1px;
+  text-color-external: #be185d;
+}
+
+relationship.HAS_EXPORTS {
+  color: #9f1239;
+  shaft-width: 2px;
+  text-color-external: #9f1239;
+}
+
+relationship.HAS_EXPORTSET {
+  color: #e11d48;
+  shaft-width: 1px;
+  text-color-external: #be123c;
+}
+
+relationship.HAS_EXPORT {
+  color: #fb7185;
+  shaft-width: 2px;
+  text-color-external: #be123c;
+}
+
+relationship.HAS_EXPORTTEMPLATE {
+  color: #fecdd3;
+  shaft-width: 1px;
+  text-color-external: #be123c;
+}
+
+relationship.HAS_FILES {
+  color: #1e293b;
+  shaft-width: 2px;
+  text-color-external: #1e293b;
+}
+
+relationship.HAS_FILESET {
+  color: #475569;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.HAS_FILE {
+  color: #94a3b8;
+  shaft-width: 2px;
+  text-color-external: #334155;
+}
+
+relationship.HAS_FILETEMPLATE {
+  color: #e2e8f0;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.HAS_IMAGE {
+  color: #cbd5e1;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.HAS_SOURCE {
+  color: #64748b;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.ARCH_HAS_SOURCE {
+  color: #cbd5e1;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.HAS_ITEM {
+  color: #9ca3af;
+  shaft-width: 1px;
+  text-color-external: #374151;
+}
+
+relationship.HAS_LINKED_CONCEPT {
+  color: #14b8a6;
+  shaft-width: 2px;
+  text-color-external: #0f766e;
+}
+
+relationship.HAS_RESTPUNT {
+  color: #ef4444;
+  shaft-width: 2px;
+  text-color-external: #b91c1c;
+}

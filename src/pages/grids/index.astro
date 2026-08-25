@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const artikelen = [
+  {
+    href: '/grids/kleurschema',
+    kicker: 'graph & data',
+    titel: 'Kleurcodering voor graafweergaven',
+    tekst:
+      'Een graaf met negentig node-types wordt pas leesbaar als kleur iets betekent. De methode ' +
+      'die we gebruiken — kleurtoon voor de toepassing, verzadiging voor het niveau, één ' +
+      'contrastregel — plus de kant-en-klare stylesheet voor Neo4j Browser.',
+  },
+];
+---
+
+<BaseLayout
+  title="GRiDS"
+  description="De werkbank achter GRiDS — bimforce's vastgoedinformatiesysteem op een graph database. Werkstukken, conventies en gereedschap dat we onderweg maken en delen."
+>
+  <Fragment slot="full">
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            werkbank
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            GRiDS
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Vastgoedinformatie in een graph database: locaties, assets, eisen, keuringen, kosten en
+            modellen als één samenhangend netwerk in plaats van losse lijsten.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 py-16">
+
+      <div class="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+        <p class="lead text-xl">
+          Onder het bouwen aan GRiDS ontstaan werkstukken die op zichzelf bruikbaar zijn — conventies,
+          gereedschap, manieren van kijken. Die zetten we hier neer, ook als ze nog niet af zijn.
+        </p>
+        <p>
+          Deze pagina groeit mee. Er staat nu één werkstuk; er komen er meer bij zodra ze het waard
+          zijn om te delen.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-5">
+        {artikelen.map((a) => (
+          <a
+            href={a.href}
+            class="group block no-underline rounded-lg border border-grey-light/60 hover:border-bf-red overflow-hidden transition-colors"
+          >
+            <div class="h-1 bg-bf-red"></div>
+            <div class="p-6 sm:p-7">
+              <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">
+                {a.kicker}
+              </div>
+              <h2 class="text-xl sm:text-2xl font-bold text-navy m-0 mb-2 group-hover:text-bf-red transition-colors">
+                {a.titel}
+              </h2>
+              <p class="text-navy/80 text-[15px] leading-relaxed m-0">{a.tekst}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <p class="mt-12 text-sm text-grey-mid">
+        Vragen of aanvullingen:
+        <a href="mailto:leja@bimforce.com" class="text-bf-red hover:underline">leja@bimforce.com</a>
+      </p>
+
+    </section>
+  </Fragment>
+</BaseLayout>

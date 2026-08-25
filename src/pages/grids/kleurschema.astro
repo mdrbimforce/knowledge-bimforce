@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+// De waaier hieronder wordt gegenereerd door
+// leja-brain/tools/graph-stylesheet/grids-v3/build_grids_v3.py.
+// Regenereren en het resultaat hierheen kopiëren; niet met de hand bewerken.
+import swatches from './_swatches.html?raw';
+---
+
+<BaseLayout
+  title="Kleurcodering voor graafweergaven"
+  description="Hoe je een Neo4j-graaf met tientallen node-types leesbaar maakt: hue voor de toepassing, shade voor het niveau, en één contrastregel die overal klopt. Inclusief de GRiDS-stylesheet om te downloaden."
+>
+  <Fragment slot="full">
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            werkbank &middot; graph &amp; data
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            Kleurcodering voor graafweergaven
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Een graaf met negentig node-types wordt pas leesbaar als kleur iets betekent.
+            Dit is de methode die we daarvoor gebruiken — plus de kant-en-klare stylesheet.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 py-16">
+
+      <div class="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+
+        <p class="lead text-xl">
+          Neo4j Browser geeft elk node-label een willekeurige kleur. Dat werkt tot een stuk of tien
+          types. Daarna kijk je naar een schaal met bolletjes waarin je niets meer terugvindt.
+        </p>
+
+        <p>
+          De voor de hand liggende oplossing — zelf kleuren toewijzen — levert een schema dat per
+          node klopt maar als geheel wankelt. Dat was ook precies de eerste versie van ons GRiDS-schema:
+          binnen één familie lagen de drie donkere niveaus vlak bij elkaar terwijl het lichtste ver
+          wegsprong, en het punt waarop witte tekst zwart moest worden viel per familie ergens anders.
+        </p>
+
+        <p>
+          De oorzaak is methodisch, niet esthetisch. Wie met de hand kleuren kiest, krijgt ongelijke
+          lichtheidsstappen. En zonder gelijke stappen bestaat er geen punt waar je consequent kunt
+          omschakelen van witte naar zwarte tekst.
+        </p>
+
+        <h2>Twee assen, drie regels</h2>
+
+        <p>
+          De oplossing is een <strong>perceptueel afgestemde kleurenwaaier</strong> — een palet waarin
+          elke stap over alle kleurtonen heen op ongeveer dezelfde lichtheid ligt. Wij gebruiken de
+          Tailwind CSS-waaier: 22 tonen &times; 11 stappen, expliciet daarop afgestemd. Dan wordt
+          kleur een regel in plaats van een afweging.
+        </p>
+
+        <p><strong>Kleurtoon draagt de betekenis.</strong> Elke functionele familie krijgt één toon.
+        Alles wat met labels te maken heeft is groen, alles wat met projecten te maken heeft is rood.</p>
+
+        <p><strong>Verzadiging draagt het niveau.</strong> Datamodellen hebben bijna altijd een
+        hiërarchie — container, groepering, item, sjabloon. Die vier krijgen altijd dezelfde vier
+        stappen uit de waaier: 800, 600, 400, 200. Steeds 15 tot 20 procentpunt lichtheid uit elkaar,
+        dus geen sprongen.</p>
+
+        <p><strong>Tekstkleur volgt uit de rest.</strong> Stap 600 en donkerder krijgt witte tekst,
+        stap 500 en lichter krijgt zwarte tekst. Omdat de waaier afgestemd is, klopt die grens in alle
+        22 tonen. In elke familie zonder uitzondering: de bovenste twee niveaus wit, de onderste twee
+        zwart.</p>
+
+        <p>
+          Daar komen nog twee praktische afspraken bij. De rand van een bol is altijd twee stappen
+          donkerder dan de vulling, zodat vorm en kleur elkaar niet in de weg zitten. En node-types
+          met miljoenen instanties krijgen bewust een lichte tint en een kleine diameter — anders
+          overspoelen ze de weergave en zie je de structuur niet meer waar het je om ging.
+        </p>
+
+        <h2>De volgorde van de kleurcirkel benutten</h2>
+
+        <p>
+          Zet families in de volgorde waarin ze op de kleurcirkel staan, en laat verwante domeinen
+          naast elkaar vallen. Iemand die het schema niet kent leest dan alsnog "dit hoort bij elkaar".
+          Voor GRiDS levert dat deze indeling op:
+        </p>
+
+      </div>
+
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b-2 border-navy/20 text-left">
+              <th class="py-2 pr-4 font-bold">Domein</th>
+              <th class="py-2 font-bold">Kleurtonen</th>
+            </tr>
+          </thead>
+          <tbody class="align-top">
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Portfolio</td><td class="py-2">rood projecten &middot; steen locaties &middot; oranje assets &middot; amber kosten</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Onderhoud &amp; semantiek</td><td class="py-2">geel technische omschrijvingen &middot; limoen classificatie &middot; groen labels &middot; smaragd eigenschappen &middot; turkoois concepten</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Eisen &amp; toetsing</td><td class="py-2">cyaan compliance &middot; hemelsblauw wettelijk kader &middot; blauw eisen</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">BIM</td><td class="py-2">indigo objecten &middot; violet modellen &middot; paars IFC-brondata</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Verwerking</td><td class="py-2">fuchsia filters &middot; roze mappings &middot; rozerood exports</td></tr>
+            <tr><td class="py-2 pr-4 font-semibold whitespace-nowrap">Kader</td><td class="py-2">neutrale grijzen voor organisatie, gebruikers, bestanden en technische hulpnodes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose prose-lg max-w-none mt-10 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+        <p>
+          Neutrale tonen zijn voor kaderdomeinen: organisatie, toegang, bestandsopslag, technische
+          hulpnodes. Verzadigde tonen blijven gereserveerd voor inhoudelijke families. Dat alleen al
+          scheelt veel — de helft van wat je in een graaf ziet is kader.
+        </p>
+
+        <h2>Het resultaat</h2>
+        <p>
+          Elke rij hieronder is één familie. Van links naar rechts loopt het niveau van container naar
+          sjabloon, met het nummer van de stap uit de waaier erbij.
+        </p>
+      </div>
+
+      <div class="gs-wrap mt-8" set:html={swatches} />
+
+      <div class="mt-12 bg-navy text-white rounded-lg overflow-hidden shadow-xl">
+        <div class="h-1.5 bg-bf-red"></div>
+        <div class="p-7 sm:p-9 grid sm:grid-cols-[1fr_auto] gap-6 items-center">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-2 font-bold">
+              Zelf gebruiken
+            </div>
+            <h2 class="text-2xl font-bold text-white m-0 mb-2">
+              De stylesheet voor GRiDS
+            </h2>
+            <p class="text-white/80 text-[15px] leading-relaxed m-0">
+              92 node-types en 84 relatietypes, kant en klaar. Sleep het bestand in het venster van
+              Neo4j Browser, of laad het via Browser Settings &rarr; Graph Stylesheet.
+              Terugdraaien met <code class="text-white">:style reset</code>.
+            </p>
+          </div>
+          <a
+            href="/grids/grids-v3.grass"
+            download
+            class="inline-flex items-center justify-center gap-2 bg-bf-red hover:bg-bf-red-bright text-white font-bold px-6 py-4 rounded-md no-underline transition-colors whitespace-nowrap"
+          >
+            Download .grass
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v13"/>
+              <path d="m7 12 5 5 5-5"/>
+              <path d="M5 21h14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="prose prose-lg max-w-none mt-12 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+        <h2>Drie dingen die we onderweg leerden</h2>
+
+        <p>
+          <strong>Genereren, niet tikken.</strong> Een stylesheet van negentig regels met de hand
+          onderhouden is vragen om drift. Wij genereren hem uit een script waarin alleen de families
+          en hun kleurtonen staan; de regels zitten in de generator. Een schemawijziging is dan één
+          regel code in plaats van tachtig zoek-en-vervang-acties.
+        </p>
+
+        <p>
+          <strong>Zet geen commentaar in een .grass-bestand.</strong> De parser van Neo4j Browser is
+          een eenvoudige tokenizer, geen CSS-engine. Documentatie hoort ernaast, niet erin.
+        </p>
+
+        <p>
+          <strong>Controleer je captions.</strong> Verwijst een caption naar een property die niet
+          bestaat, dan toont de Browser een lege bol zonder foutmelding. In GRiDS hebben de meeste
+          nodes een <code>name</code>, maar niet alle — waarden, afbeeldingen en overrides niet.
+        </p>
+
+        <p>
+          Als bijvangst dwingt zo'n inventarisatie je om alle labels te tellen, en dat legt
+          structuurproblemen bloot die je anders niet ziet: lege containers, node-types die veel
+          talrijker zijn dan verwacht, en resten van een vorige modelversie. De helft van de waarde
+          van dit werk zat niet in de kleuren.
+        </p>
+      </div>
+
+    </section>
+  </Fragment>
+</BaseLayout>
+
+<style is:global>
+  .gs-wrap .gs-h {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    margin: 26px 0 8px;
+    font-weight: 700;
+  }
+  .gs-wrap .gs-meta {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-left: 8px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .gs-wrap .gs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .gs-wrap .gs-sw {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+</style>
