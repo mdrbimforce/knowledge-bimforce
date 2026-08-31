@@ -1,0 +1,43 @@
+---
+// Overzicht van de reflecties-collection (essay-stijl observaties).
+// Zelfde reden als posts/index.astro: collection bestond, route niet.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const reflecties = (await getCollection('reflecties'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+  title="Reflecties"
+  description="Essay-stijl observaties over AI, bouw en standaarden — langzamer dan de praktijk-verhalen, en persoonlijker."
+>
+  <h1 class="text-3xl sm:text-4xl font-bold text-navy mb-2">Reflecties</h1>
+  <p class="text-navy/70 mb-10">
+    Langzamer dan de praktijk-verhalen, en persoonlijker: wat het werk aan standaarden
+    en AI met ons denken doet.
+  </p>
+
+  {reflecties.length === 0 && (
+    <p class="text-grey-mid italic">Nog geen reflecties gepubliceerd.</p>
+  )}
+
+  <ul class="list-none p-0 m-0 space-y-8">
+    {reflecties.map((entry) => (
+      <li class="border-b border-grey-light/40 pb-8 last:border-0">
+        <a href={`/reflecties/${entry.slug}`} class="no-underline group block">
+          <div class="text-xs uppercase tracking-wider text-grey-mid mb-1">
+            <time datetime={entry.data.pubDate.toISOString()}>{fmt(entry.data.pubDate)}</time>
+          </div>
+          <h2 class="text-xl font-bold text-navy m-0 mb-2 group-hover:text-bf-red transition-colors">
+            {entry.data.title}
+          </h2>
+          <p class="text-navy/75 text-[15px] leading-relaxed m-0">{entry.data.description}</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

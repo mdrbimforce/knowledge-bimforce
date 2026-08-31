@@ -1,0 +1,45 @@
+---
+// Detailpagina per post. Zie de toelichting in posts/index.astro.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) =>
+    import.meta.env.PROD ? !data.draft : true);
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+type Props = { post: CollectionEntry<'posts'> };
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article>
+    <div class="text-xs uppercase tracking-wider text-grey-mid mb-2">
+      <a href="/posts" class="no-underline hover:text-bf-red">Praktijk-verhalen</a>
+      <span class="mx-2">·</span>
+      <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+      {post.data.updated && <span class="ml-2">(bijgewerkt {fmt(post.data.updated)})</span>}
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-bold text-navy leading-tight mb-4">{post.data.title}</h1>
+    <p class="text-lg text-navy/70 leading-relaxed mb-8">{post.data.description}</p>
+
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+
+    {post.data.tags.length > 0 && (
+      <div class="mt-10 pt-6 border-t border-grey-light/40 flex flex-wrap gap-2">
+        {post.data.tags.map((tag) => (
+          <span class="text-xs uppercase tracking-wide text-grey-mid border border-grey-light/60 rounded px-2 py-0.5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </article>
+</BaseLayout>

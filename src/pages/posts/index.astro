@@ -1,0 +1,54 @@
+---
+// Overzicht van de posts-collection. Toegevoegd 2026-08-31 samen met
+// route-marketing-publish (leja-brain): de collection bestond al in
+// src/content/config.ts, maar werd nergens gerenderd — een gepubliceerde
+// markdown belandde daardoor op een pagina die niet bestond.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+  title="Praktijk-verhalen"
+  description="Praktijk-verhalen uit het werk van bimforce aan informatiestandaarden in de gebouwde omgeving."
+>
+  <h1 class="text-3xl sm:text-4xl font-bold text-navy mb-2">Praktijk-verhalen</h1>
+  <p class="text-navy/70 mb-10">
+    Wat we tegenkomen tijdens het werk aan IFC, IDS, NLRS, GRiDS en Leja — inclusief
+    de dingen die misgingen.
+  </p>
+
+  {posts.length === 0 && (
+    <p class="text-grey-mid italic">Nog geen verhalen gepubliceerd.</p>
+  )}
+
+  <ul class="list-none p-0 m-0 space-y-8">
+    {posts.map((post) => (
+      <li class="border-b border-grey-light/40 pb-8 last:border-0">
+        <a href={`/posts/${post.slug}`} class="no-underline group block">
+          <div class="text-xs uppercase tracking-wider text-grey-mid mb-1">
+            <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+          </div>
+          <h2 class="text-xl font-bold text-navy m-0 mb-2 group-hover:text-bf-red transition-colors">
+            {post.data.title}
+          </h2>
+          <p class="text-navy/75 text-[15px] leading-relaxed m-0">{post.data.description}</p>
+        </a>
+        {post.data.tags.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-2">
+            {post.data.tags.map((tag) => (
+              <span class="text-xs uppercase tracking-wide text-grey-mid border border-grey-light/60 rounded px-2 py-0.5">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
