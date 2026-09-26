@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" role="img" aria-labelledby="bak-title bak-desc">
+  <title id="bak-title">Drie bakken: welke data mag waar naartoe</title>
+  <desc id="bak-desc">Drie bakken naast elkaar. Vrij bruikbaar: openbare normen en standaarden, eigen publicaties, algemene vakvragen. Met Claude, gericht: het ontwerp van AI-workflows, documentatie en presentaties, en alleen de context die voor de vraag nodig is. Blijft in de hal: productiecode, het gedeelde geheugen, klant- en projectdata. Een pijl loopt van openbaar naar de eigen kern.</desc>
+  <!-- Bron: leja-marketing/decks/aicc-datasoevereiniteit-2026-10-13/slides.md, dia "Onze drie bakken" (r. 605-617) (statische eindstand van de click-reveal, 2026-09-26) -->
+  <style>
+    text { font-family: 'Myriad Pro', system-ui, sans-serif; }
+  </style>
+  <g><path d="M 79,30 L 98,30 L 107,39 L 107,66 L 79,66 Z" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.6" stroke-linejoin="round"/><path d="M 98,30 L 98,39 L 107,39" fill="none" stroke="#1c2a41" stroke-width="1.2"/><line x1="84" y1="45" x2="102" y2="45" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="84" y1="51" x2="102" y2="51" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="84" y1="57" x2="98" y2="57" stroke="#1c2a41" stroke-width="1" opacity="0.6"/></g><g><path d="M 109,24 L 128,24 L 137,33 L 137,60 L 109,60 Z" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.6" stroke-linejoin="round"/><path d="M 128,24 L 128,33 L 137,33" fill="none" stroke="#1c2a41" stroke-width="1.2"/><line x1="114" y1="39" x2="132" y2="39" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="114" y1="45" x2="132" y2="45" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="114" y1="51" x2="128" y2="51" stroke="#1c2a41" stroke-width="1" opacity="0.6"/></g><g><path d="M 139,30 L 158,30 L 167,39 L 167,66 L 139,66 Z" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.6" stroke-linejoin="round"/><path d="M 158,30 L 158,39 L 167,39" fill="none" stroke="#1c2a41" stroke-width="1.2"/><line x1="144" y1="45" x2="162" y2="45" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="144" y1="51" x2="162" y2="51" stroke="#1c2a41" stroke-width="1" opacity="0.6"/><line x1="144" y1="57" x2="158" y2="57" stroke="#1c2a41" stroke-width="1" opacity="0.6"/></g>
+  <text x="123" y="94" text-anchor="middle" fill="#475365" font-size="12" font-weight="600">openbaar</text>
+  <rect x="20" y="104" width="206" height="168" rx="8" fill="#F4F6F1" stroke="#00a8a8" stroke-width="1.5"/>
+  <path d="M 20,112 Q 20,104 28,104 L 218,104 Q 226,104 226,112 L 226,114 L 20,114 Z" fill="#00a8a8"/>
+  <text x="34" y="138" text-anchor="start" fill="#1c2a41" font-size="15" font-weight="700">Vrij bruikbaar</text>
+  <circle cx="38" cy="160" r="3" fill="#00a8a8"/>
+  <text x="48" y="164" text-anchor="start" fill="#1c2a41" font-size="12.5">Openbare normen</text>
+  <text x="48" y="180" text-anchor="start" fill="#1c2a41" font-size="12.5">en standaarden</text>
+  <circle cx="38" cy="198" r="3" fill="#00a8a8"/>
+  <text x="48" y="202" text-anchor="start" fill="#1c2a41" font-size="12.5">Eigen publicaties</text>
+  <circle cx="38" cy="220" r="3" fill="#00a8a8"/>
+  <text x="48" y="224" text-anchor="start" fill="#1c2a41" font-size="12.5">Algemene vakvragen</text>
+  <g><line x1="350" y1="34" x2="350" y2="22" stroke="#1c2a41" stroke-width="2"/><circle cx="350" cy="20" r="4" fill="#E65F59" stroke="#1c2a41" stroke-width="1.5"/><rect x="314" y="34" width="72" height="44" rx="10" fill="#475365" stroke="#1c2a41" stroke-width="2"/><text x="350" y="62" text-anchor="middle" fill="#fdfdfd" font-size="15" font-weight="700">Claude</text></g>
+  <text x="350" y="94" text-anchor="middle" fill="#475365" font-size="12" font-weight="600">extern model</text>
+  <rect x="247" y="104" width="206" height="168" rx="8" fill="#F4F6F1" stroke="#C9B49F" stroke-width="1.5"/>
+  <path d="M 247,112 Q 247,104 255,104 L 445,104 Q 453,104 453,112 L 453,114 L 247,114 Z" fill="#C9B49F"/>
+  <text x="261" y="138" text-anchor="start" fill="#1c2a41" font-size="15" font-weight="700">Met Claude, gericht</text>
+  <circle cx="265" cy="160" r="3" fill="#C9B49F"/>
+  <text x="275" y="164" text-anchor="start" fill="#1c2a41" font-size="12.5">Ontwerp van</text>
+  <text x="275" y="180" text-anchor="start" fill="#1c2a41" font-size="12.5">AI-workflows</text>
+  <circle cx="265" cy="198" r="3" fill="#C9B49F"/>
+  <text x="275" y="202" text-anchor="start" fill="#1c2a41" font-size="12.5">Documentatie en</text>
+  <text x="275" y="218" text-anchor="start" fill="#1c2a41" font-size="12.5">presentaties</text>
+  <circle cx="265" cy="236" r="3" fill="#C9B49F"/>
+  <text x="275" y="240" text-anchor="start" fill="#1c2a41" font-size="12.5">Alleen de context die</text>
+  <text x="275" y="256" text-anchor="start" fill="#1c2a41" font-size="12.5">voor de vraag nodig is</text>
+  <g><polygon points="527,38 577,16 627,38" fill="#1c2a41"/><rect x="527" y="38" width="100" height="50" fill="#e6e9ef" stroke="#1c2a41" stroke-width="2"/><rect x="557" y="52" width="40" height="36" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.5"/><text x="577" y="33" text-anchor="middle" fill="#fdfdfd" font-size="12" font-weight="700">eigen</text></g>
+  <rect x="474" y="104" width="206" height="168" rx="8" fill="#e6e9ef" stroke="#1c2a41" stroke-width="1.5"/>
+  <path d="M 474,112 Q 474,104 482,104 L 672,104 Q 680,104 680,112 L 680,114 L 474,114 Z" fill="#1c2a41"/>
+  <text x="488" y="138" text-anchor="start" fill="#1c2a41" font-size="15" font-weight="700">Blijft in de hal</text>
+  <circle cx="492" cy="160" r="3" fill="#1c2a41"/>
+  <text x="502" y="164" text-anchor="start" fill="#1c2a41" font-size="12.5">Onze productiecode</text>
+  <circle cx="492" cy="182" r="3" fill="#1c2a41"/>
+  <text x="502" y="186" text-anchor="start" fill="#1c2a41" font-size="12.5">Ons gedeelde geheugen</text>
+  <circle cx="492" cy="204" r="3" fill="#1c2a41"/>
+  <text x="502" y="208" text-anchor="start" fill="#1c2a41" font-size="12.5">Klant- en projectdata</text>
+  <line x1="30" y1="294" x2="660" y2="294" stroke="#475365" stroke-width="2"/><polygon points="668,294 659,289.5 659,298.5" fill="#475365"/>
+  <text x="30" y="312" text-anchor="start" fill="#475365" font-size="12">openbaar, niet onderscheidend</text>
+  <text x="670" y="312" text-anchor="end" fill="#1c2a41" font-size="12" font-weight="700">onze kern</text>
+  <text x="350" y="342" text-anchor="middle" fill="#1c2a41" font-size="14" font-weight="600">Welke data geef je je AI wél, en welke niet? Pas als je weet wat je hebt.</text>
+</svg>

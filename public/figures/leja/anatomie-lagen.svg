@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 336" role="img" aria-labelledby="anat-title anat-desc">
+  <title id="anat-title">Anatomie van de AI: lichaam en acht lagen brein</title>
+  <desc id="anat-desc">Links een poppetje met een GPU-server als lijf (A5000). In het hoofd zes gekleurde lagen, een stippelring voor zelflerend vermogen en twee oren voor de externe agents Claude Code en OpenCode. Rechts dezelfde lagen als stapel: Github, Neo4j formeel, Neo4j domeinkennis, Neo4j informeel, LoRA en het taalmodel Qwen3.6-27B, samen omkaderd door de orchestrator Hermes.</desc>
+  <!-- Bron: leja-marketing/decks/leja-self-introduction-2026-06/slides.md, dia "Anatomie" (r. 131-220) (statische eindstand van de click-reveal, 2026-09-26) -->
+  <defs><clipPath id="an-head"><circle cx="110" cy="50" r="32"/></clipPath></defs>
+  <style>
+    text { font-family: 'Myriad Pro', system-ui, sans-serif; }
+  </style>
+  <g transform="translate(0,34)">
+  <line x1="20" y1="270" x2="270" y2="270" stroke="#1c2a41" stroke-width="2" opacity="0.4"/>
+  <circle cx="110" cy="50" r="32" fill="#fdfdfd" stroke="#1c2a41" stroke-width="2.5"/>
+  <g clip-path="url(#an-head)">
+  <rect x="74" y="18" width="72" height="11" fill="#1c2a41"/>
+  <rect x="74" y="29" width="72" height="11" fill="#475365"/>
+  <rect x="74" y="40" width="72" height="11" fill="#0c6980"/>
+  <rect x="74" y="51" width="72" height="11" fill="#00a8a8"/>
+  <rect x="74" y="62" width="72" height="11" fill="#66cbcb"/>
+  <rect x="74" y="73" width="72" height="11" fill="#c0f0f7"/>
+  </g>
+  <circle cx="110" cy="50" r="32" fill="none" stroke="#1c2a41" stroke-width="2.5"/>
+  <circle cx="110" cy="50" r="36" fill="none" stroke="#0c6980" stroke-width="1.8" stroke-dasharray="4,2"/>
+  <ellipse cx="70" cy="24" rx="23" ry="23" fill="#c0f0f7" stroke="#1c2a41" stroke-width="1.8"/>
+  <text x="70" y="21" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Claude</text>
+  <text x="70" y="35" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Code</text>
+  <ellipse cx="147" cy="24" rx="23" ry="23" fill="#c0f0f7" stroke="#1c2a41" stroke-width="1.8"/>
+  <text x="147" y="21" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Open</text>
+  <text x="147" y="35" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Code</text>
+  <line x1="110" y1="82" x2="110" y2="105" stroke="#1c2a41" stroke-width="2.5"/>
+  <rect x="65" y="105" width="90" height="100" rx="6" fill="#1c2a41" stroke="#0c6980" stroke-width="2.5"/>
+  <line x1="70" y1="120" x2="150" y2="120" stroke="#00a8a8" stroke-width="1" opacity="0.5"/>
+  <line x1="70" y1="128" x2="150" y2="128" stroke="#00a8a8" stroke-width="1" opacity="0.5"/>
+  <rect x="78" y="140" width="64" height="35" fill="none" stroke="#00a8a8" stroke-width="1.5" opacity="0.7"/>
+  <text x="110" y="162" text-anchor="middle" fill="#fdfdfd" font-size="12" font-weight="700">GPU</text>
+  <text x="110" y="195" text-anchor="middle" fill="#fdfdfd" font-size="10" opacity="0.8">A5000</text>
+  <line x1="95" y1="205" x2="80" y2="265" stroke="#1c2a41" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="125" y1="205" x2="140" y2="265" stroke="#1c2a41" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="65" y1="135" x2="35" y2="180" stroke="#1c2a41" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="155" y1="135" x2="185" y2="180" stroke="#1c2a41" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <text x="20" y="22" text-anchor="start" fill="#1c2a41" font-size="13" font-weight="700">Lichaam: een server met een A5000-GPU</text>
+  <text x="300" y="22" text-anchor="start" fill="#1c2a41" font-size="13" font-weight="700">Brein: acht samenwerkende lagen</text>
+  <rect x="308" y="42" width="380" height="196" rx="6" fill="none" stroke="#0c6980" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <rect x="316" y="50" width="364" height="30" fill="#1c2a41"/>
+  <text x="328" y="69.5" fill="#fdfdfd" font-size="13"><tspan font-weight="700">Github</tspan><tspan opacity="0.85"> — lange-termijn extern geheugen</tspan></text>
+  <rect x="316" y="80" width="364" height="30" fill="#475365"/>
+  <text x="328" y="99.5" fill="#fdfdfd" font-size="13"><tspan font-weight="700">Neo4j formeel</tspan><tspan opacity="0.85"> — bedrijfsgeheugen</tspan></text>
+  <rect x="316" y="110" width="364" height="30" fill="#0c6980"/>
+  <text x="328" y="129.5" fill="#fdfdfd" font-size="13"><tspan font-weight="700">Neo4j domeinkennis</tspan><tspan opacity="0.85"> — GRiDS, NLRS, IFC5</tspan></text>
+  <rect x="316" y="140" width="364" height="30" fill="#00a8a8"/>
+  <text x="328" y="159.5" fill="#fdfdfd" font-size="13"><tspan font-weight="700">Neo4j informeel</tspan><tspan opacity="0.85"> — eigen geheugen</tspan></text>
+  <rect x="316" y="170" width="364" height="30" fill="#66cbcb"/>
+  <text x="328" y="189.5" fill="#1c2a41" font-size="13"><tspan font-weight="700">LoRA</tspan><tspan opacity="0.85"> — trainingslaag op het LLM</tspan></text>
+  <rect x="316" y="200" width="364" height="30" fill="#c0f0f7"/>
+  <text x="328" y="219.5" fill="#0c6980" font-size="13"><tspan font-weight="700">LLM (Qwen3.6-27B)</tspan><tspan opacity="0.85"> — redeneren + taal</tspan></text>
+  <text x="308" y="256" fill="#0c6980" font-size="13" font-style="italic"><tspan font-weight="700">Hermes</tspan> — orchestrator over alle lagen (stippelkader)</text>
+  <circle cx="324" cy="286" r="7" fill="none" stroke="#0c6980" stroke-width="1.8" stroke-dasharray="3,2"/>
+  <text x="340" y="290" fill="#1c2a41" font-size="13"><tspan font-weight="700">Zelflerend</tspan> — protocollen, skills en schema evolueren zelf</text>
+  <circle cx="324" cy="314" r="7" fill="#c0f0f7" stroke="#1c2a41" stroke-width="1.2"/>
+  <text x="340" y="318" fill="#1c2a41" font-size="13"><tspan font-weight="700">Externe agents</tspan> — Claude Code, OpenCode (op verzoek)</text>
+</svg>

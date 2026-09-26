@@ -1,0 +1,275 @@
+---
+title: "Waar mag een AI schrijven? De architectuur achter Leja"
+description: "Hoe we een AI-kennispartner hebben ingericht die leest wat nodig is, alleen via een mens in productiedata schrijft, en op een eigen server draait. Met de techniek erbij, en met wat nog niet af is."
+pubDate: 2026-10-14
+tags: ["AI", "AIagents", "architectuur", "informatiebeveiliging", "datasoevereiniteit", "knowledgegraphs"]
+draft: true
+---
+
+import Figure from '../../components/article/Figure.astro';
+import Callout from '../../components/article/Callout.astro';
+import Steps from '../../components/article/Steps.astro';
+import RouteFlow from '../../components/article/RouteFlow.astro';
+
+Tijdens een salesgesprek kwam de vraag die we steeds vaker horen: *"Als jullie AI alles in onze database kan lezen,
+hoe weet ik dan zeker dat hij er niets mee doet wat ik niet wil?"*
+
+Het is een goede vraag. Organisaties willen AI inzetten op hun eigen informatie: tekeningen, objectgegevens,
+keuringen, documenten. Tegelijk willen ze de controle over die informatie houden, en weten wie verantwoordelijk is
+als er iets misgaat.
+
+In [Hoeveel toegang geef je AI tot bedrijfsdata?](/posts/hoeveel-toegang-geef-je-ai-tot-bedrijfsdata) beschreven we
+het uitgangspunt in het kort. Dit artikel gaat een laag dieper. Het laat zien hoe Leja, onze AI-kennispartner, is
+opgebouwd, waar ze mag lezen, waar ze mag schrijven, waar ze draait, en hoe een wijziging in productiedata altijd
+langs een mens gaat.
+
+<Callout type="kern">
+AI hoeft niet overal bij te kunnen om waardevol te zijn. Wat telt, is dat je van elke stap weet wie hem mag zetten.
+</Callout>
+
+## Het grootste risico zit aan de randen
+
+De meeste discussies over AI-veiligheid gaan over het model: is het betrouwbaar, verzint het dingen, lekt het data?
+Dat zijn terechte vragen. Maar de grootste risico's zitten aan de randen van een systeem: in wat een AI mag
+aanroepen, waar hij mag schrijven, en wat er gebeurt als hij zich vergist.
+
+Een instructie als *"wijzig nooit iets in de productiedatabase"* helpt daar weinig. Een taalmodel volgt instructies
+meestal, en meestal is te weinig voor een harde grens. Een regel die alleen in de prompt staat, is een afspraak. Een regel die in de opbouw van het
+systeem zit, is een eigenschap.
+
+Daarom hebben we Leja zo gebouwd dat de belangrijkste grenzen in de architectuur liggen:
+
+- **gescheiden opslag**: het geheugen van de AI en de productiedata staan in aparte databases;
+- **leespaden en schrijfpaden zijn verschillende paden**: de AI praat via leestransacties met productiedata, en
+  schrijven gebeurt alleen via een route die een mens goedkeurt;
+- **lokaal waar het kan**: het meeste werk draait op een eigen server, externe modellen alleen via een portier met
+  budget en noodknop.
+
+## De anatomie van Leja
+
+Leja is een samenstel van lagen die elk één rol hebben.
+
+<Figure caption="De lagen van Leja. Het taalmodel redeneert, de kennisgraaf levert de feiten, en de dirigent (Hermes) bepaalt wie wat doet." source="presentatie 'Leja stelt zich voor', juni 2026" wide>
+  <img src="/figures/leja/anatomie-lagen.svg" alt="De lagen van Leja: kennisgraaf met geheugen en domeinkennis, lokaal taalmodel, dirigent Hermes, externe agents op verzoek" />
+</Figure>
+
+Van onder naar boven:
+
+- **Het taalmodel.** Op de eigen server draait Qwen3.6-27B, via llama.cpp, op een NVIDIA RTX A5000 met 24 GB
+  videogeheugen. Dat haalt ongeveer 33 tokens per seconde: snel genoeg voor dagelijks werk, zonder kosten per token.
+- **De kennisgraaf.** Een Neo4j-database met drie soorten inhoud: formele kennis (werkwijzen, protocollen,
+  beslissingen), domeinkennis (onder andere GRiDS, de NLRS en IFC) en het werkgeheugen: losse geheugenfragmenten uit
+  de dagelijkse praktijk.
+- **De dirigent.** Hermes ontvangt een vraag of taak, haalt gericht de relevante kennis op en bepaalt wie het werk
+  doet: het lokale model, een specialistische agent, of een mens.
+- **Externe agents, op verzoek.** Voor programmeerwerk kan de dirigent een gespecialiseerde agent inzetten,
+  gebriefd met de context uit de graaf.
+
+<Callout type="verdieping" title="Waarom een graaf en geen vector-database alleen">
+Het taalmodel redeneert, de graaf levert de feiten. Een graaf legt vast hoe dingen samenhangen: welke beslissing
+hoort bij welke sessie, welke les bij welk project, welke eis bij welk objecttype. Daardoor kan de AI bij elk
+antwoord ook laten zien waar het vandaan komt. Vector-zoeken gebruiken we daarnaast, als
+ingang; de graaf levert de samenhang.
+</Callout>
+
+## Twee databases: lezen is iets anders dan schrijven
+
+De kern van de architectuur is een scheiding tussen twee soorten opslag.
+
+<Figure caption="Links het eigen geheugen van de AI, rechts de productiedata. De AI leest uit beide, maar schrijft niet rechtstreeks in de productiedata." source="presentatie 'Leja stelt zich voor', juni 2026">
+  <img src="/figures/leja/twee-databases.svg" alt="Twee databases: het brein van de AI en de productiedata, met een doorgestreepte schrijfpijl naar de productiedata" />
+</Figure>
+
+**Het eigen geheugen** (bij ons `neo4j-leja`) is van de AI. Daarin staan haar werkwijzen, beslissingen en geleerde
+lessen, en de domeinkennis die tijdens het werk is opgebouwd. Hier heeft de AI alle rechten: dit is waar ze leert.
+
+**De productiedata** (bij ons de GRiDS-omgevingen) is van de organisatie: objecten, locaties, keuringen, documenten,
+modellen. Die heeft de AI nodig om vragen te beantwoorden. Aanpassen is een ander verhaal.
+
+Hoe die scheiding technisch werkt:
+
+1. **Aparte instanties.** Het geheugen en de productiedata zijn verschillende databases, op verschillende servers.
+   Een fout in de ene kan de andere niet raken.
+2. **De chat kan alleen lezen.** Als je Leja in het dashboard een vraag stelt over productiedata, loopt die vraag via
+   een leestransactie. Een schrijfopdracht in zo'n transactie weigert de database zelf. Er bestaat in de chat
+   bovendien geen schrijfgereedschap voor productiedata; schrijven kan de chat alleen in het eigen geheugen, en elke
+   schrijfactie daar wordt gelogd.
+3. **Schrijven in productie gaat via een route.** Moet er wel iets veranderen in productiedata, dan gebeurt dat via
+   een verwerkingsroute die de wijziging eerst voorstelt en pas uitvoert na goedkeuring door een mens. Daarover
+   verderop meer.
+
+<Callout type="nog-niet-af" title="Eerlijk over de grens">
+De leesbeperking zit in de manier waarop de AI met de database praat. Een aparte databasegebruiker die technisch
+alleen kan lezen, bestaat nog niet. Voor de chat komt het op hetzelfde neer, en een extra slot op databaseniveau is
+een logische volgende stap. Die staat op onze lijst.
+</Callout>
+
+Wat de scheiding oplevert:
+
+- **Herkomst blijft zichtbaar.** Wat de AI toevoegt, staat in haar eigen geheugen, met een verwijzing naar waar het
+  vandaan kwam. Wat in de productiedata staat, komt uit de oorspronkelijke systemen.
+- **Leren zonder de bron aan te raken.** Vragen en ervaringen worden in het geheugen vastgelegd en gekoppeld aan de
+  onderwerpen waar ze over gingen. De kennis van de AI groeit, de productiedata blijft onaangeroerd.
+
+## Lokaal waar het kan: de portier
+
+Een AI die alles naar een extern taalmodel stuurt, stuurt ook alle context mee. Daarom draait het meeste werk bij ons
+lokaal, en gaat een verzoek alleen naar een extern model als daar een reden voor is.
+
+<Figure caption="De portier: elk verzoek gaat standaard naar het lokale model. Alleen bij een zware taak, een te grote vraag of een lokale storing gaat het naar buiten, binnen een dagbudget en met een noodknop." source="presentatie 'Datasoevereiniteit', oktober 2026">
+  <img src="/figures/leja/de-portier.svg" alt="De portier: verzoeken gaan standaard naar het lokale model, alleen onder voorwaarden naar een extern model" />
+</Figure>
+
+Die portier is een klein stuk software tussen de AI en de taalmodellen. De regels:
+
+<Steps steps={[
+  { title: 'Standaard lokaal', text: 'Elk verzoek gaat eerst naar het model op de eigen server.' },
+  { title: 'Naar buiten alleen met een reden', text: 'Een expliciet zware taak, een vraag die groter is dan driekwart van wat het lokale model in één keer kan overzien, of een lokale storing (dan één nieuwe poging extern).' },
+  { title: 'Binnen een dagbudget', text: 'Boven het ingestelde bedrag per dag gaat de externe tak dicht tot middernacht. Lokaal werk loopt door.' },
+  { title: 'Met een noodknop', text: 'Eén schakelaar sluit de externe tak direct. Het lokale model blijft beschikbaar.' },
+  { title: 'Alles gelogd', text: 'Per verzoek: welke route, welk model, waarom, hoeveel tokens, wat het kostte en hoe lang het duurde.' },
+]} />
+
+Welke informatie überhaupt naar buiten mag, hebben we in drie bakken verdeeld.
+
+<Figure caption="Drie bakken: wat vrij bruikbaar is, wat gericht met een extern model mag, en wat altijd binnen blijft." source="presentatie 'Datasoevereiniteit', oktober 2026">
+  <img src="/figures/leja/drie-bakken.svg" alt="Drie bakken: vrij bruikbaar, gericht met een extern model, blijft binnen" />
+</Figure>
+
+- **Vrij bruikbaar**: openbare normen en onze eigen publicaties.
+- **Gericht met een extern model**: het ontwerp van AI-werkstromen, documentatie en presentaties.
+- **Blijft binnen**: productiecode, het gedeelde geheugen, en klant- en projectdata.
+
+Voor productiecode betekent dat: de AI leest mee en stelt voor, een ontwikkelaar beslist en voegt het toe.
+
+<Figure caption="Productiecode: de AI leest mee en doet een voorstel, een mens beslist en voegt het toe." source="presentatie 'Datasoevereiniteit', oktober 2026">
+  <img src="/figures/leja/ai-leest-mee-mens-beslist.svg" alt="Drie panelen: de AI leest, doet een voorstel, een mens voegt het toe" />
+</Figure>
+
+Een regel die we in de presentatie gebruiken, vat het samen: **huur het model, bezit de kennis.** Een extern model is
+een hulpmiddel dat je gericht inzet. De kennis die je opbouwt, blijft van jou.
+
+## Bewust lokaal: de verhuizing van het geheugen
+
+Tot juli 2026 stond het geheugen van Leja in een gratis clouddatabase. Dat werkte, tot de omvang ertoe deed: met
+ruim 50.000 knopen zaten we op een kwart van de limiet, en een enkel NLRS-projectmodel telt al zo'n 190.000 knopen.
+Het paste niet meer.
+
+We hebben het geheugen toen verhuisd naar een eigen Neo4j-installatie op dezelfde server als het lokale model.
+
+<Figure caption="Bewust lokaal: het geheugen verhuisde in juli 2026 van een clouddienst naar een eigen server." source="presentatie 'Datasoevereiniteit', oktober 2026">
+  <img src="/figures/leja/bewust-lokaal.svg" alt="Het geheugen verhuist van de cloud naar een eigen server" />
+</Figure>
+
+Hoe dat ging:
+
+<Steps steps={[
+  { title: 'Generale repetitie', text: 'Eerst een volledige proefverhuizing: 52.490 knopen en 77.594 relaties, één op één gelijk, import in 27 seconden. Zoekindexen (vector en fulltext) opnieuw opgebouwd en getest.' },
+  { title: 'Schrijfstop', text: 'Tijdens de echte overstap stonden alle schrijvende processen stil, via dezelfde noodknop die we voor de agents gebruiken.' },
+  { title: 'Overstap', text: 'Export, import (21 seconden), controles: alles groen. De hele overstap duurde ongeveer een half uur.' },
+  { title: 'Dichtgezet', text: 'De database luistert alleen op de server zelf. Wie er van buiten bij moet, gaat via een versleutelde tunnel.' },
+  { title: 'Back-ups', text: 'Dagelijks een versleutelde export, plus een kopie naar een externe opslaglocatie.' },
+]} />
+
+De server zelf is een gehuurde, dedicated machine in een Nederlands datacenter: geen gedeelde cloudomgeving, en in
+eigen beheer. Geheimen zoals wachtwoorden en sleutels staan versleuteld op schijf en worden bij het opstarten alleen in
+het werkgeheugen ontsleuteld.
+
+<Callout type="let-op" title="Lokaal is een keuze met een prijs">
+Een eigen server met een GPU kost een vast bedrag per maand en vraagt beheer: updates, back-ups, monitoring. Daar staat
+tegenover dat er geen kosten per token zijn, geen limieten van een externe dienst, en dat je precies weet waar je data
+staat.
+</Callout>
+
+## On-premise: dezelfde opbouw, op jouw server
+
+Omdat Leja zelf al op een eigen server draait, kan dezelfde opbouw ook binnen het netwerk van een organisatie draaien.
+Het verschil is alleen wie de server beheert.
+
+<Figure caption="De AI-stack voor een organisatie: dezelfde lagen, bij ons gehost of op eigen infrastructuur." source="presentatie over Leja en GRiDS, mei 2026" wide>
+  <img src="/figures/leja/ai-stack-organisatie.svg" alt="De AI-stack voor een organisatie: server, database, lokaal model, dirigent en dashboard" />
+</Figure>
+
+Wat er nodig is:
+
+- **een server met een GPU**, voor het lokale taalmodel (bij ons een RTX A5000 met 24 GB en 64 GB werkgeheugen);
+- **Neo4j**, voor het geheugen van de AI en, als je GRiDS gebruikt, voor de productiedata;
+- **het lokale model** met de portier ervoor;
+- **Hermes**, de dirigent, en het dashboard waarin je vragen stelt en voorstellen goedkeurt.
+
+Daarbij zijn drie vormen mogelijk: wij leveren en hosten het, jij host het zelf, of we bouwen het samen in jouw
+omgeving. In alle drie de gevallen geldt dezelfde regel: **de grond huur je, de hal beheer je.** Rekenkracht mag je
+huren; waar je kennis en data staan, bepaal je zelf.
+
+## Schrijven in productie: altijd via een route
+
+Tot nu toe ging het over lezen. Maar een AI-kennispartner is pas echt nuttig als hij ook dingen kan doen: een artikel
+publiceren, een objectbibliotheek bijwerken, een wijziging in een model doorvoeren. Daarvoor gebruiken we
+**verwerkingsroutes**.
+
+Een route is een vaste keten van stappen. Elke stap heeft een plafond dat in de graaf staat: *automatisch*, *review*
+(een mens moet goedkeuren) of *nooit*. Daarnaast weet de route per item hoe zeker hij is over wat hij gaat doen.
+Het strengste van die twee wint:
+
+**effectief = het plafond van de stap, of lager als de route minder zeker is.**
+
+Een onbekende situatie is altijd *nooit*: dan gebeurt er niets, en staat het item zichtbaar in het overzicht.
+
+Probeer het zelf:
+
+<RouteFlow />
+
+Een paar dingen die in dat schema zitten, en die we bewust zo hebben gebouwd:
+
+- **Goedkeuren is de uitvoering.** Er is geen tweede stap waarin de AI alsnog zelf beslist. Wat de mens heeft gezien,
+  is wat er gebeurt.
+- **Extern is altijd review.** Een post op LinkedIn gaat nooit automatisch, hoe zeker de route ook is. Alleen het eigen
+  kanaal mag na een aantal geslaagde runs naar automatisch, en dat is dan één bewuste instelling.
+- **Afwijzen wordt ook vastgelegd.** Zo kun je later zien wat er is tegengehouden, en waarom.
+- **Schrijfroutes beginnen droog.** Een route die in productiedata schrijft, laat standaard eerst zien wat hij zou
+  veranderen, zonder het te doen.
+
+Op dit moment draaien er vijf routes: publiceren naar onze website en LinkedIn, publiceren van GRiDS-modellen, en drie
+routes die productdata voor klanten verwerken. In alle vijf staat de schrijf- of publicatiestap op review.
+
+<Callout type="nog-niet-af" title="Wat nog niet af is">
+Elke route is vandaag nog maatwerk in code: wij bouwen hem, en de regels hierboven worden door de routemotor
+afgedwongen. Het doel is dat een organisatie zelf routes kan ontwerpen, met Leja als hulp, terwijl deze basisregels
+gegarandeerd blijven. Daarvoor werken we aan een aantal verbeteringen: een goedkeuring die gegarandeerd maar één keer
+kan worden uitgevoerd, tests op elke bewakingsregel van de motor, rollen voor wie mag goedkeuren, en routes die je
+beschrijft zonder te programmeren. Terugdraaien kan bij een deel van de schrijfstappen; stappen die niet terug te
+draaien zijn, moeten daarom altijd langs een mens.
+</Callout>
+
+## Leren zonder de bron aan te raken
+
+De scheiding tussen geheugen en productiedata maakt nog iets mogelijk: de AI kan leren van haar werk, zonder dat dat
+leren ooit in jouw data terechtkomt.
+
+Tijdens het werk legt Leja losse geheugenfragmenten vast: een beslissing met de afweging erachter, een fout en hoe die
+werd opgelost, een werkwijze die werkte. Eén fragment is één observatie. Dat maakt ze later terug te vinden.
+
+Eind september 2026 staan er bijna 9.000 van die fragmenten in het geheugen. Zo'n 80 procent daarvan is meer dan een
+registratie: werkwijzen, beslisverhalen, valkuilen, reflecties. Wekelijks worden verwante fragmenten samengevat tot
+blijvende kennis: op dit moment 167 kennisknopen, elk met een verwijzing naar de fragmenten waar ze uit voortkomen.
+
+Aan het begin van elke werksessie laadt Leja de relevante kennis voor het onderwerp: wat er eerder besloten is, wat er
+misging, wat werkte. Een fragment bewaart het *waarom* naast het *wat*. Dat is precies wat bij een nieuwe collega
+meestal ontbreekt.
+
+## Tot slot
+
+De vraag uit het salesgesprek was: hoe weet ik zeker dat de AI niets doet wat ik niet wil? Het antwoord zit in de opbouw
+van het systeem:
+
+- de AI leest productiedata, maar schrijft er niet rechtstreeks in;
+- elke wijziging in productie loopt via een route, en een mens keurt goed;
+- het werk draait lokaal waar het kan, en externe modellen alleen via een portier met budget en noodknop;
+- de kennis die de AI opbouwt, staat in een eigen geheugen, op een server die jij kiest.
+
+AI hoeft niet overal bij te kunnen om waardevol te zijn. Wat telt, is dat je van elke stap weet wie hem mag zetten.
+
+**Welke stap in jouw werk zou je een AI laten voorbereiden, en welke zou je altijd zelf willen goedkeuren?**
+
+Wil je weten hoe deze opbouw er in jouw organisatie uit zou zien, bij ons gehost of op eigen infrastructuur?
+[Neem contact op](/about).
