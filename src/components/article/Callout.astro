@@ -1,0 +1,28 @@
+---
+// Kader in de lopende tekst. Vier soorten, elk met een eigen functie:
+//   kern         — de ene gedachte die moet blijven hangen
+//   let-op       — valkuil of randvoorwaarde
+//   verdieping   — technisch detail voor wie verder wil lezen
+//   nog-niet-af  — wat nog in ontwikkeling is (eerlijk benoemd)
+export interface Props {
+  type?: 'kern' | 'let-op' | 'verdieping' | 'nog-niet-af';
+  title?: string;
+}
+const { type = 'kern', title } = Astro.props;
+
+const styles = {
+  kern: { border: 'border-teal', bg: 'bg-teal-soft/40', label: 'Kern' },
+  'let-op': { border: 'border-bf-red', bg: 'bg-bf-red/5', label: 'Let op' },
+  verdieping: { border: 'border-navy', bg: 'bg-off-white', label: 'Verdieping' },
+  'nog-niet-af': { border: 'border-tan', bg: 'bg-beige/40', label: 'Nog niet af' },
+}[type];
+---
+
+<aside class:list={['not-prose my-8 border-l-4 rounded-r-lg px-5 py-4', styles.border, styles.bg]}>
+  <div class="text-xs font-semibold uppercase tracking-wider text-steel mb-1">
+    {title ?? styles.label}
+  </div>
+  <div class="text-navy leading-relaxed [&_p]:my-2 [&_a]:underline">
+    <slot />
+  </div>
+</aside>

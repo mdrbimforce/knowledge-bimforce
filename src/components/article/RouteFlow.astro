@@ -1,0 +1,237 @@
+---
+// Interactieve uitleg van een verwerkingsroute met review-gate (Leja routing-principe).
+// Vereenvoudigde weergave van de echte engine: effectief = min(plafond van de stap,
+// zekerheid van het item); onbekend = nooit (fail-closed). Zonder JavaScript toont de
+// component de stappen als statische lijst.
+export interface Props {
+  title?: string;
+}
+const { title = 'Probeer het: hoe een route een actie behandelt' } = Astro.props;
+// Unieke radio-groep per instantie, zodat twee RouteFlows op één pagina elkaar niet raken.
+const group = `rf-${Math.random().toString(36).slice(2, 8)}`;
+
+const stages = [
+  { key: 'intake', label: 'Binnenkomst' },
+  { key: 'classify', label: 'Beoordelen' },
+  { key: 'report', label: 'Voorstel' },
+  { key: 'approve', label: 'Goedkeuring' },
+  { key: 'execute', label: 'Uitvoeren' },
+  { key: 'record', label: 'Vastleggen' },
+];
+
+// Voorbeeldacties. ceiling = het plafond dat voor deze stap in de graph staat;
+// certainty = hoe zeker de route is over wat hij gaat doen.
+const scenarios = [
+  { id: 'label', name: 'Een label aan een mail hangen', ceiling: 'auto', certainty: 'deterministisch',
+    why: 'Omkeerbaar en intern: het plafond staat op automatisch, en de regel is exact.' },
+  { id: 'site', name: 'Een artikel op de eigen website zetten', ceiling: 'review', certainty: 'deterministisch',
+    why: 'Publiek zichtbaar: het plafond staat op review, hoe zeker de route ook is.' },
+  { id: 'linkedin', name: 'Een post op LinkedIn plaatsen', ceiling: 'review', certainty: 'afgeleid',
+    why: 'Extern kanaal en een tekst die een model heeft voorgesteld: altijd een mens ertussen.' },
+  { id: 'unknown', name: 'Iets naar een onbekend kanaal sturen', ceiling: 'review', certainty: 'onbekend',
+    why: 'Geen bekende, goedgekeurde route naar dit kanaal: fail-closed, dus nooit.' },
+];
+---
+
+<section class="route-flow not-prose my-10 rounded-xl border border-grey-light/60 bg-white shadow-sm" data-route-flow>
+  <header class="border-b border-grey-light/40 px-5 py-4">
+    <div class="text-xs font-semibold uppercase tracking-wider text-teal-deep">Interactief</div>
+    <h3 class="text-lg font-bold text-navy mt-1">{title}</h3>
+    <p class="text-sm text-steel mt-1">Kies een actie en druk op Start. Vereenvoudigde weergave van de echte engine.</p>
+  </header>
+
+  <div class="px-5 pt-4 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Kies een actie">
+    {scenarios.map((s, i) => (
+      <label class="rf-choice flex items-start gap-2 rounded-lg border border-grey-light/60 px-3 py-2 cursor-pointer hover:border-teal">
+        <input type="radio" name={group} value={s.id} checked={i === 1} class="mt-1 accent-teal-deep"
+               data-ceiling={s.ceiling} data-certainty={s.certainty} data-why={s.why} data-name={s.name} />
+        <span class="text-sm text-navy">{s.name}</span>
+      </label>
+    ))}
+  </div>
+
+  <div class="px-5 pt-4 flex flex-wrap items-center gap-2 text-sm" aria-live="polite">
+    <span class="rf-pill" data-rf="ceiling">plafond: –</span>
+    <span class="text-grey-mid">×</span>
+    <span class="rf-pill" data-rf="certainty">zekerheid: –</span>
+    <span class="text-grey-mid">=</span>
+    <span class="rf-pill rf-pill-strong" data-rf="effective">effectief: –</span>
+  </div>
+
+  <ol class="rf-track px-5 pt-5 grid grid-cols-3 sm:grid-cols-6 gap-2">
+    {stages.map((st) => (
+      <li class="rf-stage" data-stage={st.key}>
+        <span class="rf-dot" aria-hidden="true"></span>
+        <span class="rf-label">{st.label}</span>
+      </li>
+    ))}
+  </ol>
+
+  <div class="px-5 py-4 flex flex-wrap gap-2">
+    <button type="button" class="rf-btn rf-btn-primary" data-action="start">Start</button>
+    <button type="button" class="rf-btn rf-btn-ok" data-action="approve" hidden>Goedkeuren</button>
+    <button type="button" class="rf-btn rf-btn-no" data-action="reject" hidden>Afwijzen</button>
+    <button type="button" class="rf-btn" data-action="rollback" hidden>Terugdraaien</button>
+    <button type="button" class="rf-btn" data-action="reset" hidden>Opnieuw</button>
+  </div>
+
+  <div class="rf-log mx-5 mb-5 rounded-lg bg-cream/70 px-4 py-3 text-sm text-navy min-h-[4.5rem]" aria-live="polite" data-rf="log">
+    Nog niets gebeurd.
+  </div>
+</section>
+
+<style>
+  .rf-pill { border: 1px solid #bbbfc6; border-radius: 999px; padding: 0.15rem 0.6rem; color: #475365; background: #fdfdfd; }
+  .rf-pill-strong { border-color: #0c6980; color: #0c6980; font-weight: 600; }
+  .rf-pill-strong[data-tier='nooit'] { border-color: #BB0303; color: #BB0303; }
+  .rf-pill-strong[data-tier='automatisch'] { border-color: #00a8a8; color: #00a8a8; }
+  .rf-stage { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
+  .rf-dot { width: 1.4rem; height: 1.4rem; border-radius: 999px; border: 2px solid #bbbfc6; background: #fdfdfd; transition: background 0.3s, border-color 0.3s, transform 0.3s; }
+  .rf-label { font-size: 0.78rem; color: #747d8b; }
+  .rf-stage[data-state='done'] .rf-dot { background: #0c6980; border-color: #0c6980; }
+  .rf-stage[data-state='active'] .rf-dot { background: #00a8a8; border-color: #00a8a8; transform: scale(1.25); }
+  .rf-stage[data-state='waiting'] .rf-dot { background: #F4F6F1; border-color: #E65F59; transform: scale(1.25); animation: rf-pulse 1.2s ease-in-out infinite; }
+  .rf-stage[data-state='blocked'] .rf-dot { background: #BB0303; border-color: #BB0303; }
+  .rf-stage[data-state='skipped'] .rf-dot { border-style: dashed; }
+  .rf-stage[data-state='done'] .rf-label, .rf-stage[data-state='active'] .rf-label { color: #1c2a41; }
+  .rf-stage[data-state='waiting'] .rf-label { color: #BB0303; font-weight: 600; }
+  .rf-btn { border: 1px solid #bbbfc6; border-radius: 0.5rem; padding: 0.4rem 0.9rem; font-size: 0.875rem; color: #1c2a41; background: #fdfdfd; }
+  .rf-btn:hover { border-color: #00a8a8; }
+  .rf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .rf-btn-primary { background: #0c6980; border-color: #0c6980; color: #fdfdfd; }
+  .rf-btn-ok { background: #00a8a8; border-color: #00a8a8; color: #fdfdfd; }
+  .rf-btn-no { border-color: #BB0303; color: #BB0303; }
+  .rf-choice:has(input:checked) { border-color: #0c6980; background: rgba(0, 168, 168, 0.06); }
+  @keyframes rf-pulse { 50% { transform: scale(1.05); } }
+  @media (prefers-reduced-motion: reduce) {
+    .rf-dot { transition: none; }
+    .rf-stage[data-state='waiting'] .rf-dot { animation: none; }
+  }
+</style>
+
+<script>
+  const ORDER = ['intake', 'classify', 'report', 'approve', 'execute', 'record'];
+  const TIER_RANK = { auto: 2, review: 1, never: 0 };
+  const CERTAINTY_TIER: Record<string, 'auto' | 'review' | 'never'> = {
+    deterministisch: 'auto', afgeleid: 'review', onbekend: 'never',
+  };
+  const TIER_NL = { auto: 'automatisch', review: 'review', never: 'nooit' };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, reduced ? 0 : ms));
+
+  function effectiveTier(ceiling: string, certainty: string) {
+    const fromCertainty = CERTAINTY_TIER[certainty] ?? 'never'; // onbekende waarde = fail-closed
+    const c = (ceiling in TIER_RANK ? ceiling : 'never') as keyof typeof TIER_RANK;
+    return TIER_RANK[c] <= TIER_RANK[fromCertainty] ? c : fromCertainty;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-route-flow]').forEach((root) => {
+    const $ = (sel: string) => root.querySelector<HTMLElement>(sel)!;
+    const stage = (k: string) => root.querySelector<HTMLElement>(`[data-stage="${k}"]`)!;
+    const btn = (a: string) => root.querySelector<HTMLButtonElement>(`[data-action="${a}"]`)!;
+    const log = $('[data-rf="log"]');
+    let busy = false;
+
+    const selected = () => root.querySelector<HTMLInputElement>('input[type="radio"]:checked')!;
+    const say = (html: string) => { log.innerHTML = html; };
+    const show = (...names: string[]) =>
+      ['start', 'approve', 'reject', 'rollback', 'reset'].forEach((n) => (btn(n).hidden = !names.includes(n)));
+
+    function paintTier() {
+      const s = selected();
+      const eff = effectiveTier(s.dataset.ceiling!, s.dataset.certainty!);
+      $('[data-rf="ceiling"]').textContent = `plafond: ${TIER_NL[s.dataset.ceiling as keyof typeof TIER_NL]}`;
+      $('[data-rf="certainty"]').textContent = `zekerheid: ${s.dataset.certainty}`;
+      const e = $('[data-rf="effective"]');
+      e.textContent = `effectief: ${TIER_NL[eff]}`;
+      e.dataset.tier = TIER_NL[eff];
+      return eff;
+    }
+
+    function reset() {
+      ORDER.forEach((k) => (stage(k).dataset.state = ''));
+      busy = false;
+      show('start');
+      say('Nog niets gebeurd.');
+      paintTier();
+    }
+
+    async function walk(from: number, to: number) {
+      for (let i = from; i <= to; i++) {
+        stage(ORDER[i]).dataset.state = 'active';
+        await wait(550);
+        stage(ORDER[i]).dataset.state = 'done';
+      }
+    }
+
+    async function start() {
+      if (busy) return;
+      busy = true;
+      show();
+      const s = selected();
+      const eff = paintTier();
+      say(`<strong>${s.dataset.name}.</strong> De route neemt het item in behandeling.`);
+      await walk(0, 0);
+      stage('classify').dataset.state = 'active';
+      await wait(600);
+      if (eff === 'never') {
+        stage('classify').dataset.state = 'blocked';
+        ORDER.slice(2).forEach((k) => (stage(k).dataset.state = 'skipped'));
+        say(`<strong>Geblokkeerd bij het beoordelen.</strong> ${s.dataset.why} Er gaat niets de deur uit, en het item staat zichtbaar in het overzicht.`);
+        show('reset');
+        busy = false;
+        return;
+      }
+      stage('classify').dataset.state = 'done';
+      await walk(2, 2);
+      if (eff === 'auto') {
+        stage('approve').dataset.state = 'skipped';
+        say(`<strong>Automatisch.</strong> ${s.dataset.why} De goedkeuringsstap wordt overgeslagen, maar wel vastgelegd.`);
+        await wait(700);
+        await walk(4, 5);
+        say(`<strong>Uitgevoerd en vastgelegd.</strong> ${s.dataset.why} Wie, wat en wanneer staat bij het item.`);
+        show('rollback', 'reset');
+        busy = false;
+        return;
+      }
+      stage('approve').dataset.state = 'waiting';
+      say(`<strong>Wacht op een mens.</strong> ${s.dataset.why} Het voorstel staat klaar: goedkeuren of afwijzen.`);
+      show('approve', 'reject');
+      busy = false;
+    }
+
+    async function approve() {
+      if (busy) return;
+      busy = true;
+      show();
+      stage('approve').dataset.state = 'done';
+      say('Goedgekeurd. Goedkeuren <em>is</em> de uitvoering: er is geen tweede stap waarin de AI zelf beslist.');
+      await wait(500);
+      await walk(4, 5);
+      say('<strong>Uitgevoerd en vastgelegd</strong>, met de naam van wie goedkeurde en het tijdstip.');
+      show('rollback', 'reset');
+      busy = false;
+    }
+
+    function reject() {
+      stage('approve').dataset.state = 'blocked';
+      ['execute', 'record'].forEach((k) => (stage(k).dataset.state = 'skipped'));
+      say('<strong>Afgewezen.</strong> Er gebeurt niets. De afwijzing zelf wordt wel vastgelegd, zodat je later kunt zien waarom.');
+      show('reset');
+    }
+
+    function rollback() {
+      stage('execute').dataset.state = 'blocked';
+      say('<strong>Teruggedraaid.</strong> De vorige toestand is teruggezet. Stappen die niet terug te draaien zijn, moeten daarom altijd langs een mens.');
+      show('reset');
+    }
+
+    root.querySelectorAll('input[type="radio"]').forEach((r) => r.addEventListener('change', reset));
+    btn('start').addEventListener('click', start);
+    btn('approve').addEventListener('click', approve);
+    btn('reject').addEventListener('click', reject);
+    btn('rollback').addEventListener('click', rollback);
+    btn('reset').addEventListener('click', reset);
+    reset();
+  });
+</script>

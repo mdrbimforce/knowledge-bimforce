@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 270" role="img" aria-labelledby="tdb-title tdb-desc">
+  <title id="tdb-title">Twee databases: het brein van de AI en de productiedata</title>
+  <desc id="tdb-desc">Links de eigen database van de AI (neo4j-leja), rechts de productiedata (neo4j-work). De AI leest uit beide, maar schrijft alleen in haar eigen database; een schrijfpijl naar de productiedata is doorgestreept.</desc>
+  <!-- Bron: leja-marketing/decks/leja-self-introduction-2026-06/slides.md, dia "Twee databases" (samengevoegd tot één statische figuur, 2026-09-26) -->
+  <defs>
+    <marker id="tdb-arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#1c2a41"/></marker>
+  </defs>
+  <style>
+    text { font-family: 'Myriad Pro', system-ui, sans-serif; }
+  </style>
+
+  <!-- links: eigen brein -->
+  <g transform="translate(0,0)">
+    <path d="M 30 30 L 30 188 Q 30 202 90 202 Q 150 202 150 188 L 150 30" fill="#0c6980" stroke="#075062" stroke-width="2"/>
+    <ellipse cx="90" cy="30" rx="60" ry="14" fill="#0c6980" stroke="#075062" stroke-width="2"/>
+    <ellipse cx="90" cy="85" rx="60" ry="14" fill="none" stroke="#fdfdfd" stroke-width="1" opacity="0.4"/>
+    <ellipse cx="90" cy="140" rx="60" ry="14" fill="none" stroke="#fdfdfd" stroke-width="1" opacity="0.4"/>
+    <text x="90" y="62" text-anchor="middle" fill="#fdfdfd" font-size="15" font-weight="700">neo4j-leja</text>
+    <text x="90" y="113" text-anchor="middle" fill="#fdfdfd" font-size="11">identiteit · protocollen</text>
+    <text x="90" y="128" text-anchor="middle" fill="#fdfdfd" font-size="11">geheugen · werkwijzen</text>
+    <text x="90" y="168" text-anchor="middle" fill="#fdfdfd" font-size="11" font-weight="700">domeinkennis</text>
+    <text x="90" y="183" text-anchor="middle" fill="#fdfdfd" font-size="11">grids · nlrs · ifc</text>
+    <text x="90" y="228" text-anchor="middle" fill="#0c6980" font-size="13" font-weight="700">het brein van de AI</text>
+    <text x="90" y="246" text-anchor="middle" fill="#475365" font-size="11">alle rechten</text>
+  </g>
+
+  <!-- midden: lezen / schrijven -->
+  <g transform="translate(180,0)">
+    <line x1="15" y1="80" x2="145" y2="80" stroke="#1c2a41" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#tdb-arr)"/>
+    <text x="80" y="70" text-anchor="middle" fill="#1c2a41" font-size="12" font-weight="600">leest uit beide</text>
+    <line x1="145" y1="130" x2="15" y2="130" stroke="#1c2a41" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#tdb-arr)"/>
+    <text x="80" y="150" text-anchor="middle" fill="#1c2a41" font-size="12" font-weight="600">schrijft alleen</text>
+    <text x="80" y="164" text-anchor="middle" fill="#1c2a41" font-size="12" font-weight="600">in het eigen brein</text>
+    <line x1="15" y1="195" x2="145" y2="195" stroke="#BB0303" stroke-width="2" stroke-dasharray="4,3" opacity="0.65"/>
+    <line x1="73" y1="186" x2="87" y2="204" stroke="#BB0303" stroke-width="2.5"/>
+    <line x1="87" y1="186" x2="73" y2="204" stroke="#BB0303" stroke-width="2.5"/>
+    <text x="80" y="222" text-anchor="middle" fill="#BB0303" font-size="11" font-weight="600">geen schrijfrecht</text>
+    <text x="80" y="236" text-anchor="middle" fill="#BB0303" font-size="11" font-weight="600">op productie</text>
+  </g>
+
+  <!-- rechts: productiedata -->
+  <g transform="translate(340,0)">
+    <path d="M 30 30 L 30 188 Q 30 202 90 202 Q 150 202 150 188 L 150 30" fill="#1c2a41" stroke="#0c1219" stroke-width="2"/>
+    <ellipse cx="90" cy="30" rx="60" ry="14" fill="#1c2a41" stroke="#0c1219" stroke-width="2"/>
+    <ellipse cx="90" cy="100" rx="60" ry="14" fill="none" stroke="#fdfdfd" stroke-width="1" opacity="0.4"/>
+    <ellipse cx="90" cy="155" rx="60" ry="14" fill="none" stroke="#fdfdfd" stroke-width="1" opacity="0.4"/>
+    <text x="90" y="68" text-anchor="middle" fill="#fdfdfd" font-size="15" font-weight="700">neo4j-work</text>
+    <text x="90" y="113" text-anchor="middle" fill="#fdfdfd" font-size="11">locaties · projecten</text>
+    <text x="90" y="128" text-anchor="middle" fill="#fdfdfd" font-size="11">modellen · tekeningen</text>
+    <text x="90" y="168" text-anchor="middle" fill="#fdfdfd" font-size="11">objecten · documenten</text>
+    <text x="90" y="183" text-anchor="middle" fill="#fdfdfd" font-size="11">eisen · processen</text>
+    <text x="90" y="228" text-anchor="middle" fill="#1c2a41" font-size="13" font-weight="700">de productiedata</text>
+    <text x="90" y="246" text-anchor="middle" fill="#475365" font-size="11">alleen lezen</text>
+  </g>
+</svg>

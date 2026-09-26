@@ -13,6 +13,7 @@
     "import:leja-deck": "node scripts/import-slidev-deck.mjs leja-self-introduction-2026-06 leja/presentatie"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^5.0.0"

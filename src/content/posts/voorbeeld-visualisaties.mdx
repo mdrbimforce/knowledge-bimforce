@@ -1,0 +1,56 @@
+---
+title: "Voorbeeld: visualisaties in een verdiepingsartikel"
+description: "Werkpagina (draft, niet gepubliceerd) die laat zien welke componenten een verdiepingsartikel kan gebruiken."
+pubDate: 2026-09-26
+tags: ["werkpagina"]
+draft: true
+---
+
+import Figure from '../../components/article/Figure.astro';
+import Callout from '../../components/article/Callout.astro';
+import Steps from '../../components/article/Steps.astro';
+import RouteFlow from '../../components/article/RouteFlow.astro';
+
+Deze pagina is een werkpagina. Hij staat op `draft` en verschijnt dus alleen in de lokale ontwikkelversie, niet op
+knowledge.bimforce.com. Hij laat zien wat een verdiepingsartikel aan beeld kan gebruiken.
+
+## Figuur met onderschrift
+
+<Figure caption="De AI leest uit beide databases, maar schrijft alleen in haar eigen brein. Op de productiedata heeft ze geen schrijfrechten: dat staat in de rechten van de database zelf." source="presentatie 'Leja stelt zich voor', juni 2026">
+  <img src="/figures/leja/twee-databases.svg" alt="Twee databases: het brein van de AI en de productiedata, met een doorgestreepte schrijfpijl naar de productiedata" />
+</Figure>
+
+## Kaders
+
+<Callout type="kern">
+AI hoeft niet overal bij te kunnen om waardevol te zijn.
+</Callout>
+
+<Callout type="verdieping" title="Voor wie verder wil lezen">
+De scheiding zit in de databaserechten, niet in een instructie aan het model. Een verkeerd begrepen opdracht kan
+daardoor geen productiedata veranderen.
+</Callout>
+
+<Callout type="nog-niet-af">
+Routes zijn vandaag nog code. Een eigen route inrichten zonder te programmeren is de richting waar we naartoe bouwen.
+</Callout>
+
+## Stappen
+
+<Steps steps={[
+  { title: 'Binnenkomst', text: 'De route pakt een gepland item op, bijvoorbeeld een artikel dat vandaag gepubliceerd moet worden.' },
+  { title: 'Beoordelen', text: 'Per kanaal bepaalt de route of hij het pad kent. Onbekend is geblokkeerd.' },
+  { title: 'Voorstel', text: 'Het resultaat wordt vooraf getoond: precies wat er gepubliceerd of geschreven gaat worden.' },
+  { title: 'Goedkeuring', text: 'Een mens keurt goed of wijst af. Goedkeuren is de uitvoering.' },
+  { title: 'Vastleggen', text: 'Wie, wat en wanneer blijft bij het item staan.' },
+]} />
+
+## Interactief
+
+<RouteFlow />
+
+## Een dia uit een presentatie insluiten
+
+<Figure caption="Ingesloten dia uit de gepubliceerde presentatie. Werkt, maar is zwaarder en minder scherp dan een losse figuur.">
+  <iframe src="/leja/presentatie/5" title="Presentatie Leja, dia 5" loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;border-radius:0.5rem"></iframe>
+</Figure>

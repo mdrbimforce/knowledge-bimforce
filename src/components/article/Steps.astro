@@ -1,0 +1,20 @@
+---
+// Genummerde stappen als verticale tijdlijn. Gebruik voor processen die de lezer
+// in volgorde moet volgen (een route, een installatie, een beslisketen).
+export interface Props {
+  steps: { title: string; text: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<ol class="not-prose my-8 relative border-l-2 border-teal/40 ml-4 space-y-6">
+  {steps.map((s, i) => (
+    <li class="ml-6">
+      <span class="absolute -left-[0.95rem] flex h-7 w-7 items-center justify-center rounded-full bg-teal-deep text-white text-sm font-semibold">
+        {i + 1}
+      </span>
+      <div class="font-semibold text-navy">{s.title}</div>
+      <p class="text-steel leading-relaxed mt-1">{s.text}</p>
+    </li>
+  ))}
+</ol>
