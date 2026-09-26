@@ -17,7 +17,7 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} ogImage={post.data.image}>
   <article>
     <div class="text-xs uppercase tracking-wider text-grey-mid mb-2">
       <a href="/posts" class="no-underline hover:text-bf-red">Praktijk-verhalen</a>

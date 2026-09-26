@@ -4,6 +4,7 @@ description: "Hoe we een AI-kennispartner hebben ingericht die leest wat nodig i
 pubDate: 2026-10-14
 tags: ["AI", "AIagents", "architectuur", "informatiebeveiliging", "datasoevereiniteit", "knowledgegraphs"]
 draft: true
+image: "/og/waar-mag-een-ai-schrijven.png"
 ---
 
 import Figure from '../../components/article/Figure.astro';
@@ -62,14 +63,46 @@ Van onder naar boven:
   de dagelijkse praktijk.
 - **De dirigent.** Hermes ontvangt een vraag of taak, haalt gericht de relevante kennis op en bepaalt wie het werk
   doet: het lokale model, een specialistische agent, of een mens.
-- **Externe agents, op verzoek.** Voor programmeerwerk kan de dirigent een gespecialiseerde agent inzetten,
-  gebriefd met de context uit de graaf.
+- **Extern, op verzoek.** Voor programmeerwerk werken agents als Claude Code mee, gebriefd met de context uit de
+  graaf. Voor taken waar het lokale model tekortschiet, zijn via OpenRouter specialistische modellen bereikbaar,
+  zoals Claude en DeepSeek. Die aanroepen lopen altijd via de portier (verderop).
 
 <Callout type="verdieping" title="Waarom een graaf en geen vector-database alleen">
 Het taalmodel redeneert, de graaf levert de feiten. Een graaf legt vast hoe dingen samenhangen: welke beslissing
 hoort bij welke sessie, welke les bij welk project, welke eis bij welk objecttype. Daardoor kan de AI bij elk
 antwoord ook laten zien waar het vandaan komt. Vector-zoeken gebruiken we daarnaast, als
 ingang; de graaf levert de samenhang.
+</Callout>
+
+## Meerdere agents, één geheugen
+
+Leja is geen chatvenster met één ingang. Ik werk zelf nog elke dag rechtstreeks met Claude Code, en afhankelijk van
+de klus ook met andere agents, zoals Codex of OpenCode. Het verschil met losse AI-tools: al die agents delen hetzelfde
+geheugen. Wat de ene leert, weet de volgende.
+
+Dat werkt zo:
+
+- **Rol en omgeving zijn twee dingen.** Een agent heeft een rol (programmeren, marketing, kennisbeheer,
+  geheugenonderhoud) en draait op een platform: Claude Code op de werkplek, een chat in de browser, of de dirigent op
+  de server. Dezelfde rol kan op verschillende platforms draaien, en alles wat een agent vastlegt, draagt beide labels.
+- **Elke sessie begint met de stand van zaken.** Bij de start laadt een agent de stand van het project, de lopende trajecten
+  en de laatste sessies uit het gedeelde geheugen. Daarna weet hij wat er eerder besloten is en waarom.
+- **Vastleggen gebeurt tijdens het werk.** Beslissingen, fouten en ontdekkingen gaan direct als fragment in de graaf,
+  gekoppeld aan de sessie waarin ze ontstonden. De volgende agent, op welk platform ook, vindt ze terug.
+- **Agents spreken elkaar aan.** Via berichtendraden in het geheugen legt een agent een vraag bij een andere rol neer,
+  en is zichtbaar wie aan zet is. Een grotere klus die in de dashboard-chat opkomt, wordt als overdrachtstaak
+  klaargezet voor de rol die hem moet oppakken.
+
+Inmiddels staan er ruim 490 werksessies in het geheugen, verdeeld over Claude Code, een browserchat, een
+desktop-app en de server. Ook dit artikel is zo gemaakt: de ene sessie verzamelde de feiten, een andere zette de
+illustraties uit de presentaties om, en de sessie die schreef, las beide terug uit hetzelfde geheugen.
+
+<Callout type="verdieping" title="Een voorbeeld uit de praktijk">
+Twee AI-sessies werkten aan hetzelfde live 3D-model van een technische installatie. De ene had een nieuwe regel
+gebouwd, nog niet vastgelegd. De andere moest het programma herstarten, en dat sluit het model even af. Er stond geen
+slot op en niemand had nee gezegd. Toch stuurde de tweede sessie de eerste eerst een bericht via het gedeelde
+geheugen: is het model opgeslagen, ben je nog bezig? Het antwoord kwam met een overdracht erbij, en de beslissing om
+door te gaan bleef bij de eigenaar van het project. Stilte is geen toestemming, ook niet tussen twee AI-sessies.
 </Callout>
 
 ## Twee databases: lezen is iets anders dan schrijven
@@ -86,22 +119,34 @@ lessen, en de domeinkennis die tijdens het werk is opgebouwd. Hier heeft de AI a
 **De productiedata** (bij ons de GRiDS-omgevingen) is van de organisatie: objecten, locaties, keuringen, documenten,
 modellen. Die heeft de AI nodig om vragen te beantwoorden. Aanpassen is een ander verhaal.
 
-Hoe die scheiding technisch werkt:
+### Drie zones
 
-1. **Aparte instanties.** Het geheugen en de productiedata zijn verschillende databases, op verschillende servers.
-   Een fout in de ene kan de andere niet raken.
-2. **De chat kan alleen lezen.** Als je Leja in het dashboard een vraag stelt over productiedata, loopt die vraag via
-   een leestransactie. Een schrijfopdracht in zo'n transactie weigert de database zelf. Er bestaat in de chat
-   bovendien geen schrijfgereedschap voor productiedata; schrijven kan de chat alleen in het eigen geheugen, en elke
-   schrijfactie daar wordt gelogd.
-3. **Schrijven in productie gaat via een route.** Moet er wel iets veranderen in productiedata, dan gebeurt dat via
-   een verwerkingsroute die de wijziging eerst voorstelt en pas uitvoert na goedkeuring door een mens. Daarover
-   verderop meer.
+In de praktijk zijn er meer dan twee soorten omgevingen. We werken daarom met drie zones, elk met eigen regels.
 
-<Callout type="nog-niet-af" title="Eerlijk over de grens">
-De leesbeperking zit in de manier waarop de AI met de database praat. Een aparte databasegebruiker die technisch
-alleen kan lezen, bestaat nog niet. Voor de chat komt het op hetzelfde neer, en een extra slot op databaseniveau is
-een logische volgende stap. Die staat op onze lijst.
+<Figure caption="Drie zones. De eigen omgeving is van de AI. In test-omgevingen schrijft ze alleen vanuit een werksessie of via een route. Productie is alleen bereikbaar via een lees-API en een schrijf-API waarin elke aanroep aan een gebruiker hangt; die laatste zone is een doelbeeld dat we nu bouwen." wide>
+  <img src="/figures/leja/drie-zones.svg" alt="Drie zones: eigen omgeving met lezen en schrijven, test-omgevingen met lezen en schrijven via werksessies of routes, productie via een lees-API en een schrijf-API" />
+</Figure>
+
+1. **De eigen omgeving**: het brein, het dashboard en deze kennissite. Hier heeft de AI volledige lees- en
+   schrijfrechten, op de database én op de code. Het is haar omgeving, en ze wordt ook geacht die te bewaken en te
+   onderhouden.
+2. **Test-omgevingen**: testdatabases en proefomgevingen. De AI mag hier lezen en schrijven, maar alleen vanuit een
+   werksessie op een werkplek, waar een mens meekijkt, of via een route. Vanaf de server zelf schrijft ze er niet in.
+3. **Productie**: de omgevingen waar organisaties op draaien, zowel code als databases. Daar komt de AI alleen via
+   twee toegangspunten. Een **lees-API** waarmee de hele datastructuur bevraagbaar is. En een **schrijf-API** voor
+   precies omschreven taken: iets aanmaken, bijwerken of verwijderen. Die schrijf-API wordt aangeroepen door de
+   routes van de AI, maar ook gewoon door de gebruikersinterface van GRiDS. Elke aanroep is gekoppeld aan een
+   gebruiker, mens of AI-agent, die in een aparte gebruikersdatabase staat.
+
+Het voordeel van die derde zone: de grens zit dan in de productieomgeving zelf. Het maakt niet meer uit hoe een agent
+gebouwd is of welk model erachter zit: de schrijf-API bepaalt wat er kan, en elke handeling staat op naam.
+
+<Callout type="nog-niet-af" title="Hoe het vandaag werkt">
+De productiezone met twee API's is het doelbeeld en wordt nu gebouwd. Vandaag werkt de scheiding via de manier
+waarop de AI met de databases praat. De chat in het dashboard gebruikt voor productiedata alleen leestransacties: een
+schrijfopdracht daarin weigert de database zelf, en een schrijfgereedschap voor productiedata heeft de chat niet.
+Schrijven in productie gebeurt alleen via een route, na goedkeuring door een mens. Die routes gebruiken vandaag nog
+eigen databasetoegang; met de schrijf-API verdwijnt dat.
 </Callout>
 
 Wat de scheiding oplevert:
@@ -171,8 +216,15 @@ Hoe dat ging:
   { title: 'Back-ups', text: 'Dagelijks een versleutelde export, plus een kopie naar een externe opslaglocatie.' },
 ]} />
 
-De server zelf is een gehuurde, dedicated machine in een Nederlands datacenter: geen gedeelde cloudomgeving, en in
-eigen beheer. Geheimen zoals wachtwoorden en sleutels staan versleuteld op schijf en worden bij het opstarten alleen in
+Achteraf was dat geen dag te vroeg. Het eigen geheugen van Leja telt nu zo'n 50.000 knopen. Maar op dezelfde server
+staat inmiddels ook de domeinkennis waar de AI mee werkt, en een volledige GRiDS-omgeving om veilig in te oefenen.
+Samen is dat eind september ruim 2,3 miljoen knopen, meer dan elf keer de limiet van de oude clouddienst.
+
+<Figure caption="Bij de verhuizing telde de hele database 52.490 knopen. Eind september is dat ruim 2,3 miljoen, waarvan zo'n 50.000 het eigen geheugen van de AI: meer dan elf keer de oude limiet." source="migratierapport juli 2026; telling op de database, 26 september 2026">
+  <img src="/figures/leja/groei-geheugen.svg" alt="Staafdiagram: oude limiet 200.000 knopen, juli 52.490, eigen geheugen nu 50.740, hele database nu 2.320.805" />
+</Figure>
+
+De server zelf is een gehuurde, dedicated machine in een Nederlands datacenter, die we zelf beheren. Geheimen zoals wachtwoorden en sleutels staan versleuteld op schijf en worden bij het opstarten alleen in
 het werkgeheugen ontsleuteld.
 
 <Callout type="let-op" title="Lokaal is een keuze met een prijs">

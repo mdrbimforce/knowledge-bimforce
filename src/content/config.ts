@@ -22,6 +22,8 @@ const posts = defineCollection({
     updated: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Preview-afbeelding voor LinkedIn e.d. (og:image), pad onder public/, bv. /og/<slug>.png
+    image: z.string().optional(),
   }),
 });
 

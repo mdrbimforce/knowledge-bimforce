@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 336" role="img" aria-labelledby="anat-title anat-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 358" role="img" aria-labelledby="anat-title anat-desc">
   <title id="anat-title">Anatomie van de AI: lichaam en acht lagen brein</title>
-  <desc id="anat-desc">Links een poppetje met een GPU-server als lijf (A5000). In het hoofd zes gekleurde lagen, een stippelring voor zelflerend vermogen en twee oren voor de externe agents Claude Code en OpenCode. Rechts dezelfde lagen als stapel: Github, Neo4j formeel, Neo4j domeinkennis, Neo4j informeel, LoRA en het taalmodel Qwen3.6-27B, samen omkaderd door de orchestrator Hermes.</desc>
+  <desc id="anat-desc">Links een poppetje met een GPU-server als lijf (A5000). In het hoofd zes gekleurde lagen, een stippelring voor zelflerend vermogen en twee oren: Claude Code (externe agent) en OpenRouter (toegang tot specialistische modellen zoals Claude en DeepSeek). Rechts dezelfde lagen als stapel: Github, Neo4j formeel, Neo4j domeinkennis, Neo4j informeel, LoRA (in ontwikkeling) en het taalmodel Qwen3.6-27B, samen omkaderd door de orchestrator Hermes.</desc>
   <!-- Bron: leja-marketing/decks/leja-self-introduction-2026-06/slides.md, dia "Anatomie" (r. 131-220) (statische eindstand van de click-reveal, 2026-09-26) -->
   <defs><clipPath id="an-head"><circle cx="110" cy="50" r="32"/></clipPath></defs>
   <style>
@@ -24,7 +24,7 @@
   <text x="70" y="35" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Code</text>
   <ellipse cx="147" cy="24" rx="23" ry="23" fill="#c0f0f7" stroke="#1c2a41" stroke-width="1.8"/>
   <text x="147" y="21" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Open</text>
-  <text x="147" y="35" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Code</text>
+  <text x="147" y="35" text-anchor="middle" fill="#1c2a41" font-size="11" font-weight="700">Router</text>
   <line x1="110" y1="82" x2="110" y2="105" stroke="#1c2a41" stroke-width="2.5"/>
   <rect x="65" y="105" width="90" height="100" rx="6" fill="#1c2a41" stroke="#0c6980" stroke-width="2.5"/>
   <line x1="70" y1="120" x2="150" y2="120" stroke="#00a8a8" stroke-width="1" opacity="0.5"/>
@@ -49,12 +49,13 @@
   <rect x="316" y="140" width="364" height="30" fill="#00a8a8"/>
   <text x="328" y="159.5" fill="#fdfdfd" font-size="13"><tspan font-weight="700">Neo4j informeel</tspan><tspan opacity="0.85"> — eigen geheugen</tspan></text>
   <rect x="316" y="170" width="364" height="30" fill="#66cbcb"/>
-  <text x="328" y="189.5" fill="#1c2a41" font-size="13"><tspan font-weight="700">LoRA</tspan><tspan opacity="0.85"> — trainingslaag op het LLM</tspan></text>
+  <text x="328" y="189.5" fill="#1c2a41" font-size="13"><tspan font-weight="700">LoRA</tspan><tspan opacity="0.85"> — trainingslaag (in ontwikkeling)</tspan></text>
   <rect x="316" y="200" width="364" height="30" fill="#c0f0f7"/>
   <text x="328" y="219.5" fill="#0c6980" font-size="13"><tspan font-weight="700">LLM (Qwen3.6-27B)</tspan><tspan opacity="0.85"> — redeneren + taal</tspan></text>
   <text x="308" y="256" fill="#0c6980" font-size="13" font-style="italic"><tspan font-weight="700">Hermes</tspan> — orchestrator over alle lagen (stippelkader)</text>
   <circle cx="324" cy="286" r="7" fill="none" stroke="#0c6980" stroke-width="1.8" stroke-dasharray="3,2"/>
   <text x="340" y="290" fill="#1c2a41" font-size="13"><tspan font-weight="700">Zelflerend</tspan> — protocollen, skills en schema evolueren zelf</text>
   <circle cx="324" cy="314" r="7" fill="#c0f0f7" stroke="#1c2a41" stroke-width="1.2"/>
-  <text x="340" y="318" fill="#1c2a41" font-size="13"><tspan font-weight="700">Externe agents</tspan> — Claude Code, OpenCode (op verzoek)</text>
+  <text x="340" y="318" fill="#1c2a41" font-size="13"><tspan font-weight="700">Extern, op verzoek</tspan> — Claude Code als agent</text>
+  <text x="340" y="340" fill="#1c2a41" font-size="13">OpenRouter: specialistische modellen (Claude, DeepSeek, …)</text>
 </svg>
