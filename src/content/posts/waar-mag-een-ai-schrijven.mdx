@@ -1,6 +1,6 @@
 ---
 title: "Waar mag een AI schrijven? De architectuur achter Leja"
-description: "Hoe we een AI-kennispartner hebben ingericht die leest wat nodig is, alleen via een mens in productiedata schrijft, en op een eigen server draait. Met de techniek erbij, en met wat nog niet af is."
+description: "Hoe we een AI-kennispartner hebben ingericht die leest wat nodig is, alleen via een mens in productiedata schrijft, en op een eigen server draait. Met de techniek erbij."
 pubDate: 2026-10-14
 tags: ["AI", "AIagents", "architectuur", "informatiebeveiliging", "datasoevereiniteit", "knowledgegraphs"]
 draft: true
@@ -76,7 +76,7 @@ ingang; de graaf levert de samenhang.
 
 ## Meerdere agents, één geheugen
 
-Leja is geen chatvenster met één ingang. Ik werk zelf nog elke dag rechtstreeks met Claude Code, en afhankelijk van
+Leja heeft meer dan één ingang. Ik werk zelf nog elke dag rechtstreeks met Claude Code, en afhankelijk van
 de klus ook met andere agents, zoals Codex of OpenCode. Het verschil met losse AI-tools: al die agents delen hetzelfde
 geheugen. Wat de ene leert, weet de volgende.
 
@@ -123,7 +123,7 @@ modellen. Die heeft de AI nodig om vragen te beantwoorden. Aanpassen is een ande
 
 In de praktijk zijn er meer dan twee soorten omgevingen. We werken daarom met drie zones, elk met eigen regels.
 
-<Figure caption="Drie zones. De eigen omgeving is van de AI. In test-omgevingen schrijft ze alleen vanuit een werksessie of via een route. Productie is alleen bereikbaar via een lees-API en een schrijf-API waarin elke aanroep aan een gebruiker hangt; die laatste zone is een doelbeeld dat we nu bouwen." wide>
+<Figure caption="Drie zones. De eigen omgeving is van de AI. In test-omgevingen schrijft ze alleen vanuit een werksessie of via een route. Productie is alleen bereikbaar via een lees-API en een schrijf-API waarin elke aanroep aan een gebruiker hangt; die zone richten we per organisatie in." wide>
   <img src="/figures/leja/drie-zones.svg" alt="Drie zones: eigen omgeving met lezen en schrijven, test-omgevingen met lezen en schrijven via werksessies of routes, productie via een lees-API en een schrijf-API" />
 </Figure>
 
@@ -136,17 +136,18 @@ In de praktijk zijn er meer dan twee soorten omgevingen. We werken daarom met dr
    twee toegangspunten. Een **lees-API** waarmee de hele datastructuur bevraagbaar is. En een **schrijf-API** voor
    precies omschreven taken: iets aanmaken, bijwerken of verwijderen. Die schrijf-API wordt aangeroepen door de
    routes van de AI, maar ook gewoon door de gebruikersinterface van GRiDS. Elke aanroep is gekoppeld aan een
-   gebruiker, mens of AI-agent, die in een aparte gebruikersdatabase staat.
+   gebruiker, mens of AI-agent, die in een aparte gebruikersdatabase staat. Die API's zijn uniek per implementatie:
+   voor iedere situatie ontwerpen we ze zo dat ze naadloos aansluiten op de systemen en werkwijzen die er al zijn.
 
 Het voordeel van die derde zone: de grens zit dan in de productieomgeving zelf. Het maakt niet meer uit hoe een agent
 gebouwd is of welk model erachter zit: de schrijf-API bepaalt wat er kan, en elke handeling staat op naam.
 
-<Callout type="nog-niet-af" title="Hoe het vandaag werkt">
-De productiezone met twee API's is het doelbeeld en wordt nu gebouwd. Vandaag werkt de scheiding via de manier
-waarop de AI met de databases praat. De chat in het dashboard gebruikt voor productiedata alleen leestransacties: een
-schrijfopdracht daarin weigert de database zelf, en een schrijfgereedschap voor productiedata heeft de chat niet.
-Schrijven in productie gebeurt alleen via een route, na goedkeuring door een mens. Die routes gebruiken vandaag nog
-eigen databasetoegang; met de schrijf-API verdwijnt dat.
+<Callout type="verdieping" title="Hoe het bij bimforce werkt">
+Bij bimforce liggen de grenzen op een nog fundamenteler niveau. Onze productieomgevingen zijn codebases op GitHub,
+en de lees- en schrijfrechten regelen we met GitHub-toegangstokens. Leja heeft op de repositories met productiecode
+alleen leesrechten: elke wijziging in productiecode wordt beoordeeld en goedgekeurd door een developer. Haar eigen
+repositories, voor het dashboard, deze website en interne tools, staan in een apart GitHub-account. Daar heeft ze
+volledige toegang.
 </Callout>
 
 Wat de scheiding oplevert:
@@ -284,13 +285,10 @@ Een paar dingen die in dat schema zitten, en die we bewust zo hebben gebouwd:
 Op dit moment draaien er vijf routes: publiceren naar onze website en LinkedIn, publiceren van GRiDS-modellen, en drie
 routes die productdata voor klanten verwerken. In alle vijf staat de schrijf- of publicatiestap op review.
 
-<Callout type="nog-niet-af" title="Wat nog niet af is">
-Elke route is vandaag nog maatwerk in code: wij bouwen hem, en de regels hierboven worden door de routemotor
-afgedwongen. Het doel is dat een organisatie zelf routes kan ontwerpen, met Leja als hulp, terwijl deze basisregels
-gegarandeerd blijven. Daarvoor werken we aan een aantal verbeteringen: een goedkeuring die gegarandeerd maar één keer
-kan worden uitgevoerd, tests op elke bewakingsregel van de motor, rollen voor wie mag goedkeuren, en routes die je
-beschrijft zonder te programmeren. Terugdraaien kan bij een deel van de schrijfstappen; stappen die niet terug te
-draaien zijn, moeten daarom altijd langs een mens.
+<Callout type="verdieping" title="Per organisatie ingericht">
+Elke route stemmen we af op de organisatie: welke stappen, welke kanalen, welke systemen. De basisregels hierboven
+zijn daarbij steeds dezelfde, en de routemotor dwingt ze af. Stappen die niet terug te draaien zijn, gaan altijd langs
+een mens.
 </Callout>
 
 ## Leren zonder de bron aan te raken
