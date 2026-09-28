@@ -26,7 +26,7 @@ tags:
   - "Revit"
   - "interoperabiliteit"
   - "RTC"
-draft: true
+draft: false
 ---
 Een project met meerdere partijen betekent meerdere softwarepakketten. Iedereen levert een model, en de vraag is steeds dezelfde: komt de informatie heel over bij de ander? Op RTC Europe, de Europese Revit-conferentie, gaf Martijn de Riet hierover twee sessies. Samen geven ze een overzicht van de werkwijzen en ontwikkelingen rond IFC in die jaren.
 

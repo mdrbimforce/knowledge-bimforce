@@ -21,7 +21,7 @@ tags:
   - "Revit"
   - "standaarden"
   - "opleiding"
-draft: true
+draft: false
 ---
 Wie in Revit samenwerkt met andere partijen, loopt tegen dezelfde zes frustraties aan: te veel of te weinig informatie, informatie die niet uit te lezen is, informatie op de verkeerde plaats, ongewenste parameters, en zo verder. De Nederlandse Revit Standaard (NLRS) is bedacht om precies die frustraties weg te nemen. Voor de Vink Bouw Academy verzorgde Martijn de Riet in 2019 een introductie.
 

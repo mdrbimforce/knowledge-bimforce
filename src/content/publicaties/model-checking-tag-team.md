@@ -27,7 +27,7 @@ tags:
   - "Navisworks"
   - "Revit Model Checker"
   - "BILT"
-draft: true
+draft: false
 ---
 Een BIM-proces staat of valt met de vraag of het model klopt. De meeste projectteams leunen daarvoor op één controletool. Is dat altijd de juiste keuze, of hoort de modelcontrole af te hangen van de scope en de workflow van het project?
 

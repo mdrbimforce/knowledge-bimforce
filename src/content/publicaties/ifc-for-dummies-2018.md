@@ -22,7 +22,7 @@ tags:
   - "Revit"
   - "openBIM"
   - "Dynamo"
-draft: true
+draft: false
 ---
 Je ontvangt IFC-bestanden in projecten en levert ze zelf op. Maar wat kun je ermee, en wat gaat er mis als je er te makkelijk over denkt? Deze sessie is de Nederlandse, verkorte versie van de class die Martijn de Riet in oktober 2018 op BILT Europe gaf ([More IFC for Dummies](/publicaties/more-ifc-for-dummies)), een maand later gegeven op de Revit & IFC Gebruikersdag.
 

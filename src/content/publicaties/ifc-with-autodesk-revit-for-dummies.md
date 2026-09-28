@@ -22,7 +22,7 @@ tags:
   - "Revit"
   - "Autodesk University"
   - "openBIM"
-draft: true
+draft: false
 ---
 Steeds meer landen schrijven IFC voor als opleverformaat in overheidsprojecten, en commerciële opdrachtgevers volgen. Wie buiten de Verenigde Staten met Revit werkt, krijgt er vroeg of laat mee te maken. Deze class op Autodesk University 2013 is geschreven voor precies dat moment: je moet ermee aan de slag en hebt nog geen idee hoe.
 

@@ -26,7 +26,7 @@ tags:
   - "podcast"
   - "BlenderBIM"
   - "IfcOpenShell"
-draft: true
+draft: false
 ---
 Veel van de software die IFC leesbaar, controleerbaar en bewerkbaar maakt, is open source en wordt gemaakt door een klein aantal mensen. In deze serie van de BILT Academy Podcast komen drie van hen aan het woord, na een openingsaflevering over de vraag waarom open source er in de bouw toe doet.
 

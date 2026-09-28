@@ -22,7 +22,7 @@ tags:
   - "openBIM"
   - "BILT"
   - "gevorderd"
-draft: true
+draft: false
 ---
 "IFC is geen bestandstype, het is een taal." De uitspraak hoor je vaak; deze sessie neemt hem serieus. Een taal heeft een vocabulaire en een grammatica, en kan dus op meerdere manieren worden opgeschreven en vertaald. Wie dat doorheeft, kijkt anders naar een IFC-bestand. Het eerste gereedschap in de sessie is dan ook Notepad++.
 

@@ -22,7 +22,7 @@ tags:
   - "Revit"
   - "BILT"
   - "openBIM"
-draft: true
+draft: false
 ---
 Om met een stuk gereedschap te kunnen werken moet je het eerst begrijpen, en de snelste weg is de handleiding lezen. Voor IFC bestaat die handleiding niet, in elk geval niet in taal die iemand zonder voorkennis kan volgen. Deze class op BILT Europe 2018 begint daarom bij het begin: waar komt IFC vandaan, waarom is het bedacht, door wie, en hoe is een IFC-model opgebouwd?
 

@@ -21,7 +21,7 @@ tags:
   - "fabrikanten"
   - "BIM content"
   - "strategie"
-draft: true
+draft: false
 ---
 Een fabrikant die met BIM begint, doet dat meestal omdat een klant erom vraagt. De vraag die daarna komt is lastiger: wat levert het de fabrikant zelf op? In deze keynote op de conferentie Plastic Pipes inside Buildings (2018) zet Martijn de Riet de strategieën op een rij die fabrikanten in de praktijk kiezen, met voorbeelden uit projecten van bimforce.
 

@@ -37,7 +37,7 @@ tags:
   - "Revit"
   - "openBIM"
   - "AUGIWorld"
-draft: true
+draft: false
 ---
 Rond 2012 was de vaste overtuiging in de Nederlandse BIM-wereld dat Revit slecht met IFC overweg kon. Tegelijk ging de Rijksgebouwendienst IFC eisen als opleverformaat voor BIM-projecten. Voor bureaus die met Revit werkten was dat een reële vraag: waar staan we?
 

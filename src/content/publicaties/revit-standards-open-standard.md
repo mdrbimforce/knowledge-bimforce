@@ -21,7 +21,7 @@ tags:
   - "Open Standards"
   - "Forum Standaardisatie"
   - "BILT"
-draft: true
+draft: false
 ---
 In september 2015 werd de Stichting Revit Standards opgericht, gesteund door aannemers, architecten, constructeurs, installatieadviseurs, resellers en fabrikanten. De NLRS stroomlijnt de Nederlandse werkwijze in Revit en komt inmiddels voor in de meeste BIM-protocollen. In mei 2018 volgde de erkenning door het Forum Standaardisatie als aanbevolen open standaard, na een traject van bijna twee jaar. Mark Wieringa, voorzitter van de stichting, vertelde het verhaal op BILT Europe 2018.
 

@@ -21,7 +21,7 @@ tags:
   - "Linked Data"
   - "COBie"
   - "openBIM"
-draft: true
+draft: false
 ---
 De bouw werkt met een groot aantal gespecialiseerde tools, en IFC wordt gebruikt om daartussen informatie uit te wisselen. Dat stelt eisen aan het formaat: parametrisch, zodat informatie herbruikbaar is; flexibel, omdat elke applicatie andere input vraagt; schaalbaar, omdat grote gebouwen grote modellen geven. IFC in de vorm van losse bestanden voldoet daar maar gedeeltelijk aan.
 

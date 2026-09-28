@@ -22,7 +22,7 @@ tags:
   - "gebouwdossier"
   - "BILT"
   - "case"
-draft: true
+draft: false
 ---
 Een campus van 1,6 miljoen vierkante meter, 610.000 vierkante meter gebouwd, 88 gebouwen waarvan 62 in eigendom, van kernonderzoek tot studentenhuisvesting. En de gebouwinformatie: 300 meter papieren archief, 48.000 digitale documenten, en één project dat met BIM is ontworpen. Dat was het vertrekpunt van de TU Delft toen zij een nieuwe strategie voor beheer en onderhoud ging ontwikkelen.
 
