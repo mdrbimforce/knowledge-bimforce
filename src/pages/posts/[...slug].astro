@@ -28,6 +28,16 @@ const fmt = (d: Date) =>
     <h1 class="text-3xl sm:text-4xl font-bold text-navy leading-tight mb-4">{post.data.title}</h1>
     <p class="text-lg text-navy/70 leading-relaxed mb-8">{post.data.description}</p>
 
+    {post.data.image && (
+      <img
+        src={post.data.image}
+        alt=""
+        width="1200"
+        height="630"
+        class="block w-full h-auto rounded-md border border-grey-light/40 mb-10"
+      />
+    )}
+
     <div class="prose max-w-none">
       <Content />
     </div>
