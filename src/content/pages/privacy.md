@@ -1,10 +1,10 @@
 ---
 title: "Privacyverklaring"
 description: "Hoe bimforce omgaat met persoonsgegevens op knowledge.bimforce.com en in gekoppelde diensten."
-updated: 2026-07-13
+updated: 2026-09-28
 ---
 
-**Laatst bijgewerkt: 13 juli 2026**
+**Laatst bijgewerkt: 28 september 2026**
 
 Deze privacyverklaring beschrijft hoe bimforce omgaat met persoonsgegevens op knowledge.bimforce.com en in de diensten en integraties die bimforce beheert. We houden het graag zo simpel als de werkelijkheid is: deze site is een publicatieplatform, en we verzamelen zo min mogelijk.
 
@@ -19,7 +19,9 @@ bimforce is het bedrijf van Martijn de Riet en levert kennis, software en advies
 
 ### Bezoek aan deze website
 
-knowledge.bimforce.com is een statische website. Er zijn geen gebruikersaccounts, geen reactieformulieren en geen nieuwsbriefinschrijvingen. We plaatsen zelf geen tracking-cookies en gebruiken geen advertentie- of analysediensten van derden.
+knowledge.bimforce.com is een statische website. Er zijn geen gebruikersaccounts, geen reactieformulieren en geen nieuwsbriefinschrijvingen. We plaatsen geen tracking-cookies en gebruiken geen advertentiediensten.
+
+Om te zien welke artikelen gelezen worden, gebruiken we Cloudflare Web Analytics. Deze dienst plaatst volgens Cloudflare geen cookies en volgt bezoekers niet over andere websites. Wij zien alleen totalen, zoals het aantal paginaweergaven en bezoeken per artikel; die gebruiken we om te bepalen welke onderwerpen we verder uitwerken.
 
 De site wordt gehost bij Cloudflare (Cloudflare Pages). Cloudflare verwerkt als hostingpartij technisch noodzakelijke gegevens — zoals IP-adressen in serverlogs — om de site veilig en snel te kunnen leveren. Zie daarvoor het [privacybeleid van Cloudflare](https://www.cloudflare.com/privacypolicy/).
 
