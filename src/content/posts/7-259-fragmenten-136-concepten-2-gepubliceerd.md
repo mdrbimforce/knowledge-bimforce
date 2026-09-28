@@ -47,15 +47,17 @@ Bij het afsluiten van een sessie loopt een aparte pas: welke momenten van vandaa
 
 ## Waar het vastliep
 
-![Trechter: 8.942 fragmenten vastgelegd tijdens het werk, 209 contentitems waarvan 144 op concept, en 2 gepubliceerd.](/figures/posts/pijplijn-trechter.svg)
-
 209 contentitems. 144 daarvan staan op concept. 2 zijn gepubliceerd.
 
 Het vangen werkte. Het publiceren was handwerk dat er telkens bij inschoot, en dus groeide de stapel. Een pijplijn die aan het eind dichtzit, is geen pijplijn.
 
+![Trechter: 8.942 fragmenten vastgelegd tijdens het werk, 209 contentitems waarvan 144 op concept, en 2 gepubliceerd.](/figures/posts/pijplijn-trechter.svg)
+
 ## Wat we eraan deden
 
-Een verwerkingsroute die dagelijks kijkt welke content gepland staat, per kanaal een publicatievoorstel rendert, en dat voorlegt. Het eigen kanaal krijgt een git-commit met de markdown erin; externe kanalen gaan over hun API.
+Een verwerkingsroute die dagelijks kijkt welke content gepland staat, per kanaal een publicatievoorstel rendert, en dat voorlegt. Het eigen kanaal krijgt een git-commit met de markdown erin; externe kanalen gaan over hun API. Het geheel is te volgen via een kanban waarin posts kunnen worden klaargezet, gereviewed en uiteindelijk worden goedgekeurd. 
+
+![Dashboard view op de volledige marketing content pipeline](/figures/posts/7-259-fragmenten-136-concepten-2-gepubliceerd/image.png)
 
 Met één harde regel: goedkeuren ís de publicatie. De agent plaatst niets op eigen gezag, en een kanaal zonder bekende route wordt geblokkeerd. 
 En eerlijk is eerlijk (als je dat tegenwoordig nog mag zeggen...), dit is een hybride post. Een deel van de tekst is geschreven door Leja, een deel door mij, Martijn. En de meeste posts zullen dat voorlopig nog wel blijven.
