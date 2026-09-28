@@ -5,8 +5,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+// Sorteersleutel: de datum als die er is, anders 1 januari van het jaar.
+const pubKey = (p: { data: { date?: Date; year: number } }) =>
+  p.data.date ? p.data.date.valueOf() : Date.UTC(p.data.year, 0, 1);
+
 const items = (await getCollection('publicaties', ({ data }) => import.meta.env.PROD ? !data.draft : true))
-  .sort((a, b) => (b.data.date?.valueOf() ?? b.data.year * 1e12) - (a.data.date?.valueOf() ?? a.data.year * 1e12));
+  .sort((a, b) => pubKey(b) - pubKey(a));
 
 const perJaar = new Map<number, typeof items>();
 for (const it of items) {

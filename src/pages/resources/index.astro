@@ -1,0 +1,96 @@
+---
+// Resources (2026-09-28, besluit Martijn): downloadbare zaken die je vrij mag gebruiken.
+// Vervangt de GRiDS-werkbankpagina als navigatie-item; /grids stuurt hierheen (astro.config.mjs).
+// Nieuwe resources: een item toevoegen aan de lijst hieronder, bestand in public/<map>/.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+type Resource = {
+  kicker: string;
+  titel: string;
+  tekst: string;
+  download?: { label: string; href: string; meta: string };
+  uitleg?: { label: string; href: string };
+};
+
+const resources: Resource[] = [
+  {
+    kicker: 'GRiDS · Neo4j Browser',
+    titel: 'Kleurschema voor GRiDS-grafen (.grass)',
+    tekst:
+      'De stylesheet die we zelf gebruiken om een graaf met negentig node-types leesbaar te houden: ' +
+      'kleurtoon voor de toepassing, verzadiging voor het niveau, één contrastregel. Laden in Neo4j Browser ' +
+      'via :style, of het bestand op het canvas slepen.',
+    download: { label: 'Download grids-v3.grass', href: '/grids/grids-v3.grass', meta: 'GRASS, 25 KB' },
+    uitleg: { label: 'Hoe het schema in elkaar zit', href: '/grids/kleurschema' },
+  },
+];
+---
+
+<BaseLayout
+  title="Resources"
+  description="Downloadbare bestanden en gereedschap van bimforce die je vrij mag gebruiken: het GRiDS-kleurschema voor Neo4j Browser, en wat er nog volgt rond de NLRS."
+>
+  <Fragment slot="full">
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            werkbank
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            Resources
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Bestanden en gereedschap uit ons werk die je vrij mag gebruiken. Elk item heeft een
+            download en, waar dat helpt, een uitleg over hoe het in elkaar zit.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 py-16">
+
+      <div class="grid gap-5">
+        {resources.map((r) => (
+          <article class="rounded-lg border border-grey-light/60 overflow-hidden">
+            <div class="h-1 bg-bf-red"></div>
+            <div class="p-6 sm:p-7">
+              <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">{r.kicker}</div>
+              <h2 class="text-xl sm:text-2xl font-bold text-navy m-0 mb-2">{r.titel}</h2>
+              <p class="text-navy/80 text-[15px] leading-relaxed m-0 mb-4">{r.tekst}</p>
+              <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                {r.download && (
+                  <a href={r.download.href} download class="text-bf-red font-semibold hover:underline">
+                    {r.download.label}
+                    <span class="text-grey-mid font-normal ml-2">{r.download.meta}</span>
+                  </a>
+                )}
+                {r.uitleg && (
+                  <a href={r.uitleg.href} class="text-navy/80 hover:text-bf-red hover:underline">
+                    {r.uitleg.label}
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-12 prose max-w-none prose-p:text-navy/85">
+        <p>
+          Deze pagina groeit met het werk mee. In voorbereiding staan onder meer de NLRS-hulpmiddelen
+          die we zelf gebruiken bij Revit-bibliotheekbeheer. Ze verschijnen hier zodra ze buiten ons eigen
+          werk bruikbaar zijn.
+        </p>
+      </div>
+
+      <p class="mt-10 text-sm text-grey-mid">
+        Vragen of aanvullingen:
+        <a href="mailto:leja@bimforce.com" class="text-bf-red hover:underline">leja@bimforce.com</a>
+      </p>
+
+    </section>
+  </Fragment>
+</BaseLayout>
