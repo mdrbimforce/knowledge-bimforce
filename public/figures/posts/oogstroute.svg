@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" role="img" aria-labelledby="or-title or-desc">
+  <title id="or-title">Van werksessie naar drie afnemers</title>
+  <desc id="or-desc">Tijdens een werksessie legt de AI-kennispartner losse fragmenten vast. Die fragmenten gaan drie kanten op. Eén: de volgende sessie leest de antipatronen en besluiten bij de start. Twee: wekelijks worden fragmenten samengetrokken tot 167 knowledge-nodes, de interne documentatie. Drie: bij het afsluiten kijkt een aparte pas welke momenten publicatiewaardig zijn; die worden concepten, samen met Martijn herschreven en ingepland. Een dagelijkse route legt elk gepland stuk per kanaal ter goedkeuring voor. Pas na goedkeuring door een mens volgt publicatie op knowledge.bimforce.com via een git-commit en op LinkedIn via de API.</desc>
+  <!-- Cijfers: telling neo4j-leja 27-09-2026 (zelfde stand als de marketingpipeline-post). -->
+  <style>text { font-family: 'Myriad Pro', system-ui, sans-serif; }</style>
+  <defs>
+    <marker id="or-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475365"/>
+    </marker>
+  </defs>
+
+  <!-- bron -->
+  <rect x="20" y="170" width="120" height="60" rx="8" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.5"/>
+  <text x="80" y="196" text-anchor="middle" fill="#1c2a41" font-size="14" font-weight="700">Werksessie</text>
+  <text x="80" y="214" text-anchor="middle" fill="#475365" font-size="11">code, modellen, mail</text>
+
+  <line x1="140" y1="200" x2="178" y2="200" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+
+  <rect x="180" y="162" width="140" height="76" rx="8" fill="#0c6980"/>
+  <text x="250" y="192" text-anchor="middle" fill="#fdfdfd" font-size="16" font-weight="700">8.942</text>
+  <text x="250" y="210" text-anchor="middle" fill="#fdfdfd" font-size="12">fragmenten</text>
+  <text x="250" y="226" text-anchor="middle" fill="#c0f0f7" font-size="9.5">elke 5 handelingen een check</text>
+
+  <!-- vertakkingen -->
+  <path d="M320,180 C340,180 340,65 358,65" fill="none" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <line x1="320" y1="200" x2="358" y2="200" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <path d="M320,220 C340,220 340,315 358,315" fill="none" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+
+  <!-- afnemer 1 -->
+  <text x="360" y="28" fill="#747d8b" font-size="10" font-weight="700" letter-spacing="1">AFNEMER 1 · GEDRAG VAN DE AGENT</text>
+  <rect x="360" y="40" width="300" height="50" rx="8" fill="#c0f0f7" fill-opacity="0.6" stroke="#0c6980" stroke-width="1.5"/>
+  <text x="510" y="62" text-anchor="middle" fill="#0c6980" font-size="13" font-weight="700">Volgende sessie</text>
+  <text x="510" y="79" text-anchor="middle" fill="#1c2a41" font-size="11">leest antipatronen en besluiten bij de start</text>
+
+  <!-- afnemer 2 -->
+  <text x="360" y="148" fill="#747d8b" font-size="10" font-weight="700" letter-spacing="1">AFNEMER 2 · INTERNE DOCUMENTATIE</text>
+  <rect x="360" y="175" width="160" height="50" rx="8" fill="#fdfdfd" stroke="#00a8a8" stroke-width="1.5"/>
+  <text x="440" y="197" text-anchor="middle" fill="#1c2a41" font-size="13" font-weight="700">Wekelijks</text>
+  <text x="440" y="214" text-anchor="middle" fill="#475365" font-size="11">samentrekken</text>
+  <line x1="520" y1="200" x2="558" y2="200" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <rect x="560" y="175" width="160" height="50" rx="8" fill="#00a8a8"/>
+  <text x="640" y="197" text-anchor="middle" fill="#fdfdfd" font-size="13" font-weight="700">167 knowledge-nodes</text>
+  <text x="640" y="214" text-anchor="middle" fill="#1c2a41" font-size="11">werkende recepten</text>
+
+  <!-- afnemer 3 -->
+  <text x="360" y="273" fill="#747d8b" font-size="10" font-weight="700" letter-spacing="1">AFNEMER 3 · MARKETING</text>
+  <rect x="360" y="290" width="160" height="50" rx="8" fill="#fdfdfd" stroke="#E65F59" stroke-width="1.5"/>
+  <text x="440" y="312" text-anchor="middle" fill="#1c2a41" font-size="13" font-weight="700">Afsluitpas</text>
+  <text x="440" y="329" text-anchor="middle" fill="#475365" font-size="11">publicatiewaardig?</text>
+  <line x1="520" y1="315" x2="558" y2="315" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <rect x="560" y="290" width="160" height="50" rx="8" fill="#fdfdfd" stroke="#E65F59" stroke-width="1.5"/>
+  <text x="640" y="312" text-anchor="middle" fill="#1c2a41" font-size="13" font-weight="700">Concept</text>
+  <text x="640" y="329" text-anchor="middle" fill="#475365" font-size="11">samen herschreven, gepland</text>
+
+  <!-- publicatieroute -->
+  <path d="M640,340 L640,358 L150,358 L150,378" fill="none" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <rect x="60" y="380" width="180" height="50" rx="8" fill="#fdfdfd" stroke="#1c2a41" stroke-width="1.5"/>
+  <text x="150" y="402" text-anchor="middle" fill="#1c2a41" font-size="13" font-weight="700">Dagelijkse route</text>
+  <text x="150" y="419" text-anchor="middle" fill="#475365" font-size="11">voorstel per kanaal</text>
+  <line x1="240" y1="405" x2="278" y2="405" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <rect x="280" y="380" width="180" height="50" rx="8" fill="#E65F59"/>
+  <text x="370" y="402" text-anchor="middle" fill="#fdfdfd" font-size="13" font-weight="700">Mens keurt goed</text>
+  <text x="370" y="419" text-anchor="middle" fill="#fdfdfd" font-size="11">goedkeuren is publiceren</text>
+  <path d="M460,395 C480,395 480,385 498,385" fill="none" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <path d="M460,415 C480,415 480,425 498,425" fill="none" stroke="#475365" stroke-width="1.5" marker-end="url(#or-arrow)"/>
+  <rect x="500" y="368" width="220" height="32" rx="6" fill="#0c6980"/>
+  <text x="610" y="389" text-anchor="middle" fill="#fdfdfd" font-size="12" font-weight="700">knowledge.bimforce.com</text>
+  <rect x="500" y="410" width="220" height="32" rx="6" fill="#0c6980"/>
+  <text x="610" y="431" text-anchor="middle" fill="#fdfdfd" font-size="12" font-weight="700">LinkedIn · API</text>
+</svg>

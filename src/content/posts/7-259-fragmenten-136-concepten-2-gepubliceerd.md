@@ -43,7 +43,11 @@ Wekelijks worden losse fragmenten samengetrokken tot duurzame kennis: 167 knowle
 
 Bij het afsluiten van een sessie loopt een aparte pas: welke momenten van vandaag zijn publicatiewaardig? Die worden concepten, met een verwijzing naar de fragmenten waar ze uit komen. Dat maakt elke claim in een post herleidbaar tot het moment waarop hij werd gemeten. De bedoeling is om zo voor verschillende doelen content automatisch aan te leveren. Voor kennisdeling, maar ook marketing. 
 
+![Schema: een werksessie levert fragmenten op die drie kanten op gaan. De volgende sessie leest ze bij de start, wekelijks worden ze samengetrokken tot knowledge-nodes, en een afsluitpas maakt concepten die via een dagelijkse route pas na goedkeuring door een mens op knowledge.bimforce.com en LinkedIn verschijnen.](/figures/posts/oogstroute.svg)
+
 ## Waar het vastliep
+
+![Trechter: 8.942 fragmenten vastgelegd tijdens het werk, 209 contentitems waarvan 144 op concept, en 2 gepubliceerd.](/figures/posts/pijplijn-trechter.svg)
 
 209 contentitems. 144 daarvan staan op concept. 2 zijn gepubliceerd.
 
