@@ -1,0 +1,10 @@
+# Cloudflare Pages: bindings als code (quest-139, 2026-09-28).
+# Build-instellingen (astro build, output dist) blijven in het dashboard staan;
+# dit bestand levert alleen de R2-binding voor functions/files/[[path]].js.
+name = "knowledge-bimforce"
+compatibility_date = "2025-09-01"
+pages_build_output_dir = "dist"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "knowledge-files"

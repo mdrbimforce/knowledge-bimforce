@@ -12,7 +12,7 @@ kind: "presentatie"
 image: "/publicaties/ifc-with-autodesk-revit-for-dummies.jpg"
 downloads:
   - label: "Handout, presentatie en testbestanden (zip)"
-    url: "https://files.knowledge.bimforce.com/publicaties/IFC-with-Autodesk-Revit-for-Dummies.zip"
+    url: "/files/publicaties/IFC-with-Autodesk-Revit-for-Dummies.zip"
     size: "31.6 MB"
     format: "zip"
     hosted: "r2"
