@@ -53,7 +53,7 @@ const reflecties = defineCollection({
 // Publicaties — het archief van presentaties, artikelen, handouts en podcasts
 // (quest-139, 2026-09-28: overgezet van bimforce.com/supportcenter). Eén pagina per
 // publicatie of serie; downloads staan in public/publicaties/files/ (klein) of op
-// Cloudflare R2 (hosted: 'r2', bestanden boven ~20 MB).
+// Cloudflare R2 via functions/files (hosted: 'r2', bestanden boven ~20 MB).
 const publicaties = defineCollection({
   type: 'content',
   schema: z.object({

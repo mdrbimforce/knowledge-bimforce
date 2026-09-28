@@ -12,7 +12,7 @@ kind: "presentatie"
 image: "/publicaties/ifc-for-dummies-2018.jpg"
 downloads:
   - label: "Presentatie (25 slides), IFC-voorbeelden en Revit 2019-bestanden (zip)"
-    url: "https://files.knowledge.bimforce.com/publicaties/IFC-For-Dummies.zip"
+    url: "/files/publicaties/IFC-For-Dummies.zip"
     size: "28.8 MB"
     format: "zip"
     hosted: "r2"

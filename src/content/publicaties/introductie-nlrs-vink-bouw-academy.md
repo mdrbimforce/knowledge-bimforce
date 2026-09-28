@@ -11,7 +11,7 @@ kind: "presentatie"
 image: "/publicaties/introductie-nlrs-vink-bouw-academy.jpg"
 downloads:
   - label: "Presentatie, verkorte versie (70 slides)"
-    url: "https://files.knowledge.bimforce.com/publicaties/VinkAcademyIntroductieNLRS_verkort.pptx"
+    url: "/files/publicaties/VinkAcademyIntroductieNLRS_verkort.pptx"
     size: "23.5 MB"
     format: "pptx"
     hosted: "r2"

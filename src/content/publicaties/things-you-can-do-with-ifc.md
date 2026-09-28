@@ -11,7 +11,7 @@ kind: "presentatie"
 image: "/publicaties/things-you-can-do-with-ifc.jpg"
 downloads:
   - label: "Presentatie (20 slides) en testbestanden met COBie (zip)"
-    url: "https://files.knowledge.bimforce.com/publicaties/181109_Dingen-die-je-kunt-doen-met-IFC.zip"
+    url: "/files/publicaties/181109_Dingen-die-je-kunt-doen-met-IFC.zip"
     size: "28.5 MB"
     format: "zip"
     hosted: "r2"

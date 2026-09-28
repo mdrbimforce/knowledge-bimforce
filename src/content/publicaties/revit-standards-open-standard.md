@@ -11,7 +11,7 @@ kind: "presentatie"
 image: "/publicaties/revit-standards-open-standard.jpg"
 downloads:
   - label: "Presentatie (54 slides)"
-    url: "https://files.knowledge.bimforce.com/publicaties/RevitStandardsOfficallyRecognizedAsOpenStandards.pptx"
+    url: "/files/publicaties/RevitStandardsOfficallyRecognizedAsOpenStandards.pptx"
     size: "29.6 MB"
     format: "pptx"
     hosted: "r2"
