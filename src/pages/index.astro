@@ -1,5 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Feed op de homepage (2026-09-28, besluit Martijn): de nieuwste verhalen en publicaties,
+// in plaats van de "In opbouw"-tekst. Drafts alleen in dev.
+const posts = (await getCollection('posts', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+
+const publicaties = (await getCollection('publicaties', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => pubKey(b) - pubKey(a))
+  .slice(0, 3);
+
+// Sorteersleutel voor publicaties: de datum als die er is, anders 1 januari van het jaar.
+function pubKey(p: { data: { date?: Date; year: number } }) {
+  return p.data.date ? p.data.date.valueOf() : Date.UTC(p.data.year, 0, 1);
+}
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <BaseLayout
@@ -68,31 +87,92 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- In opbouw / volgens komende content -->
+    <!-- Feed: nieuwste verhalen en publicaties -->
     <section class="bg-cream/40 border-y border-grey-light/30">
       <div class="mx-auto max-w-7xl px-6 py-14">
         <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
           <div>
-            <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">In opbouw</div>
-            <h3 class="text-2xl font-bold text-navy m-0">
-              Wat hier nog bij komt
+            <div class="text-xs uppercase tracking-wider text-bf-red mb-2 font-bold">Nieuw</div>
+            <h3 class="text-2xl font-bold text-navy m-0 mb-3">
+              Laatste verhalen
             </h3>
+            <p class="text-navy/70 text-[15px] leading-relaxed m-0">
+              Wat we tegenkomen tijdens het werk aan IFC, IDS, NLRS, GRiDS en Leja, inclusief de
+              dingen die misgingen.
+            </p>
+            <p class="m-0 pt-4 text-sm">
+              <a href="/posts" class="text-bf-red hover:underline">Alle verhalen</a>
+              <span class="text-grey-mid mx-2">·</span>
+              <a href="/rss.xml" class="text-bf-red hover:underline">RSS</a>
+            </p>
           </div>
-          <div class="text-navy/80 space-y-3 text-[15px] leading-relaxed">
-            <p class="m-0">
-              Deze site groeit mee met het werk. De komende maanden verschijnen vier soorten content:
-            </p>
-            <ul class="list-disc list-inside m-0 space-y-1.5">
-              <li><b>Praktijk-verhalen</b> uit lopend werk</li>
-              <li><b>Hands-on documentatie</b> bij Open Standards (IFC, IDS, bSDD, NLRS)</li>
-              <li><b>Reflecties</b> over AI in de bouw — wat helpt, wat nog niet</li>
-              <li><b>Audit-trail van keuzes</b> — Leja registreert besluiten met datum en bron; sommige daarvan verschijnen hier publiek</li>
+          <div>
+            {posts.length === 0 && (
+              <p class="text-grey-mid italic m-0">Nog geen verhalen gepubliceerd.</p>
+            )}
+            <ul class="list-none p-0 m-0 divide-y divide-grey-light/40">
+              {posts.map((post) => (
+                <li class="py-4 first:pt-0 last:pb-0">
+                  <a href={`/posts/${post.slug}`} class="no-underline group flex gap-4 sm:gap-5">
+                    {post.data.image && (
+                      <img
+                        src={post.data.image}
+                        alt=""
+                        width="1200"
+                        height="630"
+                        loading="lazy"
+                        class="hidden sm:block w-36 h-auto self-start shrink-0 rounded border border-grey-light/40"
+                      />
+                    )}
+                    <div class="min-w-0">
+                      <div class="text-xs uppercase tracking-wider text-grey-mid mb-1">
+                        <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+                      </div>
+                      <h4 class="text-lg font-bold text-navy m-0 mb-1 group-hover:text-bf-red transition-colors">
+                        {post.data.title}
+                      </h4>
+                      <p class="text-navy/75 text-[15px] leading-relaxed m-0">{post.data.description}</p>
+                    </div>
+                  </a>
+                </li>
+              ))}
             </ul>
-            <p class="m-0 pt-2 text-sm text-grey-mid">
-              Volg via <a href="/rss.xml" class="text-bf-red hover:underline">RSS</a> zodra de feed gevuld is.
-            </p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Publicaties en resources -->
+    <section class="mx-auto max-w-7xl px-6 py-14">
+      <div class="grid md:grid-cols-[1fr_2fr] gap-8 items-start">
+        <div>
+          <div class="text-xs uppercase tracking-wider text-navy mb-2 font-bold">Archief en gereedschap</div>
+          <h3 class="text-2xl font-bold text-navy m-0 mb-3">Publicaties en resources</h3>
+          <p class="text-navy/70 text-[15px] leading-relaxed m-0">
+            Conferentiesessies, artikelen en handouts sinds 2012, met de originele bestanden. En de
+            bestanden en gereedschappen uit ons werk die je vrij mag gebruiken.
+          </p>
+          <p class="m-0 pt-4 text-sm">
+            <a href="/publicaties" class="text-bf-red hover:underline">Alle publicaties</a>
+            <span class="text-grey-mid mx-2">·</span>
+            <a href="/resources" class="text-bf-red hover:underline">Resources</a>
+          </p>
+        </div>
+        <ul class="list-none p-0 m-0 divide-y divide-grey-light/40">
+          {publicaties.map((it) => (
+            <li class="py-4 first:pt-0 last:pb-0">
+              <a href={`/publicaties/${it.slug}`} class="no-underline group block">
+                <div class="text-xs uppercase tracking-wider text-grey-mid mb-1">
+                  {it.data.year} · {it.data.venue}
+                </div>
+                <h4 class="text-lg font-bold text-navy m-0 mb-1 group-hover:text-bf-red transition-colors">
+                  {it.data.title}
+                </h4>
+                <p class="text-navy/75 text-[15px] leading-relaxed m-0">{it.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   </Fragment>

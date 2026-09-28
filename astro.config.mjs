@@ -16,6 +16,11 @@ export default defineConfig({
     // src/components/article/ (Figure, Callout, Steps, RouteFlow). Gewone .md blijft werken.
     mdx(),
   ],
+  // /grids was de GRiDS-werkbankpagina; sinds 2026-09-28 is Resources het navigatie-item.
+  // Het artikel /grids/kleurschema en de download /grids/grids-v3.grass blijven bestaan.
+  redirects: {
+    '/grids': '/resources',
+  },
   build: {
     // Pages onder /leja en /decks/ zijn statische slidev-builds in /public,
     // dus geen Astro-routing nodig. Default settings volstaan.

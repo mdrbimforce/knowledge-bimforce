@@ -55,13 +55,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           <img src="/logos/bimforce-logo.png" alt="bimforce" class="h-9 w-auto" />
           <span class="hidden sm:inline text-grey-mid text-sm border-l border-grey-light/60 pl-3">knowledge</span>
         </a>
-        <nav>
-          <ul class="flex gap-6 sm:gap-8 text-sm font-medium uppercase tracking-wide">
+        {/* Navigatie (2026-09-28, besluit Martijn): inhoud links (Verhalen, Publicaties,
+            Resources, Leja), "Over bimforce" apart helemaal rechts. */}
+        <nav class="flex-1 flex items-center justify-between ml-8 sm:ml-12">
+          <ul class="flex gap-5 sm:gap-8 text-sm font-medium uppercase tracking-wide">
             <li><a href="/posts" class="hover:text-bf-red no-underline transition-colors">Verhalen</a></li>
             <li><a href="/publicaties" class="hover:text-bf-red no-underline transition-colors">Publicaties</a></li>
-            <li><a href="/about" class="hover:text-bf-red no-underline transition-colors">Over bimforce</a></li>
-            <li><a href="/grids" class="hover:text-bf-red no-underline transition-colors">GRiDS</a></li>
+            <li><a href="/resources" class="hover:text-bf-red no-underline transition-colors">Resources</a></li>
             <li><a href="/leja" class="hover:text-bf-red no-underline transition-colors">Hallo, ik ben Leja</a></li>
+          </ul>
+          <ul class="flex text-sm font-medium uppercase tracking-wide">
+            <li><a href="/about" class="hover:text-bf-red no-underline transition-colors">Over bimforce</a></li>
           </ul>
         </nav>
       </div>
