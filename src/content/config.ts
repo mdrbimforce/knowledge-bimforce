@@ -50,4 +50,40 @@ const reflecties = defineCollection({
   }),
 });
 
-export const collections = { pages, posts, docs, reflecties };
+// Publicaties — het archief van presentaties, artikelen, handouts en podcasts
+// (quest-139, 2026-09-28: overgezet van bimforce.com/supportcenter). Eén pagina per
+// publicatie of serie; downloads staan in public/publicaties/files/ (klein) of op
+// Cloudflare R2 (hosted: 'r2', bestanden boven ~20 MB).
+const publicaties = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    year: z.number(),
+    date: z.coerce.date().optional(),
+    venue: z.string(),
+    speakers: z.array(z.string()).default([]),
+    lang: z.enum(['nl', 'en']).default('nl'),
+    series: z.string().optional(),
+    kind: z.enum(['artikel', 'presentatie', 'handout', 'podcast', 'case']).default('presentatie'),
+    image: z.string().optional(),
+    downloads: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string(),
+          size: z.string().optional(),
+          format: z.string().optional(),
+          hosted: z.enum(['site', 'r2']).default('site'),
+        }),
+      )
+      .default([]),
+    links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+    originalUrl: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    updated: z.coerce.date().optional(),
+  }),
+});
+
+export const collections = { pages, posts, docs, reflecties, publicaties };

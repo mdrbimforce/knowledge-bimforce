@@ -1,0 +1,96 @@
+---
+// Detailpagina per publicatie. Zie de toelichting in publicaties/index.astro.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const items = await getCollection('publicaties', ({ data }) =>
+    import.meta.env.PROD ? !data.draft : true);
+  return items.map((item) => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+type Props = { item: CollectionEntry<'publicaties'> };
+const { item } = Astro.props;
+const { Content } = await item.render();
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const kindLabel: Record<string, string> = {
+  artikel: 'Artikelen',
+  presentatie: 'Presentatie',
+  handout: 'Handout',
+  podcast: 'Podcast',
+  case: 'Case study',
+};
+---
+
+<BaseLayout title={item.data.title} description={item.data.description} ogImage={item.data.image}>
+  <article>
+    <div class="text-xs uppercase tracking-wider text-grey-mid mb-2">
+      <a href="/publicaties" class="no-underline hover:text-bf-red">Publicaties</a>
+      <span class="mx-2">·</span>
+      {kindLabel[item.data.kind]}
+      <span class="mx-2">·</span>
+      {item.data.date ? <time datetime={item.data.date.toISOString()}>{fmt(item.data.date)}</time> : item.data.year}
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-bold text-navy leading-tight mb-4">{item.data.title}</h1>
+    <p class="text-lg text-navy/70 leading-relaxed mb-6">{item.data.description}</p>
+
+    <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm text-navy/80 mb-8">
+      <dt class="text-grey-mid">Podium</dt><dd class="m-0">{item.data.venue}</dd>
+      <dt class="text-grey-mid">{item.data.speakers.length === 1 ? 'Spreker' : 'Sprekers'}</dt><dd class="m-0">{item.data.speakers.join(', ')}</dd>
+      {item.data.series && <><dt class="text-grey-mid">Serie</dt><dd class="m-0">{item.data.series}</dd></>}
+      <dt class="text-grey-mid">Taal</dt><dd class="m-0">{item.data.lang === 'en' ? 'Engels (toelichting in het Nederlands)' : 'Nederlands'}</dd>
+    </dl>
+
+    {item.data.image && (
+      <img
+        src={item.data.image}
+        alt=""
+        width="1200"
+        height="840"
+        class="block w-full h-auto rounded-md border border-grey-light/40 mb-10"
+      />
+    )}
+
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+
+    {(item.data.downloads.length > 0 || item.data.links.length > 0) && (
+      <section class="mt-10 pt-6 border-t border-grey-light/40">
+        <h2 class="text-lg font-bold text-navy mb-3">{item.data.downloads.length > 0 ? 'Downloads' : 'Luisteren'}</h2>
+        <ul class="list-none p-0 m-0 space-y-2">
+          {item.data.downloads.map((d) => (
+            <li>
+              <a href={d.url} class="text-bf-red hover:underline" download={d.hosted === 'site' ? '' : undefined}>{d.label}</a>
+              <span class="text-sm text-grey-mid ml-2">{[d.format?.toUpperCase(), d.size].filter(Boolean).join(', ')}</span>
+            </li>
+          ))}
+          {item.data.links.map((l) => (
+            <li>
+              <a href={l.url} class="text-bf-red hover:underline" target="_blank" rel="noopener">{l.label}</a>
+              <span class="text-sm text-grey-mid ml-2">extern</span>
+            </li>
+          ))}
+        </ul>
+        {item.data.originalUrl && (
+          <p class="text-sm text-grey-mid mt-4 mb-0">
+            Eerder gepubliceerd op <a href={item.data.originalUrl} class="hover:underline">{item.data.originalUrl.replace('https://www.', '')}</a>.
+          </p>
+        )}
+      </section>
+    )}
+
+    {item.data.tags.length > 0 && (
+      <div class="mt-10 pt-6 border-t border-grey-light/40 flex flex-wrap gap-2">
+        {item.data.tags.map((tag) => (
+          <span class="text-xs uppercase tracking-wide text-grey-mid border border-grey-light/60 rounded px-2 py-0.5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </article>
+</BaseLayout>

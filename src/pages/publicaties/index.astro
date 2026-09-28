@@ -1,0 +1,83 @@
+---
+// Overzicht van de publicaties-collection (quest-139, 2026-09-28): het archief van
+// presentaties, artikelen, handouts en podcasts dat op bimforce.com/supportcenter
+// stond. Gegroepeerd per jaar, nieuwste eerst. Drafts alleen zichtbaar in dev.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('publicaties', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => (b.data.date?.valueOf() ?? b.data.year * 1e12) - (a.data.date?.valueOf() ?? a.data.year * 1e12));
+
+const perJaar = new Map<number, typeof items>();
+for (const it of items) {
+  const list = perJaar.get(it.data.year) ?? [];
+  list.push(it);
+  perJaar.set(it.data.year, list);
+}
+const jaren = [...perJaar.keys()].sort((a, b) => b - a);
+
+const kindLabel: Record<string, string> = {
+  artikel: 'artikelen',
+  presentatie: 'presentatie',
+  handout: 'handout',
+  podcast: 'podcast',
+  case: 'case study',
+};
+---
+
+<BaseLayout
+  title="Publicaties"
+  description="Presentaties, artikelen, handouts en podcasts van bimforce over IFC, de NLRS, modelcontrole en gebouwinformatie, van 2012 tot nu. Met de originele bestanden om te downloaden."
+>
+  <h1 class="text-3xl sm:text-4xl font-bold text-navy mb-2">Publicaties</h1>
+  <p class="text-navy/70 mb-10">
+    Kennisdeling door de jaren heen: conferentiesessies, artikelen, handouts en podcasts over IFC,
+    de Nederlandse Revit Standaard, modelcontrole en gebouwinformatie. Per publicatie een korte
+    toelichting en de originele bestanden.
+  </p>
+
+  {items.length === 0 && (
+    <p class="text-grey-mid italic">Nog geen publicaties gepubliceerd.</p>
+  )}
+
+  {jaren.map((jaar) => (
+    <section class="mb-12">
+      <h2 class="text-xs uppercase tracking-wider text-grey-mid font-semibold border-b border-grey-light/40 pb-2 mb-6">
+        {jaar}
+      </h2>
+      <ul class="list-none p-0 m-0 space-y-8">
+        {perJaar.get(jaar)!.map((it) => (
+          <li class="border-b border-grey-light/40 pb-8 last:border-0">
+            <a href={`/publicaties/${it.slug}`} class="no-underline group flex flex-col sm:flex-row gap-4 sm:gap-6">
+              {it.data.image && (
+                <img
+                  src={it.data.image}
+                  alt=""
+                  width="1200"
+                  height="840"
+                  loading="lazy"
+                  class="block w-full sm:w-56 h-auto sm:self-start shrink-0 rounded border border-grey-light/40 sm:order-2"
+                />
+              )}
+              <div class="min-w-0">
+                <div class="text-xs uppercase tracking-wider text-grey-mid mb-1">
+                  {kindLabel[it.data.kind]} · {it.data.venue}
+                  {it.data.lang === 'en' && <span class="ml-2 border border-grey-light/60 rounded px-1.5 py-0.5 normal-case tracking-normal">Engels</span>}
+                </div>
+                <h3 class="text-xl font-bold text-navy m-0 mb-2 group-hover:text-bf-red transition-colors">
+                  {it.data.title}
+                </h3>
+                <p class="text-navy/75 text-[15px] leading-relaxed m-0">{it.data.description}</p>
+                <p class="text-sm text-grey-mid m-0 mt-2">
+                  {it.data.speakers.join(', ')}
+                  {it.data.downloads.length > 0 && <span> · {it.data.downloads.length} {it.data.downloads.length === 1 ? 'download' : 'downloads'}</span>}
+                  {it.data.links.length > 0 && <span> · {it.data.links.length} {it.data.links.length === 1 ? 'link' : 'links'}</span>}
+                </p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>
