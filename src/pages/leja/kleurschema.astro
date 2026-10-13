@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+// De twee waaiers hieronder worden gegenereerd door
+// leja-brain/tools/graph-stylesheet/leja-v1/build_leja_v1.py --publish
+// (schrijft ook public/leja/leja-v1.grass). Niet met de hand bewerken.
+import swatches from './_swatches.html?raw';
+import swatchesDonker from './_swatches-donker.html?raw';
+---
+
+<BaseLayout
+  title="Kleurschema voor de Leja-graph"
+  description="Hoe het geheugen van Leja leesbaar wordt: 14 families op kleurtoon, het niveau op tint, een gespiegeld donker thema en de keten van sessies als ruggengraat. Inclusief de stylesheet voor Neo4j Browser."
+>
+  <Fragment slot="full">
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            werkbank &middot; leja &middot; graph &amp; data
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            Kleurschema voor de Leja-graph
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Leja onthoudt alles in één knowledge graph. Met dit schema zie je in één oogopslag
+            wat daarin bij elkaar hoort, in Neo4j Browser en in het dashboard.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 py-16">
+
+      <div class="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+
+        <p class="lead text-xl">
+          <a href="/leja">Leja</a>, de AI-kennispartner van bimforce, schrijft na elke sessie op wat
+          ze geleerd heeft: fragmenten, beslissingen, taken, inzichten. Dat staat in een Neo4j-graph met
+          90 node-types en ruim 60.000 nodes. Zonder afspraken over kleur is dat een wolk van
+          willekeurige bolletjes.
+        </p>
+
+        <p>
+          Voor GRiDS hebben we eerder een methode uitgewerkt om zo'n graph leesbaar te maken:
+          kleurtoon voor de betekenis, tint voor het niveau, en één regel voor de tekstkleur. Hoe en
+          waarom staat in <a href="/grids/kleurschema">Kleurcodering voor graafweergaven</a>. Het
+          Leja-schema, <code>leja-v1</code>, gebruikt dezelfde methode en dezelfde generator. Deze
+          pagina gaat over de keuzes die specifiek zijn voor een geheugen.
+        </p>
+
+        <h2>Veertien families op kleurtoon</h2>
+
+        <p>
+          De indeling volgt hoe de graph gebruikt wordt. Wat rond één sessie hangt, moet je als groep
+          herkennen: het werk waaraan gewerkt is, de kennis die eruit kwam, de beslissingen die vielen.
+          Die families staan op de kleurcirkel minstens drie tonen uit elkaar. Negen families dragen
+          inhoud en krijgen een verzadigde kleur; vijf vormen het kader en blijven grijs.
+        </p>
+
+      </div>
+
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b-2 border-navy/20 text-left">
+              <th class="py-2 pr-4 font-bold">Familie</th>
+              <th class="py-2 pr-4 font-bold">Kleurtoon</th>
+              <th class="py-2 font-bold">Wat erin zit</th>
+            </tr>
+          </thead>
+          <tbody class="align-top">
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Geheugen</td><td class="py-2 pr-4">cyaan</td><td class="py-2">stand, sessies en wat er per sessie onthouden is</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Infra</td><td class="py-2 pr-4">blauw</td><td class="py-2">protocollen, tools en agents</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Processen</td><td class="py-2 pr-4">indigo</td><td class="py-2">routes, geplande taken en wekelijkse controles</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Kennis</td><td class="py-2 pr-4">violet</td><td class="py-2">kennis, principes, concepten en inzichten</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Identiteit</td><td class="py-2 pr-4">fuchsia</td><td class="py-2">wie Leja is en met wie ze werkt</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Beslissen en leren</td><td class="py-2 pr-4">rozerood</td><td class="py-2">beslissingen, fouten en ideeën</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Werk</td><td class="py-2 pr-4">amber</td><td class="py-2">projecten, quests, stappen en taken</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Publicatie</td><td class="py-2 pr-4">limoen</td><td class="py-2">content, documenten, presentaties en campagnes</td></tr>
+            <tr class="border-b border-grey-light/50"><td class="py-2 pr-4 font-semibold whitespace-nowrap">Gesprekken</td><td class="py-2 pr-4">smaragd</td><td class="py-2">threads tussen agents en met mensen</td></tr>
+            <tr><td class="py-2 pr-4 font-semibold whitespace-nowrap">Kader</td><td class="py-2 pr-4">vijf grijzen</td><td class="py-2">schema en UI, administratie, runs, spoor (audit en statusovergangen), containers</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose prose-lg max-w-none mt-10 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+
+        <h2>De keten van sessies als ruggengraat</h2>
+
+        <p>
+          Elke sessie hangt aan een stand per project, en de sessies volgen elkaar op in de tijd. Die
+          keten is de ruggengraat van het geheugen: vanaf een sessie vind je terug wat er besloten,
+          gedaan en onthouden is. Daarom krijgt Geheugen de kleur die het dichtst bij de accentkleur
+          van het dashboard ligt. In de 3D-weergave Tijd loopt de keten als cyaan lijn door het beeld,
+          en daaromheen hangen taken in amber, kennis in violet en beslissingen in rozerood.
+        </p>
+
+      </div>
+
+      <figure class="mt-8 mb-0">
+        <img
+          src="/figures/leja/dashboard-graph-tijd-leja-v1.jpg"
+          alt="De weergave Tijd in het Leja-dashboard: een verticale cyaan keten van sessies, met daaromheen gekleurde nodes per familie en een legenda."
+          width="1053" height="1172" loading="lazy"
+          class="w-full max-w-xl mx-auto rounded-lg shadow-xl"
+        />
+        <figcaption class="text-sm text-grey-mid mt-3 text-center">
+          De weergave Tijd in het dashboard, donker thema: vijftig sessies op een rij met wat eraan hangt.
+        </figcaption>
+      </figure>
+
+      <div class="prose prose-lg max-w-none mt-12 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+
+        <h2>Fragmenten bewust klein</h2>
+
+        <p>
+          Het geheugen bestaat voor het grootste deel uit kleine notities: ruim 10.000 fragmenten,
+          tegen een paar honderd sessies. Krijgen die dezelfde aandacht als de rest, dan zie je alleen
+          nog fragmenten. Ze krijgen daarom de kleinste bol en een tint die bij de achtergrond blijft:
+          licht op een lichte canvas, donker op een donkere. Hetzelfde geldt voor afbeeldingen,
+          statusovergangen en de tienduizenden monitoring-metingen. Je ziet dat ze er zijn, en de
+          structuur blijft leesbaar.
+        </p>
+
+        <h2>Donker gespiegeld</h2>
+
+        <p>
+          Op een witte canvas valt een donkere tint op. Op een donkere canvas is dat omgekeerd: houd je
+          dezelfde tinten aan, dan lichten de duizenden fragmenten op en zakken de stand en de
+          projecten weg. In het donkere thema spiegelt de tint daarom: stap <code>n</code> wordt
+          stap <code>1000 &minus; n</code>. De stand gaat van cyaan-800 naar cyaan-200, het fragment
+          van 200 naar 800. De kleurtoon blijft gelijk, dus een familie heeft in beide thema's dezelfde
+          kleur; alleen de helderheid draait mee. In het lichte thema van het dashboard, dat bollen
+          zonder rand tekent, wordt de randkleur de vulling (stap <code>n + 200</code>), behalve bij
+          de massatypes.
+        </p>
+
+        <h2>De waaier</h2>
+        <p>
+          Elke rij is één familie, met per node-type de stap uit de Tailwind-waaier. Eerst de kleuren
+          van de stylesheet voor Neo4j Browser (label zonder het voorvoegsel <code>Leja</code>),
+          daarna dezelfde families zoals het dashboard ze op een donkere canvas tekent.
+        </p>
+      </div>
+
+      <div class="gs-wrap mt-8" set:html={swatches} />
+
+      <div class="gs-wrap gs-donker mt-10 rounded-lg p-5 sm:p-7" set:html={swatchesDonker} />
+
+      <div class="prose prose-lg max-w-none mt-12 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+        <h2>Het hele brein in één beeld</h2>
+        <p>
+          Zo ziet het geheugen van Leja eruit op 12 oktober 2026, in het donkere schema. In beeld:
+          21.161 nodes met inhoud, van de 60.990 in totaal (containers en monitoring-metingen zijn
+          weggelaten). De stand met zijn ruim 500 sessies vormt de ster in het hart. Werk, kennis en
+          publicaties vormen herkenbare eilanden; de groene bladeren aan de rand zijn presentaties
+          met hun afbeeldingen.
+        </p>
+      </div>
+
+      <figure class="mt-8 mb-0 -mx-6 sm:mx-0">
+        <a href="/figures/leja/leja-brein-totaal-2026-10-12.jpg">
+          <img
+            src="/figures/leja/leja-brein-totaal-2026-10-12.jpg"
+            alt="Het complete Leja-brein als netwerk op een donkere achtergrond: een dichte kern van cyaan, amber en violet nodes, met losse groepjes in een ring eromheen."
+            width="2400" height="1222" loading="lazy"
+            class="w-full sm:rounded-lg shadow-xl"
+          />
+        </a>
+        <figcaption class="text-sm text-grey-mid mt-3 text-center px-6 sm:px-0">
+          Het Leja-brein op 12 oktober 2026: 21.161 nodes, de sessieketen als lichtspoor.
+        </figcaption>
+      </figure>
+
+      <div class="mt-12 bg-navy text-white rounded-lg overflow-hidden shadow-xl">
+        <div class="h-1.5 bg-bf-red"></div>
+        <div class="p-7 sm:p-9 grid sm:grid-cols-[1fr_auto] gap-6 items-center">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-2 font-bold">
+              Zelf gebruiken
+            </div>
+            <h2 class="text-2xl font-bold text-white m-0 mb-2">
+              De stylesheet voor de Leja-graph
+            </h2>
+            <p class="text-white/80 text-[15px] leading-relaxed m-0">
+              90 node-types in 14 families, 32 containerlabels en 42 relatietypes. Sleep het bestand in
+              het venster van Neo4j Browser, of laad het via Browser Settings &rarr; Graph Stylesheet.
+              Terugdraaien met <code class="text-white">:style reset</code>.
+            </p>
+          </div>
+          <a
+            href="/leja/leja-v1.grass"
+            download
+            class="inline-flex items-center justify-center gap-2 bg-bf-red hover:bg-bf-red-bright text-white font-bold px-6 py-4 rounded-md no-underline transition-colors whitespace-nowrap"
+          >
+            Download .grass
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v13"/>
+              <path d="m7 12 5 5 5-5"/>
+              <path d="M5 21h14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="prose prose-lg max-w-none mt-12 prose-headings:font-bold prose-p:text-navy/85 prose-a:text-bf-red prose-strong:text-navy">
+        <h2>Eén bron voor drie plekken</h2>
+
+        <p>
+          Het schema staat in één script met per node-type een familie, een stap en een diameter. Daaruit
+          komen de stylesheet voor Neo4j Browser, de kleurmap die het dashboard leest, en de waaiers op
+          deze pagina. Komt er een node-type bij, dan is dat één regel in dat script, en alle drie de
+          plekken lopen weer gelijk.
+        </p>
+
+        <p>
+          Het tellen van alle labels leverde ook hier bijvangst op: 24 types met één enkele
+          node, en monitoring-metingen die met bijna 40.000 stuks talrijker bleken dan de rest van het
+          geheugen bij elkaar. Dat zie je pas als je alles een plek moet geven.
+        </p>
+      </div>
+
+    </section>
+  </Fragment>
+</BaseLayout>
+
+<style is:global>
+  .gs-wrap .gs-h {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    margin: 26px 0 8px;
+    font-weight: 700;
+  }
+  .gs-wrap .gs-meta {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-left: 8px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .gs-wrap .gs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .gs-wrap .gs-sw {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .gs-donker {
+    background: #0f1826;
+  }
+  .gs-donker .gs-h:first-child {
+    margin-top: 0;
+  }
+  .gs-donker .gs-sw {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+  .gs-donker .gs-h {
+    color: #9fb0c3;
+  }
+  .gs-donker .gs-meta {
+    color: #6b7c93;
+  }
+</style>

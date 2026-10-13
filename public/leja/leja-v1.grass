@@ -1,0 +1,1369 @@
+node {
+  diameter: 50px;
+  color: #a3a3a3;
+  border-color: #525252;
+  border-width: 2px;
+  text-color-internal: #111827;
+  font-size: 10px;
+  caption: "{name}";
+}
+
+relationship {
+  color: #d4d4d4;
+  shaft-width: 1px;
+  font-size: 8px;
+  padding: 3px;
+  text-color-external: #525252;
+  text-color-internal: #FFFFFF;
+  caption: "<type>";
+}
+
+node.LejaState {
+  color: #155e75;
+  border-color: #164e63;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 72px;
+  caption: "{id}";
+}
+
+node.LejaSession {
+  color: #0891b2;
+  border-color: #155e75;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 60px;
+  caption: "{title}";
+}
+
+node.LejaInteraction {
+  color: #67e8f9;
+  border-color: #06b6d4;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 44px;
+  caption: "{id}";
+}
+
+node.LejaMemoryFragment {
+  color: #a5f3fc;
+  border-color: #22d3ee;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 30px;
+  caption: "{title}";
+}
+
+node.LejaEmbedding {
+  color: #cffafe;
+  border-color: #67e8f9;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{id}";
+}
+
+node.LejaProtocol {
+  color: #1e40af;
+  border-color: #1e3a8a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 62px;
+  caption: "{title}";
+}
+
+node.LejaConnection {
+  color: #1d4ed8;
+  border-color: #1e3a8a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.LejaTool {
+  color: #2563eb;
+  border-color: #1e40af;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 54px;
+  caption: "{name}";
+}
+
+node.LejaAgent {
+  color: #3b82f6;
+  border-color: #1d4ed8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 54px;
+  caption: "{name}";
+}
+
+node.LejaRepository {
+  color: #60a5fa;
+  border-color: #2563eb;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.LejaSlackBot {
+  color: #93c5fd;
+  border-color: #3b82f6;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 42px;
+  caption: "{name}";
+}
+
+node.LejaAgentConfig {
+  color: #bfdbfe;
+  border-color: #60a5fa;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.LejaProcess {
+  color: #3730a3;
+  border-color: #312e81;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 58px;
+  caption: "{name}";
+}
+
+node.LejaRoute {
+  color: #4338ca;
+  border-color: #312e81;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 54px;
+  caption: "{title}";
+}
+
+node.LejaCronJob {
+  color: #4f46e5;
+  border-color: #3730a3;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{id}";
+}
+
+node.LejaRouteStep {
+  color: #6366f1;
+  border-color: #4338ca;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 46px;
+  caption: "{title}";
+}
+
+node.LejaFridayCheck {
+  color: #818cf8;
+  border-color: #4f46e5;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 44px;
+  caption: "{title}";
+}
+
+node.LejaPipelineEntry {
+  color: #a5b4fc;
+  border-color: #6366f1;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.LejaRouteItem {
+  color: #c7d2fe;
+  border-color: #818cf8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "{id}";
+}
+
+node.LejaKnowledgeBase {
+  color: #5b21b6;
+  border-color: #4c1d95;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{id}";
+}
+
+node.LejaKnowledge {
+  color: #7c3aed;
+  border-color: #5b21b6;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 56px;
+  caption: "{title}";
+}
+
+node.LejaPrinciple {
+  color: #6d28d9;
+  border-color: #4c1d95;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 52px;
+  caption: "{title}";
+}
+
+node.LejaConcept {
+  color: #8b5cf6;
+  border-color: #6d28d9;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 48px;
+  caption: "{title}";
+}
+
+node.LejaInsight {
+  color: #a78bfa;
+  border-color: #7c3aed;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 46px;
+  caption: "{title}";
+}
+
+node.LejaIdentity {
+  color: #86198f;
+  border-color: #701a75;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 68px;
+  caption: "{name}";
+}
+
+node.LejaSoul {
+  color: #a21caf;
+  border-color: #701a75;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 60px;
+  caption: "{id}";
+}
+
+node.LejaMission {
+  color: #c026d3;
+  border-color: #86198f;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 54px;
+  caption: "{title}";
+}
+
+node.LejaPerson {
+  color: #e879f9;
+  border-color: #c026d3;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.LejaSelfEvaluation {
+  color: #f0abfc;
+  border-color: #d946ef;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaDecision {
+  color: #e11d48;
+  border-color: #9f1239;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{title}";
+}
+
+node.LejaMistake {
+  color: #fb7185;
+  border-color: #e11d48;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 48px;
+  caption: "{title}";
+}
+
+node.LejaIdea {
+  color: #fecdd3;
+  border-color: #fb7185;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 44px;
+  caption: "{title}";
+}
+
+node.LejaProject {
+  color: #92400e;
+  border-color: #78350f;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 66px;
+  caption: "{name}";
+}
+
+node.LejaQuest {
+  color: #d97706;
+  border-color: #92400e;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 56px;
+  caption: "{title}";
+}
+
+node.LejaTask {
+  color: #fbbf24;
+  border-color: #d97706;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 46px;
+  caption: "{title}";
+}
+
+node.LejaQuestStep {
+  color: #fcd34d;
+  border-color: #f59e0b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{title}";
+}
+
+node.LejaTaskStep {
+  color: #fde68a;
+  border-color: #fbbf24;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{title}";
+}
+
+node.LejaMarketingCampaign {
+  color: #3f6212;
+  border-color: #365314;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 60px;
+  caption: "{title}";
+}
+
+node.LejaUseCase {
+  color: #4d7c0f;
+  border-color: #365314;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{title}";
+}
+
+node.LejaContent {
+  color: #65a30d;
+  border-color: #3f6212;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 48px;
+  caption: "{title}";
+}
+
+node.LejaDocument {
+  color: #84cc16;
+  border-color: #4d7c0f;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 46px;
+  caption: "{title}";
+}
+
+node.LejaPresentation {
+  color: #a3e635;
+  border-color: #65a30d;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 44px;
+  caption: "{title}";
+}
+
+node.LejaCanvaTemplate {
+  color: #bef264;
+  border-color: #84cc16;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+node.LejaImageAsset {
+  color: #d9f99d;
+  border-color: #a3e635;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 30px;
+  caption: "{title}";
+}
+
+node.LejaAgentThread {
+  color: #047857;
+  border-color: #064e3b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 54px;
+  caption: "{title}";
+}
+
+node.LejaMessage {
+  color: #059669;
+  border-color: #065f46;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{id}";
+}
+
+node.LejaAgentMessage {
+  color: #34d399;
+  border-color: #059669;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaThreadMessage {
+  color: #6ee7b7;
+  border-color: #10b981;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{id}";
+}
+
+node.LejaThreadAction {
+  color: #a7f3d0;
+  border-color: #34d399;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 36px;
+  caption: "{id}";
+}
+
+node.LejaProductSchema {
+  color: #1e293b;
+  border-color: #0f172a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 56px;
+  caption: "{name}";
+}
+
+node.LejaDomain {
+  color: #334155;
+  border-color: #0f172a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 52px;
+  caption: "{name}";
+}
+
+node.LejaSchemaNode {
+  color: #475569;
+  border-color: #1e293b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{id}";
+}
+
+node.LejaProductSchemaReference {
+  color: #64748b;
+  border-color: #334155;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaSchemaSnapshot {
+  color: #94a3b8;
+  border-color: #475569;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{id}";
+}
+
+node.LejaSchemaProposal {
+  color: #cbd5e1;
+  border-color: #64748b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 36px;
+  caption: "{title}";
+}
+
+node.LejaSchemaChange {
+  color: #0f172a;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 36px;
+  caption: "{id}";
+}
+
+node.LejaSchemaMigration {
+  color: #020617;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 36px;
+  caption: "{id}";
+}
+
+node.LejaMigration {
+  color: #f1f5f9;
+  border-color: #cbd5e1;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{id}";
+}
+
+node.LejaSchemaBootstrap {
+  color: #e2e8f0;
+  border-color: #94a3b8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{id}";
+}
+
+node.LejaRevenueState {
+  color: #292524;
+  border-color: #1c1917;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 54px;
+  caption: "{id}";
+}
+
+node.LejaIncomeSource {
+  color: #44403c;
+  border-color: #1c1917;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{name}";
+}
+
+node.LejaMaintenancePartner {
+  color: #57534e;
+  border-color: #292524;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{name}";
+}
+
+node.LejaServiceTechnician {
+  color: #78716c;
+  border-color: #44403c;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 42px;
+  caption: "{name}";
+}
+
+node.LejaProposal {
+  color: #a8a29e;
+  border-color: #57534e;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaMaintenanceReport {
+  color: #d6d3d1;
+  border-color: #78716c;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{id}";
+}
+
+node.LejaPartnerObjectMapping {
+  color: #e7e5e4;
+  border-color: #a8a29e;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{id}";
+}
+
+node.LejaInvoiceItem {
+  color: #f5f5f4;
+  border-color: #d6d3d1;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 30px;
+  caption: "{id}";
+}
+
+node.LejaFridayRun {
+  color: #1f2937;
+  border-color: #111827;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 46px;
+  caption: "{id}";
+}
+
+node.LejaRouteRun {
+  color: #374151;
+  border-color: #111827;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaChatRun {
+  color: #4b5563;
+  border-color: #1f2937;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaThreadRun {
+  color: #6b7280;
+  border-color: #374151;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 38px;
+  caption: "{id}";
+}
+
+node.LejaCronRun {
+  color: #9ca3af;
+  border-color: #4b5563;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 36px;
+  caption: "{id}";
+}
+
+node.LejaInvoiceReportRun {
+  color: #d1d5db;
+  border-color: #6b7280;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 34px;
+  caption: "{id}";
+}
+
+node.LejaFridayCheckResult {
+  color: #e5e7eb;
+  border-color: #9ca3af;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 30px;
+  caption: "{id}";
+}
+
+node.LejaApiCall {
+  color: #f3f4f6;
+  border-color: #d1d5db;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{id}";
+}
+
+node.LejaWebhookCall {
+  color: #030712;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 28px;
+  caption: "{id}";
+}
+
+node.LejaCypherCall {
+  color: #111827;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 28px;
+  caption: "{id}";
+}
+
+node.LejaAuditChain {
+  color: #18181b;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 50px;
+  caption: "{id}";
+}
+
+node.LejaAlert {
+  color: #27272a;
+  border-color: #18181b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 42px;
+  caption: "{title}";
+}
+
+node.LejaGrafsteen {
+  color: #3f3f46;
+  border-color: #18181b;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 40px;
+  caption: "{id}";
+}
+
+node.LejaSecretRotation {
+  color: #52525b;
+  border-color: #27272a;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 36px;
+  caption: "{id}";
+}
+
+node.LejaAuditEvent {
+  color: #71717a;
+  border-color: #3f3f46;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "{id}";
+}
+
+node.LejaProcessEvent {
+  color: #a1a1aa;
+  border-color: #52525b;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "{id}";
+}
+
+node.LejaTransition {
+  color: #d4d4d8;
+  border-color: #71717a;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 30px;
+  caption: "{id}";
+}
+
+node.LejaMonitoringSnapshot {
+  color: #e4e4e7;
+  border-color: #a1a1aa;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 24px;
+  caption: "{id}";
+}
+
+node.LejaLock {
+  color: #f4f4f5;
+  border-color: #d4d4d8;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 28px;
+  caption: "{id}";
+}
+
+node.LejaContainer {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaUiPointer {
+  color: #a3a3a3;
+  border-color: #525252;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "{id}";
+}
+
+node.LejaUiDoc {
+  color: #d4d4d4;
+  border-color: #737373;
+  border-width: 2px;
+  text-color-internal: #111827;
+  diameter: 32px;
+  caption: "{title}";
+}
+
+node.LejaCredentials {
+  color: #171717;
+  border-color: #000000;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 40px;
+  caption: "{name}";
+}
+
+relationship.HAS_STATE {
+  color: #155e75;
+  shaft-width: 3px;
+  text-color-external: #155e75;
+}
+
+relationship.HAS_SESSION {
+  color: #0891b2;
+  shaft-width: 3px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_MEMORY {
+  color: #a5f3fc;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_MEMORYFRAGMENT {
+  color: #a5f3fc;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.HAS_EMBEDDING {
+  color: #cffafe;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.EMBEDDED_AS {
+  color: #cffafe;
+  shaft-width: 1px;
+  text-color-external: #0e7490;
+}
+
+relationship.CONDUCTED {
+  color: #3b82f6;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.ACTS_AS {
+  color: #60a5fa;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.USED_IN {
+  color: #93c5fd;
+  shaft-width: 1px;
+  text-color-external: #1d4ed8;
+}
+
+relationship.HAS_RUN {
+  color: #818cf8;
+  shaft-width: 1px;
+  text-color-external: #4338ca;
+}
+
+relationship.HAS_CHECK {
+  color: #818cf8;
+  shaft-width: 1px;
+  text-color-external: #4338ca;
+}
+
+relationship.HAS_KNOWLEDGE {
+  color: #7c3aed;
+  shaft-width: 2px;
+  text-color-external: #6d28d9;
+}
+
+relationship.HAS_INSIGHT {
+  color: #a78bfa;
+  shaft-width: 1px;
+  text-color-external: #6d28d9;
+}
+
+relationship.DISTILLED_FROM {
+  color: #c4b5fd;
+  shaft-width: 1px;
+  text-color-external: #6d28d9;
+}
+
+relationship.DERIVED_FROM {
+  color: #c4b5fd;
+  shaft-width: 1px;
+  text-color-external: #6d28d9;
+}
+
+relationship.DISCOVERED_IN {
+  color: #fb7185;
+  shaft-width: 1px;
+  text-color-external: #be123c;
+}
+
+relationship.HAS_DECISION {
+  color: #e11d48;
+  shaft-width: 1px;
+  text-color-external: #be123c;
+}
+
+relationship.HAS_IDEA {
+  color: #fecdd3;
+  shaft-width: 1px;
+  text-color-external: #be123c;
+}
+
+relationship.BELONGS_TO {
+  color: #92400e;
+  shaft-width: 2px;
+  text-color-external: #92400e;
+}
+
+relationship.HAS_QUEST {
+  color: #d97706;
+  shaft-width: 2px;
+  text-color-external: #b45309;
+}
+
+relationship.HAS_TASK {
+  color: #fbbf24;
+  shaft-width: 1px;
+  text-color-external: #b45309;
+}
+
+relationship.HAS_STEP {
+  color: #fcd34d;
+  shaft-width: 1px;
+  text-color-external: #b45309;
+}
+
+relationship.SPAWNED {
+  color: #f59e0b;
+  shaft-width: 1px;
+  text-color-external: #b45309;
+}
+
+relationship.WORKED_ON {
+  color: #fbbf24;
+  shaft-width: 1px;
+  text-color-external: #b45309;
+}
+
+relationship.IMPLEMENTS {
+  color: #d97706;
+  shaft-width: 1px;
+  text-color-external: #b45309;
+}
+
+relationship.HAS_CONTENT {
+  color: #65a30d;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_DOCUMENT {
+  color: #84cc16;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HARVESTED_FROM {
+  color: #a3e635;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.PART_OF_CAMPAIGN {
+  color: #3f6212;
+  shaft-width: 1px;
+  text-color-external: #3f6212;
+}
+
+relationship.HAS_PRESENTATION {
+  color: #a3e635;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_ASSET {
+  color: #d9f99d;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_IMAGE {
+  color: #d9f99d;
+  shaft-width: 1px;
+  text-color-external: #4d7c0f;
+}
+
+relationship.HAS_MESSAGE {
+  color: #34d399;
+  shaft-width: 1px;
+  text-color-external: #047857;
+}
+
+relationship.HAS_TRANSITION {
+  color: #d4d4d8;
+  shaft-width: 1px;
+  text-color-external: #3f3f46;
+}
+
+relationship.HAS_AUDIT_EVENT {
+  color: #71717a;
+  shaft-width: 1px;
+  text-color-external: #3f3f46;
+}
+
+relationship.HAS_MONITORINGSNAPSHOT {
+  color: #d4d4d8;
+  shaft-width: 1px;
+  text-color-external: #3f3f46;
+}
+
+relationship.RESULT_OF {
+  color: #d1d5db;
+  shaft-width: 1px;
+  text-color-external: #374151;
+}
+
+relationship.HAS_RESULT {
+  color: #d1d5db;
+  shaft-width: 1px;
+  text-color-external: #374151;
+}
+
+relationship.HAS_ITEM {
+  color: #a3a3a3;
+  shaft-width: 1px;
+  text-color-external: #404040;
+}
+
+relationship.RELATES_TO {
+  color: #94a3b8;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.ABOUT {
+  color: #94a3b8;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+relationship.SUPERSEDED_BY {
+  color: #64748b;
+  shaft-width: 1px;
+  text-color-external: #334155;
+}
+
+node.LejaSessions {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaMemoryFragments {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaContents {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaMistakes {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaPrinciples {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaDecisions {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaIdeas {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaTools {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaProtocols {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaAgents {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaRepositories {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaProjects {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaConcepts {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaInsights {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaQuests {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaDocuments {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaPersons {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaStates {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaUseCases {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaAgentConfigs {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaAgentThreads {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaProductSchemas {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaTasks {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaMarketingCampaigns {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaCanvaTemplates {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaConnections {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaSelfEvaluations {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaMonitoringSnapshots {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaEmbeddings {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaAlerts {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaInteractions {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
+
+node.LejaAuditEvents {
+  color: #404040;
+  border-color: #171717;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  diameter: 44px;
+  caption: "{name}";
+}
