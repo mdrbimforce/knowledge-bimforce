@@ -1,0 +1,124 @@
+---
+title: 'Ons AI-beleid, in drie pagina''s: wat we onszelf opleggen en wat een opdrachtgever van ons mag verwachten'
+description: 'Steeds vaker krijgen we het AI-beleid van een opdrachtgever toegestuurd. Goed leesbaar, en bijna altijd met dezelfde open plekken: AI die zelf handelt, welke informatie waarheen mag, en wat er geldt voor leveranciers. Dus hebben we ons eigen beleid opgeschreven. Hier staat het volledig.'
+pubDate: 2026-10-28
+tags: ['AI', 'AIbeleid', 'AIverordening', 'AVG', 'informatiebeveiliging', 'AIagents', 'datasoevereiniteit']
+draft: false
+image: '/og/ons-ai-beleid-in-drie-paginas.png'
+---
+
+import Callout from '../../components/article/Callout.astro';
+import Steps from '../../components/article/Steps.astro';
+import Figure from '../../components/article/Figure.astro';
+
+Steeds vaker krijgen we het AI-beleid van een opdrachtgever toegestuurd. Meestal is het een goed leesbaar stuk van een paar pagina's: jij blijft verantwoordelijk, controleer wat de AI oplevert, zet geen vertrouwelijke informatie in een publieke chat-tool, gebruik alleen tools uit het register. Daar is weinig op af te dingen.
+
+Wat er bijna altijd ontbreekt, zijn drie dingen. Hoe de organisatie omgaat met AI die zelf iets doet, zoals een mail versturen of een bestand wijzigen. Welke informatie precies waar naartoe mag. En wat er geldt voor leveranciers die met de projectinformatie van de opdrachtgever werken. Dat laatste raakt ons direct: Leja, onze AI-kennispartner, werkt dagelijks met data van klanten.
+
+Dus hebben we ons eigen beleid opgeschreven. Even kort als dat van onze opdrachtgevers, met de bestuurslaag erbij. Hieronder staat het volledig, in de versie die op 27 oktober 2026 is vastgesteld.
+
+<Callout type="kern">
+Een regel die in een document staat, is een afspraak. Een regel die in de opbouw van het systeem zit, is een eigenschap. Dit beleid beschrijft vooral eigenschappen.
+</Callout>
+
+## Waarom dit document
+
+bimforce werkt dagelijks met AI. Leja is een vaste collega: ze leest mee, onthoudt, schrijft concepten, stelt vragen en voert afgesproken handelingen uit. Dit document beschrijft hoe we dat doen, wat we onszelf opleggen en wat een klant van ons mag verwachten. Het geldt voor iedereen die namens bimforce werkt, voor elk AI-hulpmiddel dat we gebruiken, en voor Leja zelf.
+
+## Vijf uitgangspunten
+
+1. **De mens tekent.** Elk stuk dat bimforce oplevert heeft een menselijke auteur die het heeft gecontroleerd en ervoor instaat. AI schrijft mee, de mens beslist en is aanspreekbaar.
+2. **AI handelt alleen op een vooraf afgesproken pad.** Een AI-toepassing die zelf iets doet (een mail verstuurt, een bestand wijzigt, iets goedkeurt) mag dat alleen langs een pad dat vooraf is vastgelegd en goedgekeurd. Nooit op eigen inschatting. Alles wat erbuiten valt, wacht op een mens.
+3. **Data gaat alleen waar de klasse het toestaat.** We delen informatie in vier klassen in en per klasse is vastgelegd welke modellen en diensten erbij mogen. De afspraak met de klant gaat altijd vóór onze eigen regel.
+4. **Alles is terug te vinden.** Wat AI bij ons heeft gedaan, staat in een spoor: welk model, met welke invoer, wie het heeft bekeken. Dat spoor is voor de klant inzichtelijk en wordt niet gewist.
+5. **We zeggen het.** Bij een stuk dat naar een klant gaat of waar een besluit op wordt gebaseerd, staat dat AI is gebruikt en wie het heeft gecontroleerd. Intern conceptwerk hoeft niet gemeld.
+
+<Figure caption="Drie van de vijf uitgangspunten. De AI schrijft mee en de mens tekent; de AI handelt alleen langs een afgesproken pad en alles daarbuiten wacht op een mens; op een stuk naar een klant staat dat AI is gebruikt en wie het heeft gecontroleerd." source="AI-beleid bimforce en Leja v1.0, 27 oktober 2026" wide>
+  <img src="/figures/leja/ai-beleid-mens-en-ai.svg" alt="Strip in drie plaatjes: de AI geeft een concept aan een mens die het tekent; de AI volgt een pad met een poort en wacht bij een vraagteken op een mens; een mens geeft een klant een stuk met het etiket met AI, gecontroleerd" />
+</Figure>
+
+## Dataklassen en wat ermee mag
+
+| Klasse | Voorbeelden | Mag naar |
+|---|---|---|
+| **Openbaar** | publicaties, website, vrij beschikbare normteksten | elk goedgekeurd model, ook buiten de EU |
+| **Intern** | eigen werkwijzen, offertes in concept, Leja's geheugen over ons werk | goedgekeurde modellen via onze eigen route (OpenRouter met zero-data-retention, of het lokale model op onze server) |
+| **Klantvertrouwelijk** | projectinformatie, modellen, tekeningen, bestekken, rapporten van of voor een klant | alleen modellen die in de verwerkersovereenkomst met die klant staan; standaard aanbieders in de EU of onder het Data Privacy Framework, een aanbieder daarbuiten alleen na een bewuste keuze van de klant per persoon |
+| **Persoonsgegevens** | namen in mail, deelnemers aan overleggen, personeelsgegevens van klanten | alleen met grondslag, alleen binnen de verwerkersovereenkomst, nooit in een publieke chat-tool, bewaartermijn vastgelegd |
+
+Publieke chat-tools (een gratis ChatGPT-, Gemini- of Copilot-account zonder zakelijk contract) zijn alleen toegestaan voor de klasse Openbaar. Documenten van derden (bestekken, tekeningen, rapporten van een opdrachtgever) voeren we alleen in een AI-dienst in binnen de afspraak met die opdrachtgever.
+
+## Controleladder
+
+Hoe zwaarder het gevolg, hoe zwaarder de controle.
+
+| Trede | Wat | Controle |
+|---|---|---|
+| **Informatief** | samenvatting, concepttekst, eerste zoekslag | lezen en aanpassen door de gebruiker |
+| **Adviserend** | analyse, berekening, verwijzing naar een norm, wet of getal | bron erbij zoeken; een verwijzing die AI noemt, is pas waar als hij in de bron staat |
+| **Beslissend of extern** | stuk naar een klant, offerte, advies waar een besluit op volgt, iets dat AI zelf uitvoert | tweede paar ogen, naam van de controleur erbij, spoor bewaard |
+
+<Callout type="verdieping" title="Waarom een ladder en geen enkele regel">
+"Controleer de output" staat in elk AI-beleid. Een samenvatting van een overleg controleer je anders dan een verwijzing naar een NEN-norm of een kostenraming. Door de controle aan het gevolg te koppelen, wordt de regel uitvoerbaar. Voor een technisch bureau hoort er één harde regel bij: een norm, wet of getal dat een AI noemt, bestaat pas als je hem in de bron hebt gezien.
+</Callout>
+
+<Figure caption="Data, spoor en controle. Vier dataklassen als vier kasten en de afspraak met de klant gaat voor; elke handeling van de AI staat in een spoor dat de klant kan inzien; de controleladder met drie treden en bovenaan een tweede paar ogen." source="AI-beleid bimforce en Leja v1.0, 27 oktober 2026" wide>
+  <img src="/figures/leja/ai-beleid-data-spoor-controle.svg" alt="Strip in drie plaatjes: een mens met een map kiest uit vier kasten van openbaar tot persoon; de AI schrijft in een spoor met model, invoer en wie keek, en een klant kijkt met een vergrootglas; een trap met drie treden informatief, adviserend, beslissend met twee poppetjes bovenaan" />
+</Figure>
+
+## Hoe Leja zelf begrensd is
+
+Leja is onze eigen AI. Daarvoor gelden dezelfde regels als voor elke andere tool, en we hebben ze in het systeem ingebouwd:
+
+- **Alleen handelen op een afgesproken pad.** Leja voert alleen handelingen uit langs vooraf goedgekeurde, deterministische paden (bijvoorbeeld het doorsturen van een factuur naar een vast adres). Alles daarbuiten wordt een voorstel dat op een mens wacht.
+- **Rechten per persoon en per rol.** Wie wat mag zien en laten doen staat in één rechtenbron; Leja kan niet meer dan de persoon die haar aanstuurt.
+- **Onvertrouwde inhoud zet de rem erop.** Zodra een gesprek inhoud bevat van buiten (een mail, een document, broncode van een klant), kan Leja in dat gesprek alleen nog lezen en adviseren. Schrijven, versturen en uitrollen staan dan uit. Instructies in zo'n bron krijgt de gebruiker te zien; Leja voert ze niet uit.
+- **Vier ogen bij gevoelige wijzigingen.** Rechten wijzigen, gegevens verwijderen en besluiten in verwerkingsroutes vragen een tweede beheerder.
+- **Een spoor dat niet weg kan.** Elke handeling en elk gesprek staat in een onveranderbaar logboek met een hash-keten. Bij een verwijderverzoek wordt de persoon in het spoor gepseudonimiseerd; het spoor zelf blijft heel.
+- **Modelkeuze is zichtbaar.** Welk model een antwoord gaf, staat bij het antwoord. Modellen buiten de EU of het Data Privacy Framework zijn alleen beschikbaar voor wie daar bewust de rol voor heeft gekregen.
+- **Hosting in de EU.** De server staat in Nederland, de versleutelde back-up in Duitsland.
+
+Hoe die grenzen technisch in elkaar zitten, staat in [Hoeveel toegang geef je AI tot bedrijfsdata?](/posts/hoeveel-toegang-geef-je-ai-tot-bedrijfsdata).
+
+## Wie doet wat
+
+| Rol | Verantwoordelijk voor |
+|---|---|
+| **Iedereen die namens bimforce werkt** | eigen gebruik, de controleladder, melden als iets misgaat |
+| **Eigenaar (tekenbevoegd)** | vaststellen en herzien van dit beleid, goedkeuring van nieuwe AI-diensten, contactpersoon voor klanten en voor datalekken |
+| **Tweede beheerder** | vier-ogen-goedkeuringen in Leja, vervanging bij afwezigheid |
+| **Leja** (als systeem) | het spoor, het register van modellen en diensten, de wekelijkse controleronde |
+
+Dat Leja zelf een rij in deze tabel heeft, is een bewuste keuze. Een AI die taken uitvoert, heeft een plek in de verantwoordelijkheidsverdeling nodig, ook als de aansprakelijkheid altijd bij een mens blijft.
+
+## Register van AI-diensten en modellen
+
+Het register leeft in Leja zelf: elke dienst, koppeling en elk model staat als node in de knowledge graph, met leverancier, vestigingsland, doorgiftegrond, eigenaar en datum van de laatste toets. Een nieuwe dienst komt erin na drie vragen: welke dataklasse mag erheen, is er een verwerkersovereenkomst of gelijkwaardige afspraak, en wat is het terugvalpad als de dienst uitvalt. AI-functies die in bestaande software opduiken (Autodesk, Microsoft, Bluebeam) worden bij de wekelijkse ronde getoetst zodra ze beschikbaar komen.
+
+## Wettelijk kader, in één alinea
+
+De AI-verordening (EU 2024/1689) is sinds 1 augustus 2024 van kracht. De plicht tot AI-geletterdheid (artikel 4) geldt sinds 2 februari 2025 en vullen we in door dit document, door de uitleg in het dashboard en door de klant bij een installatie te laten zien hoe Leja werkt. bimforce gebruikt geen AI voor werving, beoordeling van personen, biometrie of veiligheidskritische besturing; hoog-risicotoepassingen vallen daarmee buiten ons werk, en als dat verandert gaat er eerst een aparte toets aan vooraf. De verplichtingen voor hoog-risicosystemen zijn met de Digitale omnibus (Verordening (EU) 2026/1744, juli 2026) uitgesteld tot december 2027; de plicht tot geletterdheid en de verboden praktijken bleven staan. Voor persoonsgegevens geldt de AVG: een verwerkersovereenkomst per klant (artikel 28), een DPIA-toets bij een nieuwe verwerking met persoonsgegevens (artikel 35), meldplicht datalek binnen 24 uur aan de klant. De actuele stand controleren we bij elke jaarlijkse herziening.
+
+## Als het misgaat
+
+Verkeerde data in een verkeerde tool, een AI-advies dat fout bleek en al is gebruikt, een handeling van Leja die niet had gemogen: meld het dezelfde dag bij de eigenaar. We rekenen het niemand aan, we herstellen eerst en we leggen vast wat we ervan leren. Bij persoonsgegevens volgt de datalekprocedure uit de verwerkersovereenkomst.
+
+## Herziening
+
+Dit beleid wordt minstens eens per jaar herzien, en eerder wanneer een nieuwe AI-dienst wordt toegevoegd, een klant andere eisen stelt of de wet verandert. Elke versie krijgt een nummer en een datum; de vorige versie blijft bewaard. Versie 1.0 is vastgesteld op 27 oktober 2026.
+
+## Vijf vragen voor je eigen AI-beleid
+
+Wie zijn eigen beleid ernaast legt, kan het langs deze vijf vragen halen. Het zijn de plekken waar wij de meeste beleidsstukken zagen stilvallen.
+
+<Steps steps={[
+  { title: 'Welke informatie mag waarheen?', text: 'Zonder dataklassen is "wees zorgvuldig met data" een gevoel. Met vier klassen en per klasse een lijst van toegestane diensten is het een regel die je kunt controleren. Let daarbij ook op een AI binnen de eigen tenant: die brengt informatie bij collega\'s die er nooit naar zochten, als de rechten op de documenten niet op orde zijn.' },
+  { title: 'Wat mag een AI die zelf handelt?', text: 'Een assistent die tekst maakt en een agent die mail verstuurt of bestanden wijzigt, zijn twee verschillende dingen. Voor de tweede hoort er een vast pad, een logboek en een mens die de drempel bepaalt.' },
+  { title: 'Weet je dat AI-geletterdheid een plicht is?', text: 'Trainingen en uitleg zijn sinds februari 2025 een wettelijke verplichting voor de werkgever, en moeten aantoonbaar zijn. Veel beleid noemt ze nog als extra service.' },
+  { title: 'Is de AVG toegepast of alleen genoemd?', text: 'Een AI die overleggen samenvat, verwerkt persoonsgegevens van alle deelnemers. Een nieuwe toepassing met persoonsgegevens vraagt een DPIA-toets en een verwerkersovereenkomst. En wie het gebruik per medewerker meet, heeft de ondernemingsraad nodig.' },
+  { title: 'Wat doe je als het misgaat?', text: 'Eén alinea met een meldpunt en de belofte dat melden niet wordt afgestraft, voorkomt dat fouten verborgen blijven.' },
+]} />
+
+**Welke van deze vijf staat al in jouw AI-beleid, en welke mist nog?**
+
+Wil je weten hoe Leja binnen jouw beleid past, of wil je ons beleid als bijlage bij je eigen ketenparagraaf? [Neem contact op](/about).
