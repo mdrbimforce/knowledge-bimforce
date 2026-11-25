@@ -174,7 +174,10 @@ export const skills: Skill[] = [
       'Windows met Revit 2025 of 2026',
       'Zelf bouwen: de .NET 8 SDK',
     ],
-    handleidingen: [{ label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' }],
+    handleidingen: [
+      { label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' },
+      { label: 'Broncode op GitHub (MIT): addin, skills en tests', href: 'https://github.com/mdrbimforce/revit-agent' },
+    ],
     status: 'beschikbaar',
   },
 ];
