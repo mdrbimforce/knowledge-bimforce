@@ -57,11 +57,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         </a>
         {/* Navigatie (2026-09-28, besluit Martijn): inhoud links (Verhalen, Publicaties,
             Resources, Leja), "Over bimforce" apart helemaal rechts. */}
-        <nav class="flex-1 flex items-center justify-between ml-8 sm:ml-12">
-          <ul class="flex gap-5 sm:gap-8 text-sm font-medium uppercase tracking-wide">
+        {/* Op een telefoon past de rij niet op één regel: items lopen door naar een volgende regel
+            en blijven zo in beeld (2026-11-25, bij het menu-item Skills). */}
+        <nav class="flex-1 min-w-0 flex flex-wrap items-center justify-between gap-y-2 ml-6 sm:ml-12">
+          <ul class="flex flex-wrap gap-x-4 gap-y-1 sm:gap-8 text-sm font-medium uppercase tracking-wide">
             <li><a href="/posts" class="hover:text-bf-red no-underline transition-colors">Verhalen</a></li>
             <li><a href="/publicaties" class="hover:text-bf-red no-underline transition-colors">Publicaties</a></li>
             <li><a href="/resources" class="hover:text-bf-red no-underline transition-colors">Resources</a></li>
+            <li><a href="/skills" class="hover:text-bf-red no-underline transition-colors">Skills</a></li>
             <li><a href="/leja" class="hover:text-bf-red no-underline transition-colors">Hallo, ik ben Leja</a></li>
           </ul>
           <ul class="flex text-sm font-medium uppercase tracking-wide">

@@ -11,7 +11,8 @@ export default defineConfig({
       // We willen onze eigen base-styles in src/styles/globals.css aanvullen
       applyBaseStyles: false,
     }),
-    sitemap(),
+    // Uitkomstpagina's van de nieuwsbriefaanmelding (noindex) horen niet in de sitemap.
+    sitemap({ filter: (page) => !page.includes('/nieuwsbrief/') }),
     // MDX (2026-09-26): verdiepingsartikelen gebruiken componenten uit
     // src/components/article/ (Figure, Callout, Steps, RouteFlow). Gewone .md blijft werken.
     mdx(),
