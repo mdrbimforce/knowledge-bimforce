@@ -1,10 +1,10 @@
 ---
 title: "Privacyverklaring"
 description: "Hoe bimforce omgaat met persoonsgegevens op knowledge.bimforce.com en in gekoppelde diensten."
-updated: 2026-09-28
+updated: 2026-11-25
 ---
 
-**Laatst bijgewerkt: 28 september 2026**
+**Laatst bijgewerkt: 25 november 2026**
 
 Deze privacyverklaring beschrijft hoe bimforce omgaat met persoonsgegevens op knowledge.bimforce.com en in de diensten en integraties die bimforce beheert. We houden het graag zo simpel als de werkelijkheid is: deze site is een publicatieplatform, en we verzamelen zo min mogelijk.
 
@@ -19,11 +19,37 @@ bimforce is het bedrijf van Martijn de Riet en levert kennis, software en advies
 
 ### Bezoek aan deze website
 
-knowledge.bimforce.com is een statische website. Er zijn geen gebruikersaccounts, geen reactieformulieren en geen nieuwsbriefinschrijvingen. We plaatsen geen tracking-cookies en gebruiken geen advertentiediensten.
+knowledge.bimforce.com is een publicatiesite. Er zijn geen gebruikersaccounts en geen reactieformulieren. We plaatsen geen tracking-cookies en gebruiken geen advertentiediensten.
 
 Om te zien welke artikelen gelezen worden, gebruiken we Cloudflare Web Analytics. Deze dienst plaatst volgens Cloudflare geen cookies en volgt bezoekers niet over andere websites. Wij zien alleen totalen, zoals het aantal paginaweergaven en bezoeken per artikel; die gebruiken we om te bepalen welke onderwerpen we verder uitwerken.
 
 De site wordt gehost bij Cloudflare (Cloudflare Pages). Cloudflare verwerkt als hostingpartij technisch noodzakelijke gegevens — zoals IP-adressen in serverlogs — om de site veilig en snel te kunnen leveren. Zie daarvoor het [privacybeleid van Cloudflare](https://www.cloudflare.com/privacypolicy/).
+
+### Downloads van skills
+
+Op [/skills](/skills) tellen we hoe vaak elke skill wordt gedownload. Per download verhogen we één teller voor de combinatie van skill en dag. Meer bewaren we niet: geen IP-adres, geen browsergegevens, geen cookie en niet de pagina waar je vandaan kwam. Deze telling bevat geen persoonsgegevens. We gebruiken haar om te zien welke skills gebruikt worden.
+
+### Aanmelding voor de nieuwsbrief
+
+Op deze site kun je je aanmelden voor de nieuwsbrief van bimforce. Daarvoor bewaren we:
+
+- je e-mailadres;
+- het tijdstip van aanmelding;
+- de status van je aanmelding (onbevestigd, bevestigd of afgemeld);
+- een willekeurige code waarmee je je aanmelding later bevestigt;
+- op welke pagina je je aanmeldde.
+
+**Doel:** je de nieuwsbrief sturen. We gebruiken je adres voor niets anders en verkopen of delen het niet.
+
+**Grondslag:** je toestemming, die je geeft met het vinkje bij het formulier. Je kunt die toestemming altijd intrekken.
+
+**Bevestiging:** de verzending van de nieuwsbrief start binnenkort. Je krijgt dan eerst een bevestigingsmail; pas als je die bevestigt, sturen we je de nieuwsbrief. Tot die tijd mailen we je niet. Zodra de verzending start, werken we deze verklaring bij met de dienst die de mail verstuurt.
+
+**Bewaartermijn:** tot je je afmeldt. Een aanmelding die je niet bevestigt, verwijderen we 30 dagen nadat we de bevestigingsmail stuurden, en uiterlijk 12 maanden na de aanmelding.
+
+**Opslag:** de gegevens staan in een database bij Cloudflare (Cloudflare D1), dezelfde partij die deze site host.
+
+**Afmelden:** mail naar [martijn@bimforce.com](mailto:martijn@bimforce.com). We verwijderen je adres dan uit de lijst.
 
 ### E-mailcontact
 
@@ -42,15 +68,15 @@ Op gegevens die LinkedIn zelf verwerkt is het [privacybeleid van LinkedIn](https
 
 ## Waarom we deze gegevens mogen verwerken
 
-We verwerken persoonsgegevens op basis van gerechtvaardigd belang (het beantwoorden van je bericht, het veilig aanbieden van deze website, het beheren van onze eigen social-media-kanalen) of, waar van toepassing, op basis van jouw toestemming.
+We verwerken persoonsgegevens op basis van gerechtvaardigd belang (het beantwoorden van je bericht, het veilig aanbieden van deze website, het beheren van onze eigen social-media-kanalen) of, waar van toepassing, op basis van jouw toestemming. De aanmelding voor de nieuwsbrief verwerken we op basis van toestemming.
 
 ## Bewaartermijnen
 
-We bewaren persoonsgegevens niet langer dan nodig. Serverlogs bij onze hostingpartij hebben een korte, technische bewaartermijn. E-mailcorrespondentie bewaren we zo lang die relevant is voor de afhandeling en de wettelijke administratieplicht. OAuth-tokens voor social-media-integraties verlopen automatisch en worden bij intrekking of einde van het gebruik verwijderd.
+We bewaren persoonsgegevens niet langer dan nodig. Serverlogs bij onze hostingpartij hebben een korte, technische bewaartermijn. E-mailcorrespondentie bewaren we zo lang die relevant is voor de afhandeling en de wettelijke administratieplicht. Een aanmelding voor de nieuwsbrief bewaren we tot je je afmeldt; een onbevestigde aanmelding uiterlijk zoals hierboven beschreven. OAuth-tokens voor social-media-integraties verlopen automatisch en worden bij intrekking of einde van het gebruik verwijderd.
 
 ## Delen met derden
 
-We delen persoonsgegevens alleen met partijen die nodig zijn om de hierboven beschreven diensten te leveren (zoals onze hostingpartij) en alleen voor zover dat daarvoor nodig is. We verkopen geen persoonsgegevens.
+We delen persoonsgegevens alleen met partijen die nodig zijn om de hierboven beschreven diensten te leveren (zoals onze hostingpartij Cloudflare, die ook de database met nieuwsbriefaanmeldingen bewaart) en alleen voor zover dat daarvoor nodig is. We verkopen geen persoonsgegevens.
 
 ## Jouw rechten
 
