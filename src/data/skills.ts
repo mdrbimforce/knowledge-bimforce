@@ -83,48 +83,91 @@ export const skills: Skill[] = [
     ],
     status: 'beschikbaar',
   },
-  // Revit en NLRS: voor de hackathon van 26-11-2026. Tekst, versie, vereisten en zip volgen.
+  // Revit en NLRS: eerste versie voor de NLRS-hackathon van 26-11-2026. Bron: de repo revit-agent
+  // (tools/pak.py bouwt de zips). De skills werken in Revit via de Revit Agent-addin; die staat
+  // hieronder op 'binnenkort' tot hij in een draaiende Revit getest is.
   {
     slug: 'revit-agent',
-    titel: 'Revit-agent',
+    titel: 'Revit Agent',
     kicker: 'Revit en NLRS',
-    tekst: 'Beschrijving en download volgen binnenkort.',
-    versie: '',
-    datum: '',
+    tekst:
+      'Claude werkt mee in je eigen Revit: kijken welke modellen open staan, elementen en parameters lezen, views, sheets en materialen maken. ' +
+      'Elke wijziging gaat eerst als proef en wordt pas uitgevoerd na jouw akkoord; bewaren doet de skill alleen als je erom vraagt. ' +
+      'Eerste versie, gemaakt voor de NLRS-hackathon van 26 november 2026.',
+    versie: '0.1',
+    datum: '2026-11-25',
     bestand: 'revit-agent.zip',
-    vereisten: [],
-    status: 'binnenkort',
+    vereisten: [
+      'Claude Desktop (onderdeel Code) of Claude Code',
+      'Revit 2025 of 2026 met de Revit Agent-addin',
+      'Python 3.10 of hoger',
+    ],
+    status: 'beschikbaar',
   },
   {
     slug: 'nlrs-agent',
-    titel: 'NLRS-agent',
+    titel: 'NLRS Agent',
     kicker: 'Revit en NLRS',
-    tekst: 'Beschrijving en download volgen binnenkort.',
-    versie: '',
-    datum: '',
+    tekst:
+      'Claude controleert of een Revit-model de NLRS volgt: namen tegen de Naamgenerator, shared parameters op naam en GUID, materialen, en de Assembly Code tegen NL-SfB. ' +
+      'Je krijgt een rapport met een score per onderdeel en een herstelplan; hernoemen gaat eerst als proef. ' +
+      'De skill haalt de NLRS-bestanden zelf op bij de Revit Standards Foundation.',
+    versie: '0.1',
+    datum: '2026-11-25',
     bestand: 'nlrs-agent.zip',
-    vereisten: [],
-    status: 'binnenkort',
+    vereisten: [
+      'Claude Desktop (onderdeel Code) of Claude Code',
+      'Python 3.10 of hoger',
+      'Voor het uitlezen en herstellen van een model: Revit 2025 of 2026 met de Revit Agent-addin',
+    ],
+    status: 'beschikbaar',
   },
   {
     slug: 'ifc-ils-export',
-    titel: 'IFC-export volgens de ILS',
+    titel: 'IFC-export volgens een ILS',
     kicker: 'Revit en NLRS',
-    tekst: 'Beschrijving en download volgen binnenkort.',
-    versie: '',
-    datum: '',
+    tekst:
+      'Claude exporteert een IFC uit Revit met een vaste export-setup, bewerkt hem na (georeferentie, bouwlagen, ruimtenummers en -namen, zones, classificatie) en toetst het resultaat. ' +
+      'Het ruimtemodel voor de ILS Omgevingsvergunning is als voorbeeld uitgewerkt. ' +
+      'Nabewerken en toetsen werken ook op een IFC die je al hebt.',
+    versie: '0.1',
+    datum: '2026-11-25',
     bestand: 'ifc-ils-export.zip',
-    vereisten: [],
-    status: 'binnenkort',
+    vereisten: [
+      'Claude Desktop (onderdeel Code) of Claude Code',
+      'Python 3.10 of hoger; de skill installeert IfcOpenShell in een eigen omgeving',
+      'Voor de export zelf: Revit 2025 of 2026 met de Revit Agent-addin',
+    ],
+    status: 'beschikbaar',
   },
   {
     slug: 'ils-check',
     titel: 'ILS-check',
     kicker: 'Revit en NLRS',
-    tekst: 'Beschrijving en download volgen binnenkort.',
+    tekst:
+      'Claude leest een ILS als IDS-bestand, koppelt elke eis aan een Revit-parameter en laat vóór de export zien welke parameters ontbreken, aan een andere categorie hangen of leeg zijn. ' +
+      'Na de export toetst hij de IFC tegen dezelfde IDS. ' +
+      'Met de koppelingen uit de NLRS voor de ILS Ontwerp & Engineering.',
+    versie: '0.1',
+    datum: '2026-11-25',
+    bestand: 'ils-check.zip',
+    vereisten: [
+      'Claude Desktop (onderdeel Code) of Claude Code',
+      'Python 3.10 of hoger; de skill installeert IfcOpenShell en ifctester in een eigen omgeving',
+      'Voor de controle in het model: Revit 2025 of 2026 met de Revit Agent-addin',
+    ],
+    status: 'beschikbaar',
+  },
+  {
+    slug: 'revit-agent-addin',
+    titel: 'Revit Agent-addin',
+    kicker: 'Revit en NLRS',
+    tekst:
+      'De addin die de opdrachten van de vier skills in Revit uitvoert, voor Revit 2025 en 2026, met installatiescript en broncode. ' +
+      'Hij luistert alleen op je eigen computer. De download komt beschikbaar na de laatste test in Revit.',
     versie: '',
     datum: '',
-    bestand: 'ils-check.zip',
+    bestand: 'revit-agent-addin.zip',
     vereisten: [],
     status: 'binnenkort',
   },
