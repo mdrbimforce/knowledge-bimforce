@@ -1,0 +1,289 @@
+---
+// Naslag van alle opdrachten van de Revit Agent-addin (2026-11-25).
+// Alles komt uit src/data/revit-agent-opdrachten.json; dat bestand maakt
+// scripts/sync-revit-opdrachten.mjs uit de repo revit-agent. Niet met de hand aanpassen.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import data from '../../../data/revit-agent-opdrachten.json';
+
+type Opdracht = {
+  name: string;
+  beschrijving: string;
+  schrijft: boolean;
+  dry_run: boolean;
+  params: string[];
+  voorbeeld: string | null;
+  toelichting: string | null;
+  groep: string;
+};
+
+const opdrachten = data.commands as Opdracht[];
+const aantalLezen = opdrachten.filter((o) => !o.schrijft).length;
+const aantalSchrijven = opdrachten.length - aantalLezen;
+
+const datumNl = new Date(`${data.gesynchroniseerd}T12:00:00Z`).toLocaleDateString('nl-NL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const groepen = data.groepen
+  .map((g) => ({ ...g, items: opdrachten.filter((o) => o.groep === g.id) }))
+  .filter((g) => g.items.length > 0);
+
+// Kleine omzetting van markdown naar HTML: alinea's, lijsten, `code`, **vet** en codeblokken.
+// Alles wordt eerst ge-escaped; ruwe HTML uit de bron komt dus nooit door.
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function inline(s: string): string {
+  return esc(s)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+function markdown(tekst: string): string {
+  const regels = tekst.replace(/\r\n/g, '\n').split('\n');
+  const uit: string[] = [];
+  let alinea: string[] = [];
+  let lijst: string[] = [];
+  const sluitAlinea = () => {
+    if (alinea.length) uit.push(`<p>${inline(alinea.join(' '))}</p>`);
+    alinea = [];
+  };
+  const sluitLijst = () => {
+    if (lijst.length) uit.push(`<ul>${lijst.map((l) => `<li>${inline(l)}</li>`).join('')}</ul>`);
+    lijst = [];
+  };
+  for (let i = 0; i < regels.length; i++) {
+    const r = regels[i];
+    if (r.startsWith('```')) {
+      sluitAlinea();
+      sluitLijst();
+      const blok: string[] = [];
+      i++;
+      while (i < regels.length && !regels[i].startsWith('```')) blok.push(regels[i++]);
+      uit.push(`<pre tabindex="0"><code>${esc(blok.join('\n'))}</code></pre>`);
+    } else if (/^\s*[-*] /.test(r)) {
+      sluitAlinea();
+      lijst.push(r.replace(/^\s*[-*] /, ''));
+    } else if (r.trim() === '') {
+      sluitAlinea();
+      sluitLijst();
+    } else {
+      sluitLijst();
+      alinea.push(r.trim());
+    }
+  }
+  sluitAlinea();
+  sluitLijst();
+  return uit.join('\n');
+}
+
+const zoektekst = (o: Opdracht) => `${o.name} ${o.beschrijving} ${o.params.join(' ')}`.toLowerCase();
+---
+
+<BaseLayout
+  title="Revit Agent: alle opdrachten"
+  description={`Naslag van alle ${opdrachten.length} opdrachten die een AI-assistent in Revit kan geven via de Revit Agent-addin, met parameters en voorbeelden.`}
+>
+  <Fragment slot="full">
+    <style is:global>
+      .op-lijst code, .op-uitleg code { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; }
+      .op-uitleg p { margin: 0 0 0.6rem; }
+      .op-uitleg ul { margin: 0 0 0.6rem; padding-left: 1.25rem; list-style: disc; }
+      .op-uitleg :not(pre) > code { background: #F4F6F1; border-radius: 3px; padding: 0 0.25rem; font-size: 0.875em; overflow-wrap: anywhere; }
+      .op-lijst pre { margin: 0 0 0.6rem; max-width: 100%; overflow-x: auto; background: #1c2a41; color: #E7ECEF; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.8125rem; line-height: 1.5; }
+      .op-lijst pre code { background: none; padding: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+      .op-lijst pre:focus-visible, .op-fokus:focus-visible { outline: 3px solid #0c6980; outline-offset: 2px; }
+      .op-knop[aria-pressed='true'] { background: #1c2a41; color: #fff; border-color: #1c2a41; }
+      .op-lijst article:target { outline: 3px solid #0c6980; outline-offset: 3px; }
+    </style>
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-14 sm:py-16">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">naslag</div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            Revit Agent: alle opdrachten
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Alle {opdrachten.length} opdrachten die een AI-assistent in Revit kan geven, met parameters en
+            voorbeelden. Zoek op naam, beschrijving of parameter.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <div class="mx-auto max-w-3xl px-6 pt-12 op-lijst">
+      <section aria-labelledby="inleiding">
+        <h2 id="inleiding" class="text-2xl font-bold text-navy m-0 mb-3">Zo werkt het</h2>
+        <p class="text-navy/85 text-[15px] leading-relaxed m-0 mb-3">
+          De Revit Agent-addin luistert alleen op je eigen computer (<code>127.0.0.1</code>). Een opdracht is
+          één regel JSON: <code class="break-words">{'{"command", "params", "token"}'}</code>. Het antwoord is ook één regel:
+          <code class="break-words">{'{"success", "data", "error"}'}</code>. De poort en het token staan in
+          <code class="break-all">%APPDATA%\RevitAgent\bridge.json</code>; de addin maakt dat bestand bij elke start van Revit opnieuw.
+        </p>
+        <p class="text-navy/85 text-[15px] leading-relaxed m-0 mb-3">
+          Vanuit de skill roep je een opdracht zo aan:
+        </p>
+        <pre tabindex="0"><code>python scripts/revit.py &lt;opdracht&gt; "&lt;params als JSON&gt;"</code></pre>
+        <p class="text-navy/85 text-[15px] leading-relaxed m-0 mb-6">
+          Dit is geen MCP-server maar een eenvoudige bridge: elke taal met een TCP-socket kan hem aanspreken.
+        </p>
+
+        <h3 class="text-xl font-bold text-navy m-0 mb-2">De regels</h3>
+        <ul class="list-disc pl-5 m-0 mb-4 grid gap-2 text-[15px] text-navy/85 leading-relaxed">
+          <li><strong>Eerst lezen.</strong> Kijk wat er in het model staat voordat je iets wijzigt.</li>
+          <li><strong>Dan een proef.</strong> Bij bijna alle schrijvende opdrachten is <code>dry_run</code> standaard <code>true</code>: je ziet wat er zou gebeuren. Geef <code>"dry_run": false</code> pas na akkoord van de gebruiker.</li>
+          <li><strong>Bewaren en sluiten doet geen opdracht uit zichzelf.</strong> Alleen als je erom vraagt, bijvoorbeeld met <code>save_first</code> of <code>save_after</code>.</li>
+          <li><strong><code>target_document</code></strong> (de titel uit <code>get_open_documents</code>) werkt bij bijna elke opdracht en staat er niet steeds bij.</li>
+          <li><strong>Kijk ook in <code>data</code>.</strong> Een antwoord met <code>"success": true</code> kan in <code>data</code> toch <code>"ok": false</code> met een <code>error</code> hebben, bijvoorbeeld als het document niet open is.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="zoeken" class="mt-10">
+        <h2 id="zoeken" class="text-2xl font-bold text-navy m-0 mb-3">Zoeken</h2>
+        <p class="text-navy/85 text-[15px] m-0 mb-4">
+          {opdrachten.length} opdrachten: {aantalLezen} lezen, {aantalSchrijven} schrijven.
+          Versie van de addin: {data.versie_addin}. Bijgewerkt op {datumNl}.
+        </p>
+
+        <form id="op-form" role="search" class="grid gap-3" onsubmit="return false">
+          <div>
+            <label for="op-zoek" class="block text-sm font-semibold text-navy mb-1">Zoek op naam, beschrijving of parameter</label>
+            <input
+              id="op-zoek"
+              type="search"
+              autocomplete="off"
+              placeholder="bijvoorbeeld material of dry_run"
+              class="op-fokus w-full rounded border border-grey-light bg-white px-3 py-2 text-base text-navy"
+            />
+          </div>
+          <div role="group" aria-label="Soort opdracht" class="flex flex-wrap gap-2 text-sm">
+            <button type="button" data-filter="alles" aria-pressed="true" class="op-knop op-fokus rounded border border-grey-light px-3 py-1.5 font-semibold text-navy">Alles</button>
+            <button type="button" data-filter="lezen" aria-pressed="false" class="op-knop op-fokus rounded border border-grey-light px-3 py-1.5 font-semibold text-navy">Lezen</button>
+            <button type="button" data-filter="schrijven" aria-pressed="false" class="op-knop op-fokus rounded border border-grey-light px-3 py-1.5 font-semibold text-navy">Schrijven</button>
+          </div>
+        </form>
+        <p id="op-teller" role="status" aria-live="polite" class="text-sm text-navy m-0 mt-3">{opdrachten.length} van {opdrachten.length} opdrachten</p>
+        <p id="op-leeg" hidden class="text-sm text-bf-red font-semibold m-0 mt-2">Geen opdrachten gevonden. Probeer een ander zoekwoord of kies Alles.</p>
+      </section>
+
+      <nav aria-labelledby="inhoud" class="mt-10">
+        <h2 id="inhoud" class="text-2xl font-bold text-navy m-0 mb-3">Inhoud</h2>
+        <ul class="list-none p-0 m-0 grid gap-1 sm:grid-cols-2 text-[15px]">
+          {groepen.map((g) => (
+            <li data-inhoud={g.id}>
+              <a href={`#groep-${g.id}`} class="text-navy hover:text-bf-red hover:underline">{g.titel}</a>
+              <span class="text-grey-mid"> ({g.items.length})</span>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="mt-10">
+        {groepen.map((g) => (
+          <section data-groep={g.id} aria-labelledby={`groep-${g.id}`} class="mb-12">
+            <h2 id={`groep-${g.id}`} class="text-2xl font-bold text-navy m-0 mb-4 scroll-mt-4">{g.titel}</h2>
+            <div class="grid gap-4">
+              {g.items.map((o) => (
+                <article
+                  id={o.name}
+                  data-opdracht
+                  data-soort={o.schrijft ? 'schrijven' : 'lezen'}
+                  data-zoek={zoektekst(o)}
+                  class="min-w-0 rounded-lg border border-grey-light/60 p-5 scroll-mt-4"
+                >
+                  <h3 class="m-0 mb-2 text-lg font-bold text-navy break-all">
+                    <a href={`#${o.name}`} class="text-navy no-underline hover:text-bf-red hover:underline" style="font-family: Consolas, Monaco, 'Courier New', monospace;">{o.name}</a>
+                  </h3>
+                  <p class="m-0 mb-3 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wider">
+                    <span class={`rounded px-2 py-0.5 ${o.schrijft ? 'bg-bf-red text-white' : 'bg-off-white text-navy'}`}>{o.schrijft ? 'schrijft' : 'leest'}</span>
+                    {o.dry_run && <span class="rounded px-2 py-0.5 bg-teal-soft text-navy">kent proef (dry_run)</span>}
+                  </p>
+                  <p class="text-navy/85 text-[15px] leading-relaxed m-0 mb-3">{o.beschrijving}</p>
+
+                  <div class="mb-3">
+                    <div class="text-sm font-semibold text-navy mb-1">Parameters</div>
+                    {o.params.length > 0 ? (
+                      <ul class="list-none p-0 m-0 flex flex-wrap gap-x-3 gap-y-1 text-sm" style="font-family: Consolas, Monaco, 'Courier New', monospace;">
+                        {o.params.map((p) => <li class="break-all">{p}</li>)}
+                      </ul>
+                    ) : (
+                      <p class="m-0 text-sm text-grey-mid">Geen parameters.</p>
+                    )}
+                  </div>
+
+                  {o.voorbeeld && (
+                    <div class="mb-3 op-uitleg">
+                      <div class="text-sm font-semibold text-navy mb-1">Voorbeeld</div>
+                      <pre tabindex="0"><code>{o.voorbeeld}</code></pre>
+                    </div>
+                  )}
+
+                  {o.toelichting && (
+                    <div class="op-uitleg text-sm text-navy/85 leading-relaxed">
+                      <div class="text-sm font-semibold text-navy mb-1">Toelichting uit de code</div>
+                      <Fragment set:html={markdown(o.toelichting)} />
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <p class="text-sm text-navy/85 leading-relaxed m-0">
+        Terug naar <a href="/skills/" class="text-bf-red hover:underline">alle skills</a>. Daar staan de download
+        van de skill <a href="/skills/#revit-agent" class="text-bf-red hover:underline">Revit Agent</a> en van de
+        <a href="/skills/#revit-agent-addin" class="text-bf-red hover:underline">Revit Agent-addin</a>.
+      </p>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var invoer = document.getElementById('op-zoek');
+        var teller = document.getElementById('op-teller');
+        var leeg = document.getElementById('op-leeg');
+        var knoppen = Array.prototype.slice.call(document.querySelectorAll('.op-knop'));
+        var kaarten = Array.prototype.slice.call(document.querySelectorAll('[data-opdracht]'));
+        var groepen = Array.prototype.slice.call(document.querySelectorAll('[data-groep]'));
+        var inhoud = Array.prototype.slice.call(document.querySelectorAll('[data-inhoud]'));
+        if (!invoer || !teller) return;
+        var soort = 'alles';
+
+        function pas() {
+          var woorden = invoer.value.toLowerCase().split(/\s+/).filter(Boolean);
+          var treffers = 0;
+          kaarten.forEach(function (k) {
+            var tekst = k.getAttribute('data-zoek') || '';
+            var past = (soort === 'alles' || k.getAttribute('data-soort') === soort) &&
+              woorden.every(function (w) { return tekst.indexOf(w) !== -1; });
+            k.hidden = !past;
+            if (past) treffers++;
+          });
+          groepen.forEach(function (g) {
+            var zichtbaar = g.querySelectorAll('[data-opdracht]:not([hidden])').length;
+            g.hidden = zichtbaar === 0;
+            inhoud.forEach(function (li) {
+              if (li.getAttribute('data-inhoud') === g.getAttribute('data-groep')) li.hidden = zichtbaar === 0;
+            });
+          });
+          teller.textContent = treffers + ' van ' + kaarten.length + ' opdrachten';
+          leeg.hidden = treffers !== 0;
+        }
+
+        invoer.addEventListener('input', pas);
+        knoppen.forEach(function (b) {
+          b.addEventListener('click', function () {
+            soort = b.getAttribute('data-filter');
+            knoppen.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            pas();
+          });
+        });
+        pas();
+      })();
+    </script>
+  </Fragment>
+</BaseLayout>

@@ -204,6 +204,20 @@ npx wrangler d1 migrations apply knowledge-bimforce --local
 npx wrangler pages dev dist
 ```
 
+## Naslag Revit-opdrachten bijwerken
+
+De pagina `/skills/revit-agent/opdrachten/` wordt gebouwd uit `src/data/revit-agent-opdrachten.json`.
+Dat bestand komt uit de repo `revit-agent` (de lijst met opdrachten en de voorbeelden en toelichtingen).
+Na een wijziging daar:
+
+```bash
+npm run sync:revit-opdrachten    # = node scripts/sync-revit-opdrachten.mjs ../revit-agent
+```
+
+Het pad naar de revit-agent-repo is het eerste argument (standaard `../revit-agent`). De groepsindeling
+staat bovenin het script; een nieuwe opdracht die er niet in staat, komt in "Overig" en het script meldt
+hem op de console. Pas de pagina niet met de hand aan voor inhoud uit de bron.
+
 ## Deploy
 
 Cloudflare Pages connect naar deze GitHub-repo. Build-instructies:

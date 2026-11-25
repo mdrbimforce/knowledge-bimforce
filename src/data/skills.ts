@@ -85,7 +85,7 @@ export const skills: Skill[] = [
   },
   // Revit en NLRS: eerste versie voor de NLRS-hackathon van 26-11-2026. Bron: de repo revit-agent
   // (tools/pak.py bouwt de zips). De skills werken in Revit via de Revit Agent-addin; die staat
-  // hieronder op 'binnenkort' tot hij in een draaiende Revit getest is.
+  // hieronder, met broncode.
   {
     slug: 'revit-agent',
     titel: 'Revit Agent',
@@ -102,6 +102,7 @@ export const skills: Skill[] = [
       'Revit 2025 of 2026 met de Revit Agent-addin',
       'Python 3.10 of hoger',
     ],
+    handleidingen: [{ label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' }],
     status: 'beschikbaar',
   },
   {
@@ -163,12 +164,17 @@ export const skills: Skill[] = [
     titel: 'Revit Agent-addin',
     kicker: 'Revit en NLRS',
     tekst:
-      'De addin die de opdrachten van de vier skills in Revit uitvoert, voor Revit 2025 en 2026, met installatiescript en broncode. ' +
-      'Hij luistert alleen op je eigen computer. De download komt beschikbaar na de laatste test in Revit.',
-    versie: '',
-    datum: '',
+      'De addin die de opdrachten van de vier skills in Revit uitvoert, voor Revit 2025 en 2026, met installatiescript en de volledige broncode om zelf verder te bouwen. ' +
+      'Hij luistert alleen op je eigen computer en vraagt bij elk verzoek een token. ' +
+      'Getekend door bimforce met een eigen certificaat: Revit vraagt bij de eerste start één keer of hij geladen mag worden.',
+    versie: '0.1',
+    datum: '2026-11-25',
     bestand: 'revit-agent-addin.zip',
-    vereisten: [],
-    status: 'binnenkort',
+    vereisten: [
+      'Windows met Revit 2025 of 2026',
+      'Zelf bouwen: de .NET 8 SDK',
+    ],
+    handleidingen: [{ label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' }],
+    status: 'beschikbaar',
   },
 ];
