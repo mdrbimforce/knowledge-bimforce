@@ -2,6 +2,9 @@
 dist/
 .astro/
 
+# lokale staat van wrangler (lokale D1 bij wrangler pages dev)
+.wrangler/
+
 # dependencies
 node_modules/
 

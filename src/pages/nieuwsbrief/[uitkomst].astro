@@ -1,0 +1,44 @@
+---
+// Uitkomst van een aanmelding zonder JavaScript: /api/nieuwsbrief stuurt hierheen (303).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return [
+    {
+      params: { uitkomst: 'aangemeld' },
+      props: {
+        titel: 'Je aanmelding staat genoteerd',
+        tekst:
+          'Dank je. Zodra de nieuwsbrief start, krijg je eerst een bevestigingsmail. Pas na je bevestiging ' +
+          'sturen we je de nieuwsbrief. Afmelden kan altijd met een mail naar martijn@bimforce.com.',
+      },
+    },
+    {
+      params: { uitkomst: 'ongeldig' },
+      props: {
+        titel: 'Aanmelden is niet gelukt',
+        tekst: 'Controleer je e-mailadres en vink de toestemming aan. Daarna kun je het opnieuw proberen.',
+      },
+    },
+    {
+      params: { uitkomst: 'later' },
+      props: {
+        titel: 'Aanmelden kan nu even niet',
+        tekst: 'Probeer het later opnieuw, of mail naar leja@bimforce.com als je op de hoogte wilt blijven.',
+      },
+    },
+  ];
+}
+
+const { titel, tekst } = Astro.props;
+---
+
+<BaseLayout title={titel} noIndex>
+  <h1 class="text-3xl sm:text-4xl font-bold text-navy mb-4">{titel}</h1>
+  <p class="text-lg text-navy/85 leading-relaxed mb-8">{tekst}</p>
+  <p class="text-sm">
+    <a href="/skills" class="text-bf-red font-semibold hover:underline">Terug naar de skills</a>
+    <span class="text-grey-mid mx-2">·</span>
+    <a href="/privacy" class="text-navy/80 hover:text-bf-red hover:underline">Privacyverklaring</a>
+  </p>
+</BaseLayout>

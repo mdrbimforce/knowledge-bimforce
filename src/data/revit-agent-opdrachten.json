@@ -1,0 +1,1703 @@
+{
+  "versie_addin": "0.1.0",
+  "gesynchroniseerd": "2026-11-25",
+  "aantal": 101,
+  "groepen": [
+    {
+      "id": "bridge-diagnose",
+      "titel": "Bridge en diagnose"
+    },
+    {
+      "id": "documenten-links",
+      "titel": "Documenten en links"
+    },
+    {
+      "id": "elementen-lezen",
+      "titel": "Elementen lezen"
+    },
+    {
+      "id": "elementen-wijzigen",
+      "titel": "Elementen wijzigen"
+    },
+    {
+      "id": "parameters",
+      "titel": "Parameters"
+    },
+    {
+      "id": "families",
+      "titel": "Families"
+    },
+    {
+      "id": "kopieren-tussen-modellen",
+      "titel": "Kopiëren tussen modellen"
+    },
+    {
+      "id": "materialen",
+      "titel": "Materialen"
+    },
+    {
+      "id": "views-filters",
+      "titel": "Views en filters"
+    },
+    {
+      "id": "sheets-export",
+      "titel": "Sheets en export"
+    },
+    {
+      "id": "modelleren",
+      "titel": "Modelleren"
+    },
+    {
+      "id": "mep",
+      "titel": "MEP"
+    },
+    {
+      "id": "ifc",
+      "titel": "IFC"
+    }
+  ],
+  "commands": [
+    {
+      "name": "ping",
+      "beschrijving": "Leeft de bridge? Werkt zonder token; geeft de versie van de addin.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": "{\"command\": \"ping\", \"params\": {}}",
+      "toelichting": null,
+      "groep": "bridge-diagnose"
+    },
+    {
+      "name": "list_commands",
+      "beschrijving": "Alle opdrachten met korte uitleg, of ze schrijven en of ze dry_run kennen.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "bridge-diagnose"
+    },
+    {
+      "name": "get_info",
+      "beschrijving": "Versie en build van Revit.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "bridge-diagnose"
+    },
+    {
+      "name": "get_diagnostics",
+      "beschrijving": "Stand van de dispatcher en de laatste logregels van de addin.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "bridge-diagnose"
+    },
+    {
+      "name": "reset_counters",
+      "beschrijving": "Tellers en log van de dispatcher leegmaken.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "bridge-diagnose"
+    },
+    {
+      "name": "get_open_documents",
+      "beschrijving": "Welke modellen en families staan open (titel, pad, onbewaard werk).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [],
+      "voorbeeld": "{\"command\": \"get_open_documents\", \"params\": {}}",
+      "toelichting": null,
+      "groep": "documenten-links"
+    },
+    {
+      "name": "open_document",
+      "beschrijving": "Een .rvt of .rfa openen op de achtergrond (zonder venster), ook met ontbrekende links.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "path",
+        "worksets",
+        "detach",
+        "audit"
+      ],
+      "voorbeeld": "{\"command\": \"open_document\", \"params\": {\"path\": \"D:\\\\Projecten\\\\Voorbeeldproject.rvt\", \"worksets\": \"alle\"}}",
+      "toelichting": "```text\nopen_document: een .rvt/.rfa openen op de achtergrond (geen venster, wel volledig bruikbaar via de bridge).\nparams: path · worksets (\"alle\" standaard | \"geen\" | \"laatste\") · detach (\"nee\" standaard | \"behoud\" | \"weggooien\")\n        · audit (false)\nOntbrekende links: de melding \"Unresolved References\" wordt beantwoord met \"doorgaan met openen\";\nhet antwoord noemt welke links niet geladen zijn (links_niet_geladen).\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "open_document_ui",
+      "beschrijving": "Een model openen en tonen in Revit (met venster), ook met ontbrekende links.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "path",
+        "worksets",
+        "detach",
+        "audit"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nopen_document_ui: als open_document, maar het model wordt getoond en actief in Revit.\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "save_document",
+      "beschrijving": "Een open model bewaren. Alleen als de gebruiker erom vraagt.",
+      "schrijft": true,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": "{\"command\": \"save_document\", \"params\": {\"target_document\": \"Voorbeeldproject\"}}",
+      "toelichting": "```text\nsave_document: een open model bewaren. params: target_document. Alleen op verzoek van de gebruiker.\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "save_document_as",
+      "beschrijving": "Een open model bewaren onder een nieuwe naam. Alleen als de gebruiker erom vraagt.",
+      "schrijft": true,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "path",
+        "overwrite",
+        "compact"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "documenten-links"
+    },
+    {
+      "name": "close_document",
+      "beschrijving": "Een open model sluiten (standaard zonder bewaren). Alleen als de gebruiker erom vraagt.",
+      "schrijft": true,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "save"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nclose_document — sluit een open document op Title zonder opslaan (stray edit-docs na een mislukte EditFamily).\nparams: target_document (verplicht), save (default false). Weigert het actieve UI-document.\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "new_project",
+      "beschrijving": "Een nieuw, leeg project maken (optioneel uit een sjabloon). Wordt niet bewaard.",
+      "schrijft": true,
+      "dry_run": false,
+      "params": [
+        "template"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "documenten-links"
+    },
+    {
+      "name": "get_worksets",
+      "beschrijving": "Worksets van een model met open/dicht.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nget_worksets — alleen lezen: user-worksets van een open document met open/dicht-status.\nWorksets zijn via de API niet te openen op\neen al open document; dit commando toont of een heropen (open_document_ui, alle worksets) nodig is.\nparams: target_document (verplicht).\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "list_link_instances",
+      "beschrijving": "Revit-links in een model: naam, pad, geladen of niet.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nlist_link_instances — RevitLinkInstances in target_document, alleen lezen.\nparams: target_document.\nPer instantie: element_id, name, type_name, type_id, linked_document (Title van het geladen gelinkte document =\ntarget_document voor get_room_geometry, null als niet geladen), geladen, status (LinkedFileStatus), pad,\nattachment, genest, pinned, transform {origin_mm, basis_x, basis_y, basis_z, rotatie_xy_deg}\n(GetTotalTransform: van gelinkte interne coördinaten naar die van target_document), origin_op_origin (origin\n≤ 1 mm en basis = identiteit).\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "load_links",
+      "beschrijving": "Revit-links toevoegen uit paden of een map (plaatsing origin of shared).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "paths",
+        "folder",
+        "name_contains",
+        "placement",
+        "dry_run"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nload_links: Revit-links toevoegen.\nparams: target_document · paths [..] of folder (alle *.rvt, optioneel name_contains)\n        · placement (\"origin\" standaard | \"shared\") · dry_run (true)\nEen link waarvan de bestandsnaam al als link in het model staat, wordt overgeslagen.\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "reload_link",
+      "beschrijving": "Een Revit-link opnieuw laden, eventueel vanaf een ander pad.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "link_titles",
+        "link_title"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nreload_link — RevitLinkType herladen, zodat het hoofdmodel wijzigingen in de link ziet (bv. RE na nieuwe wanden in\nBouwkundig: room bounding). Aanvulling op relink_links (dat zet links om naar bestanden in andere mappen, LoadFrom)\nen load_links (nieuwe links maken): dit commando houdt het pad en laadt opnieuw.\nparams: target_document, dry_run (default TRUE), link_titles?: [naam, ...] (naam van het RevitLinkType, met of zonder\n\".rvt\", of de Title van het gelinkte document; zonder lijst: alle niet-geneste links).\nGeladen link → RevitLinkType.Reload; niet geladen → Load. Buiten een transactie (eigen Revit-operatie).\nResultaat per link: {index, naam, type_id, status: zou_herladen|zou_laden|herladen|geladen|fout, load_result,\ngeladen_voor, geladen_na, status_voor, status_na, pad, fouten}; niet_gevonden: gevraagde namen zonder link.\nLet op: is het gelinkte model als hoofddocument open in deze sessie, dan kan Revit het laden weigeren.\n```",
+      "groep": "documenten-links"
+    },
+    {
+      "name": "list_type_catalog",
+      "beschrijving": "De type_id's die query_elements en get_element_detail kennen.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "pattern"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "query_elements",
+      "beschrijving": "Alle elementen van één soort (type_id uit list_type_catalog), zoals wall_type of materials.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "type_id",
+        "target_document"
+      ],
+      "voorbeeld": "{\"command\": \"query_elements\", \"params\": {\"type_id\": \"wall_type\", \"target_document\": \"Voorbeeldproject\"}}",
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_element_detail",
+      "beschrijving": "Alle eigenschappen en parameters van één element (type_id + element_id).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "type_id",
+        "element_id",
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "query_category_instances",
+      "beschrijving": "Instanties van een categorie met familie, type en gevraagde parameters.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "categories",
+        "include_types"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_family_instances",
+      "beschrijving": "Family-instanties met hun parameters (begrensd met limit).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "limit",
+        "skip_categories",
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_families_loaded",
+      "beschrijving": "Geladen families per categorie met aantal types.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_family_detail",
+      "beschrijving": "Eén familie met haar types en parameters.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "name",
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_levels",
+      "beschrijving": "Alle levels met hoogte (voet en meter) en parameters.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": "{\"command\": \"get_levels\", \"params\": {\"target_document\": \"Voorbeeldproject\"}}",
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_door_room_relations",
+      "beschrijving": "Per deur de ruimte aan beide kanten (van/naar).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "phase",
+        "include_links",
+        "category",
+        "geometrie",
+        "offset_mm",
+        "probe_height_mm",
+        "element_ids"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "get_room_geometry",
+      "beschrijving": "Grenslijnen en hoogte van ruimten.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "levels"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nget_room_geometry — rooms met geometrie, alleen lezen. Werkt ook op een gelinkt model dat geladen is: geef dan\nde Title van het gelinkte document als target_document (list_link_instances noemt die); coördinaten zijn dan\nin het interne stelsel van dat model (omrekenen met de totale transformatie van de link).\nparams: target_document, levels?: [levelnaam, ...] (filter; onbekende namen in notes).\nPer room: id, unique_id, name, number, level, phase, area_m2, geplaatst, omsloten, location_point_mm [x,y,z],\nbbox_mm {min, max} ([x,y,z]), boundary_mm (buitenste lus, [[x,y], ...], bogen getesselleerd, laatste punt ≠\neerste), boundary_z_mm, lussen (aantal boundary-lussen, incl. de buitenste), deuren [{element_id, mark, family,\ntype, from_room_number, to_room_number}] (deuren in hetzelfde document met deze room als FromRoom of ToRoom).\nBoundary: SpatialElementBoundaryOptions met SpatialElementBoundaryLocation.Finish; buitenste lus = de lus met\nhet grootste oppervlak in XY. FromRoom/ToRoom gelden voor de laatste fase van het project.\n```",
+      "groep": "elementen-lezen"
+    },
+    {
+      "name": "change_element_type",
+      "beschrijving": "Elementen een ander type geven (op id of naam).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "element_ids",
+        "new_type_id",
+        "new_type_name",
+        "family_name",
+        "dry_run"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nchange_element_type: elementen een ander type geven.\nparams: target_document · element_ids [..] · new_type_id of new_type_name (+ optioneel family_name) · dry_run (true)\n```",
+      "groep": "elementen-wijzigen"
+    },
+    {
+      "name": "rename_element",
+      "beschrijving": "Elementen (types, views, materialen) hernoemen. Standaard eerst als proef.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "dry_run",
+        "save_first",
+        "target_document",
+        "renames",
+        "element_id",
+        "new_name",
+        "expected_name"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "elementen-wijzigen"
+    },
+    {
+      "name": "delete_element",
+      "beschrijving": "Elementen verwijderen; met expected_name als controle. Standaard eerst als proef.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "dry_run",
+        "save_first",
+        "target_document",
+        "deletes",
+        "element_id",
+        "expected_name",
+        "element_ids"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ndelete_element — remove elements from the model (NLRS remediation status=\"delete\").\nSame backup-gate as rename: doc.Save first (numbered backup) before any mutation. doc.Delete\nalso removes dependent elements — the returned count reflects everything Revit removed.\nSafety: pass expected_name per element so a stale/colliding id (resolving\nto a different element than intended) is SKIPPED as stale_id instead of deleting the wrong thing;\ntarget_document scopes to one open doc by Title.\n  deletes    : [{element_id[, expected_name]}]  |  element_ids:[int]  |  element_id:int\n  dry_run/save_first : bool                      |  target_document : string\n```",
+      "groep": "elementen-wijzigen"
+    },
+    {
+      "name": "read_parameter_values",
+      "beschrijving": "Parameterwaarden lezen voor een categorie of een lijst elementen, met telling gevuld/leeg/ontbreekt.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "categories",
+        "element_ids",
+        "params",
+        "include_all",
+        "limit",
+        "offset"
+      ],
+      "voorbeeld": "{\"command\": \"read_parameter_values\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"categories\": [\"OST_Doors\"], \"params\": [\"Mark\", \"Fire Rating\"]}}",
+      "toelichting": "```text\nread_parameter_values — bulk lezen voor inventaris en controle (alleen lezen).\nSelectie: categories:[\"OST_Doors\", ...] (of UI-namen) of element_ids:[...]. Parameters: params:[namen], eerst op de\ninstantie, dan op het type (bron \"instance\"|\"type\"). include_all (default false): alle parameters met waarde\n(instance + type), gecapt op 500 rijen. Paginering met limit (default 5000) en offset, gesorteerd op element-id.\nRij: {element_id, unique_id, category, family, type, level, ifc_guid, values:{naam:{value, raw, bron}}}.\nsummary per param (over de hele selectie, niet alleen de pagina): {met_waarde, zonder_waarde, ontbreekt}.\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "set_parameter_value",
+      "beschrijving": "Eén parameter op een element of type zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits",
+        "element_id",
+        "family",
+        "param_name",
+        "new_value",
+        "expected_current"
+      ],
+      "voorbeeld": "{\"command\": \"set_parameter_value\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"edits\": [{\"element_id\": 352187, \"param_name\": \"Mark\", \"new_value\": \"D01\"}], \"dry_run\": true}}",
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "set_parameter_values_bulk",
+      "beschrijving": "Veel parameterwaarden tegelijk zetten, in batches, met voorbeeld bij dry_run.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "only_if_empty",
+        "batch_size",
+        "edits",
+        "value"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nset_parameter_values_bulk — schrijf waarden op instanties of op hun type, in batches (één transactie per batch).\nWaarde per StorageType: String → Set(string); Integer → Yes/No (bool, ja/nee, true/false, 1/0) of int;\nDouble → string = SetValueString (met eenheid, project-display-eenheden), getal = in de display-eenheid van de\nparameter (UnitUtils.ConvertToInternalUnits met Parameter.GetUnitTypeId); ElementId → geweigerd.\ntarget \"type\": schrijft op het ElementType; dezelfde type+param+waarde één keer, tegenstrijdige waarden = conflict\n(niets geschreven voor dat type+param). Groepsleden met een parameter die niet per groep mag variëren: fout\ngroup_member (geen schrijfpoging, geen modale dialoog). Read-back na commit bepaalt \"geschreven\".\nparams: target_document, edits:[{element_id, param | guid, value, target: \"instance\"|\"type\"}],\n        only_if_empty (default false), dry_run (default TRUE), batch_size (default 500).\nRapport: {gevraagd, geschreven, overgeslagen_niet_leeg, ongewijzigd_al_gelijk, type_dubbel_samengevoegd,\n          fouten:[{element_id, param, reden}] (max 200), fouten_totaal, per_param:{naam:{geschreven, fout}}}.\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "list_parameter_bindings",
+      "beschrijving": "Alle project- en shared parameters met hun categorieën en groep.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nlist_parameter_bindings — alle project- en shared-parameterbindingen van een document (alleen lezen).\nparams: target_document.\nRij: {name, guid (alleen shared), shared, instance_or_type, group, group_id, data_type, varies_across_groups,\n      categories:[OST_-naam of UI-naam]}.\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "bind_shared_parameters",
+      "beschrijving": "Shared parameters uit een bestand aan categorieën binden (nieuw of uitbreiden).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "shared_param_file",
+        "dry_run",
+        "bindings",
+        "categories"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nbind_shared_parameters — bind shared parameters uit een SP-bestand aan categorieën.\nZoekt de definitie op GUID (voorkeur) of naam. Bestaande binding: alleen ontbrekende categorieën erbij\n(ReInsert, zelfde soort en groep; nooit categorieën weg, nooit instance↔type omzetten). Parameter met\ndezelfde naam maar een andere GUID in het document: niet binden, status \"conflict\".\nSharedParametersFilename wordt altijd in finally hersteld.\nparams: target_document, shared_param_file (verplicht),\n        bindings:[{name?, guid?, categories:[\"OST_Doors\",...], instance (default true),\n                   group (\"Data\" | \"IdentityData\" | \"IfcParameters\" | \"PG_IDENTITY_DATA\" ...; default Data)}],\n        dry_run (default TRUE).\nRapport per binding: {name, guid, status: nieuw|uitgebreid|al_gebonden|conflict|niet_in_bestand|fout,\n                      categorieen_toegevoegd, categorieen_onbekend, notes}.\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "unbind_shared_parameters",
+      "beschrijving": "Bindingen van shared parameters weghalen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "shared_param_file",
+        "guids",
+        "dry_run"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nunbind_shared_parameters — haal de projectbinding van shared parameters weg maar houd (of maak) de\nSharedParameterElement-definitie (zelfde GUID, naam uit het SP-bestand), zodat families die de parameter dragen\nhem onder de vertaalde naam tonen zonder dat ELKE family in de categorie hem krijgt.\nparams: target_document, guids:[...], shared_param_file (voor herstel van de definitie), dry_run (default true).\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "set_parameter_binding",
+      "beschrijving": "Een parameterbinding aanpassen (categorieën, instance/type, groep).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "shared_param_file",
+        "bindings",
+        "categories"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nset_parameter_binding — (re)bind a project shared parameter to an EXPLICIT category list with a\nchosen instance/type binding (review SP-binding-edit). Replace-semantics: the given\ncategories are the desired end-state. Category names are resolved fail-on-mismatch — one unknown\nname fails that row with no mutation. Reuses the ReInsert/Insert + NewInstance/TypeBinding motor\nfrom MirrorParameterBinding, but fed from an explicit list instead of a source param/filters.\nparams:\n  target_document : scope by Title\n  bindings : [{guid? | param_name?, kind: \"instance\"|\"type\", categories:[UI category names], expected?}]\n  dry_run    : bool (default TRUE)\n  save_first : bool (default false)\n```",
+      "groep": "parameters"
+    },
+    {
+      "name": "mirror_parameter_binding",
+      "beschrijving": "De binding van een parameter overnemen op een andere parameter.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "category_source",
+        "mappings",
+        "source",
+        "target"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "report_parameter_usage",
+      "beschrijving": "Waar een parameter gebruikt wordt (bindingen, filters, schedules, families).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "scan_instances",
+        "guids"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "swap_parameter",
+      "beschrijving": "Een project-parameter vervangen door een andere en de waarden overzetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_guid",
+        "source_builtin",
+        "target_guid",
+        "target_document",
+        "dry_run",
+        "categories",
+        "shared_param_file",
+        "save_first"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "couple_builtin_parameter",
+      "beschrijving": "Waarden van een ingebouwde parameter naar een eigen parameter kopiëren.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_name",
+        "source_guid",
+        "target_guid",
+        "shared_param_file",
+        "target_document",
+        "dry_run",
+        "scan_all",
+        "families",
+        "save_first"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "enum_system_family_parameters",
+      "beschrijving": "Parameters van systeemfamilies (wanden, vloeren, ...) per type.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "ignore_params"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "parameters"
+    },
+    {
+      "name": "load_family",
+      "beschrijving": "Een .rfa laden in een project, met keuze voor overschrijven van waarden.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "path",
+        "overwrite_values",
+        "shared_source",
+        "resolve_failures",
+        "purge_stale_types",
+        "purge_only",
+        "type_map",
+        "dry_run"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nload_family — laad een .rfa van schijf in het project of in een open family-doc (Document.LoadFamily), met of zonder\noverschrijven van parameterwaarden. params: target_document, path, overwrite_values (default true), shared_source\n(\"family\"|\"project\"), resolve_failures (default true: warnings weg, errors met resolutie oplossen), purge_stale_types\n(default false: types van de geladen family die niet in de rfa zitten -> instanties omhangen naar het best passende\ntype en verwijderen; tegen dubbele typen na een typenaam-wijziging), dry_run (default true).\nLet op: Revit geeft stil false als de rfa sinds de vorige load in dit document niet veranderd is (\"al up-to-date\").\n```",
+      "groep": "families"
+    },
+    {
+      "name": "enum_family_parameters",
+      "beschrijving": "Parameters binnen families (opent de familie op de achtergrond).",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "scan_all",
+        "dialog_ok",
+        "dialog_result",
+        "families"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "enum_nested_families",
+      "beschrijving": "Geneste families binnen families.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "scan_all",
+        "families",
+        "family_ids",
+        "max_depth"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "rename_nested_families",
+      "beschrijving": "Geneste families hernoemen in hun moederfamilies.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save",
+        "max_depth",
+        "families",
+        "renames",
+        "old",
+        "new"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "rename_nested_families_rfa",
+      "beschrijving": "Geneste families hernoemen in een .rfa-bestand.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "rfa_path",
+        "dry_run",
+        "dialog_ok",
+        "regex_from",
+        "regex_to",
+        "renames"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "swap_family_parameter",
+      "beschrijving": "Een parameter in families vervangen door een (shared) parameter.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_guid",
+        "source_name",
+        "target_guid",
+        "shared_param_file",
+        "target_document",
+        "dry_run",
+        "scan_all",
+        "families",
+        "save_first"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "rename_family_parameter",
+      "beschrijving": "Een family-parameter hernoemen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "dialog_ok",
+        "dialog_result",
+        "save_first",
+        "rfa_path",
+        "edits"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "delete_family_parameter",
+      "beschrijving": "Een family-parameter verwijderen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "deletes",
+        "family",
+        "guid",
+        "param_name",
+        "expected_name"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "set_family_formula",
+      "beschrijving": "Een formule op een family-parameter zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "rfa_path",
+        "dialog_ok",
+        "dialog_result",
+        "edits",
+        "formula"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "set_family_type_values",
+      "beschrijving": "Waarden per type in een familie zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "family",
+        "rfa_path",
+        "dry_run",
+        "save_first",
+        "dialog_ok",
+        "dialog_result",
+        "force_reload",
+        "params",
+        "edits",
+        "value",
+        "rename_types"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "set_family_param_kind",
+      "beschrijving": "Een family-parameter instance of type maken.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "family",
+        "rfa_path",
+        "dry_run",
+        "dialog_ok",
+        "overwrite_values",
+        "edits",
+        "is_instance"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "delete_family_types",
+      "beschrijving": "Types uit een familie verwijderen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "family",
+        "rfa_path",
+        "dry_run",
+        "dialog_ok",
+        "types",
+        "keep_types"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ndelete_family_types — family-types van de ROOT-family in een family-doc verwijderen (FamilyManager.DeleteCurrentType).\nparams: target_document, family (projectfamily) óf rfa_path; types:[...] te verwijderen óf keep_types:[...] (alle andere weg);\ndry_run (default true), dialog_ok (default true).\n```",
+      "groep": "families"
+    },
+    {
+      "name": "copy_family_type",
+      "beschrijving": "Een type in een familie dupliceren.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "family",
+        "rfa_path",
+        "dry_run",
+        "dialog_ok",
+        "delete_source",
+        "edits"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncopy_family_type — een family-type dupliceren onder een nieuwe naam (FamilyManager.NewType kopieert de waarden van het\nhuidige type) en optioneel het brontype verwijderen. Workaround voor RenameCurrentType dat op sommige typen stil niet doorkomt.\nparams: target_document, family óf rfa_path, edits:[{source_type, new_name}], delete_source (default false),\ndry_run (default true), dialog_ok (default true).\n```",
+      "groep": "families"
+    },
+    {
+      "name": "rename_family_materials",
+      "beschrijving": "Materialen binnen families hernoemen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "dialog_ok",
+        "nested",
+        "dialog_result",
+        "families",
+        "rfa_path",
+        "renames"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "export_families_to_folder",
+      "beschrijving": "Families uit het project als .rfa naar een map bewaren (het project blijft gelijk); een bestaand bestand alleen overschrijven met overwrite=true.",
+      "schrijft": false,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "folder",
+        "prefix",
+        "dry_run",
+        "dialog_ok",
+        "dialog_result",
+        "overwrite",
+        "families",
+        "subfolders",
+        "file_names"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "place_family_instances",
+      "beschrijving": "Family-instanties plaatsen op punten (mm), met level en rotatie.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "items",
+        "params",
+        "host",
+        "face_down",
+        "kind",
+        "z_mm"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nplace_family_instances — plaats family-instanties.\n  Zonder host: niet-gehost (NewFamilyInstance met Level en StructuralType.NonStructural), alleen placement_type\n  OneLevelBased.\n  Met host:{height_mm, face_down (default true)}: op een horizontaal referentievlak op height_mm boven het level\n  (NewFamilyInstance(refplane.GetReference, punt, refDir, symbol)), voor WorkPlaneBased (vlakgebonden) en\n  werkvlakgebonden OneLevelBased families. face_down true = normaal −Z (onderkant van een plafond: de family\n  hangt omlaag, voor plafondelementen); false = normaal +Z (op de vloer). Eén vlak per (level, hoogte, richting)\n  met de vaste naam BF_host_&lt;level&gt;_&lt;hoogte mm&gt;_&lt;down|up&gt;; bestaat hij, dan wordt hij hergebruikt (mits normaal en\n  hoogte kloppen), anders aangemaakt in een eigen, gecommitte transactie in een plattegrond van het level (nooit\n  in de ActiveView), vóór de plaatsing. refDir = (cos rotation_deg, sin rotation_deg, 0); geen RotateElement.\n  z_mm mag dan ontbreken of moet gelijk zijn aan host.height_mm. Schedule Level wordt op het level gezet.\n  OneLevelBasedHosted (wand/plafond), CurveBased e.d. en in-place families worden per item geweigerd.\nparams: target_document, dry_run (default TRUE),\n        items:[{family?, type, level, x_mm, y_mm, z_mm (hoogte boven het level, default 0), rotation_deg (default 0),\n                host?:{height_mm, face_down?}, params:{naam: waarde}}].\nfamily is optioneel zolang de typenaam uniek is. Waarden: tekst; getal in projecteenheden (getal → de\nprojecteenheid van die grootheid, tekst met eenheid → UnitFormatUtils.TryParse); ja/nee (true/false, ja/nee, 1/0).\nElementId-parameters en type-parameters worden niet gezet (gemeld).\nPer item een TransactionGroup: transactie 1 plaatst (+ rotatie, hoogte), transactie 2 zet de parameters. Rolt\ntransactie 2 terug, dan blijft het element staan en staan de parameters als fout in het resultaat.\nResultaat per item: {index, status: zou_plaatsen|geplaatst|geplaatst_met_fouten|fout, element_id, locatie\n(read-back), params:{naam:{gevraagd, gelezen, status}}, fouten:[...]}.\n```",
+      "groep": "families"
+    },
+    {
+      "name": "place_family_grid",
+      "beschrijving": "Alle types van families in een raster plaatsen (catalogus-view).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "family_symbol",
+        "family_name",
+        "family_path",
+        "level_name",
+        "dry_run",
+        "save_first",
+        "origin_mm",
+        "spacing_mm",
+        "count",
+        "instance_params"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "families"
+    },
+    {
+      "name": "place_hosted_family",
+      "beschrijving": "Een family in een host plaatsen (deur of raam in een wand).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "items",
+        "host"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nplace_hosted_family — wandgehoste family plaatsen in een bestaande wand (of ander host-element).\nparams: target_document, dry_run (default TRUE),\n  items:[{host_id (getal) | host (getal = id, tekst = Comments van de host, exact of eindigend op \" \" + tekst, zoals\n          de scripts '&lt;MARKER&gt; &lt;sleutel&gt;' zetten), family?, type, level, point_mm:[x,y] of [x,y,z] (z boven het level,\n          default 0), flip_facing?, flip_hand?, face? (\"auto\"|\"exterior\"|\"interior\", alleen vlakgebonden families),\n          params?{}, comments?}].\nOneLevelBasedHosted (deur, raam, wandgehoste armatuur): punt geprojecteerd op de wandas, dan\nNewFamilyInstance(punt, symbol, host, level, NonStructural). WorkPlaneBased (vlakgebonden, bv. handmelder uit een\n\"Hosted\"-sjabloon): zijvlak van de wand (HostObjectUtils.GetSideFaces), punt geprojecteerd op dat vlak,\nNewFamilyInstance(vlakreferentie, punt, wandrichting, symbol). Niet-gehoste families: geweigerd (place_family_instances).\nIdempotent: Comments gelijk → bestond; zonder Comments een instantie van hetzelfde type in dezelfde host binnen\n10 mm → bestond. In een dry-run bestaan wanden uit dezelfde batch nog niet: dan host_niet_gevonden.\nResultaat per item: {index, status, element_id, host_id, placement_type, projectie_afstand_mm, locatie (read-back),\nparams, fouten}.\n```",
+      "groep": "families"
+    },
+    {
+      "name": "inventory_copy",
+      "beschrijving": "Vooraf nagaan wat kopiëren tussen twee open modellen zou doen.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "source_document",
+        "target_document",
+        "scratch_document",
+        "mode",
+        "cleanup",
+        "source_element_ids"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "kopieren-tussen-modellen"
+    },
+    {
+      "name": "copy_elements",
+      "beschrijving": "Elementen (types, materialen, views, ...) van het ene naar het andere open model kopiëren.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_document",
+        "target_document",
+        "mode",
+        "save_first",
+        "dry_run",
+        "skip_duplicates",
+        "source_element_ids",
+        "scratch_document",
+        "cleanup"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncopy_elements — the real apply counterpart of inventory_copy: copies the view set from source\nINTO the target and commits it. Same drag-along as the probe, but it lands for real.\nReports every newly-created element (the manifest), flags which ones duplicate a name that\nalready existed in the target pre-copy (so the post-copy material/filter remediation knows what\nto swap), and lists the cleaned-up-category concerns. save_first writes a numbered backup first.\nparams: source_document, target_document (required) · mode | source_element_ids ·\n        save_first (default false) · dry_run (default true; when true it delegates to a scratch\n        probe so nothing lands; use inventory_copy directly for richer probe output).\n```",
+      "groep": "kopieren-tussen-modellen"
+    },
+    {
+      "name": "diagnose_family_copy",
+      "beschrijving": "Nagaan waarom het kopiëren van een familie mislukt.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "source_document",
+        "scratch_document",
+        "category",
+        "include_warnings",
+        "source_element_ids",
+        "limit"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ndiagnose_family_copy — non-destructive per-family copy probe that CAPTURES the failures a\ncross-document family copy raises, instead of letting Revit pop a modal dialog (which blocks the\nmain thread and hangs the bridge). Copies each source loadable family ALONE into the disposable\nscratch canvas with a failure-capturing preprocessor, records which families fail and with which\nfailure(s) + failing element names, then rolls back / deletes so nothing persists. Returns a\nper-family report so the reviewer can fix the offending families in a targeted way.\nBecause every error-severity failure is handled programmatically (rollback), no\ndialog appears and the probe never hangs.\nparams:\n  source_document    : string (required) — project to copy FROM (e.g. Bron_…)\n  scratch_document   : string (optional) — disposable canvas; default first open non-family doc\n                        that is neither source nor a family (typically \"Project1\").\n  source_element_ids : [int]  (optional) — explicit family element ids; default = every loadable\n                        Family in the source.\n  category           : string (optional) — restrict the default family set to this category name.\n  include_warnings   : bool   (default false) — also record Warning-severity failures.\n  limit              : int    (optional) — cap the number of families probed (smoke test).\n```",
+      "groep": "kopieren-tussen-modellen"
+    },
+    {
+      "name": "transfer_family",
+      "beschrijving": "Een familie van het ene naar het andere open model overzetten; een familie met dezelfde naam alleen overschrijven met overwrite=true.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_document",
+        "target_document",
+        "category",
+        "save_first",
+        "overwrite",
+        "dry_run",
+        "source_element_ids",
+        "family_names"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ntransfer_family — robustly transfer loadable families source -> target via the LOAD path\n(EditFamily -> SaveAs .rfa -> LoadFamily) instead of ElementTransformUtils.CopyElements. A raw\ncross-document copy drops the symbols of hosted/nested families (they land as a typeless shell);\nLoadFamily brings the family with ALL its\ntypes. The family loads under its SOURCE name; a same-named family in the target is only\noverwritten with overwrite=true. Reconciling to the NLRS target name is a separate rename step.\nparams:\n  source_document    : string (required) — project to transfer FROM\n  target_document    : string (required) — project to load INTO\n  source_element_ids : [int]  (optional) — family element ids in the source; OR\n  family_names       : [str]  (optional) — family names in the source to transfer\n  category           : string (optional) — restrict a default (all-families) run to one category\n  save_first         : bool   (default false) — save a target backup before the first load\n  overwrite          : bool   (default false) — overwrite a same-named family already in target\n  dry_run            : bool   (default true) — resolve + report the set WITHOUT loading anything\n```",
+      "groep": "kopieren-tussen-modellen"
+    },
+    {
+      "name": "get_materials",
+      "beschrijving": "Alle materialen met naam, klasse, kleur, patronen en assets.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "name_contains"
+      ],
+      "voorbeeld": "{\"command\": \"get_materials\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"name_contains\": \"beton\"}}",
+      "toelichting": "```text\nget_materials: alle materialen. params: target_document · name_contains (optioneel).\nPer materiaal: element_id, name, material_class, material_category, color (\"R,G,B\"), transparency, shininess,\nsurface_pattern(+_color), cut_pattern(+_color), achtergrondpatronen, appearance/structural/thermal_asset.\n```",
+      "groep": "materialen"
+    },
+    {
+      "name": "create_material",
+      "beschrijving": "Een nieuw materiaal maken (naam, klasse, kleur, optioneel patronen).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "name",
+        "source",
+        "dry_run",
+        "duplicate_assets",
+        "material_class",
+        "color",
+        "transparency"
+      ],
+      "voorbeeld": "{\"command\": \"create_material\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"name\": \"Beton prefab\", \"material_class\": \"Beton\", \"color\": \"#B4B4B4\", \"dry_run\": true}}",
+      "toelichting": "```text\ncreate_material: params target_document · name · material_class · color (\"#RRGGBB\" of \"R,G,B\")\n· transparency (0-100) · surface_pattern / surface_pattern_color · cut_pattern / cut_pattern_color\n(patroon = naam van een fill pattern) · dry_run (true).\n```",
+      "groep": "materialen"
+    },
+    {
+      "name": "duplicate_material",
+      "beschrijving": "Een materiaal dupliceren onder een nieuwe naam, optioneel met nieuwe klasse of kleur.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "name",
+        "source",
+        "dry_run",
+        "duplicate_assets",
+        "material_class",
+        "color",
+        "transparency"
+      ],
+      "voorbeeld": "{\"command\": \"duplicate_material\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"source\": \"Beton - in het werk gestort\", \"name\": \"Beton - zichtwerk\", \"dry_run\": true}}",
+      "toelichting": "```text\nduplicate_material: params target_document · source (bestaande naam) · name (nieuwe naam)\n· duplicate_assets (false: de kopie deelt de appearance asset met de bron; true: eigen kopie)\n· en optioneel dezelfde velden als create_material · dry_run (true).\n```",
+      "groep": "materialen"
+    },
+    {
+      "name": "set_material_class",
+      "beschrijving": "De klasse (Material Class) van materialen zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "filter",
+        "dry_run",
+        "edits",
+        "name",
+        "element_id",
+        "material_class",
+        "material_category"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "set_material_fill_pattern",
+      "beschrijving": "Oppervlakte- en snijpatronen van een materiaal zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits",
+        "material_name"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "replace_material",
+      "beschrijving": "Een materiaal overal vervangen door een ander (types, families, parameters).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "replacements",
+        "source_id"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "enum_material_parameters",
+      "beschrijving": "Parameters van materialen.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "enum_material_usage",
+      "beschrijving": "Waar elk materiaal gebruikt wordt.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nenum_material_usage — per material, count the DISTINCT element-types that reference it\n(\"aan hoeveel element-types is dit materiaal toegekend\"). Drives the\nis_toegepast column on the Materials tab so a delete decision shows its blast-radius, and is the\nprecursor to the delete+replace workflow (replace_material). Type-level (not instance) on purpose.\nThree reference paths are unioned per type: (1) Element.GetMaterialIds(false) — geometry/assigned\nmaterials; (2) CompoundStructure layer materials for HostObjAttributes types (Wall/Floor/Roof/\nCeiling); (3) ElementId-typed parameters whose value resolves to a Material (the NLRS family\nmaterial-parameter pattern). A capped name list is returned for context.\nparams: target_document (scope by Title).\n```",
+      "groep": "materialen"
+    },
+    {
+      "name": "asset_rename",
+      "beschrijving": "Een appearance-, physical- of thermal-asset hernoemen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "asset_swap",
+      "beschrijving": "Een materiaal een ander asset geven.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits",
+        "material_id"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "materialen"
+    },
+    {
+      "name": "get_view_structure",
+      "beschrijving": "Views, view templates en view types met hun samenhang.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "include_views"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nget_view_structure — read-only report for an Excel export: view templates with the\nfilters applied to them, view types with their default template, and (the\ncomplete non-template-view enumeration) the ACTUAL views —\nplans/elevations/sections/etc. — with the view template applied to each and that view's own\nfilter set, level, discipline, scale, detail level and whether it sits on a sheet. Doc-scoped\n(target_document). include_views=false skips the (potentially large) view enumeration.\n```",
+      "groep": "views-filters"
+    },
+    {
+      "name": "create_views",
+      "beschrijving": "Views maken (plattegrond, plafond, doorsnede, 3D, drafting), optioneel met template.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "dry_run",
+        "save_first",
+        "save_after",
+        "target_document",
+        "source_document",
+        "copy_params",
+        "plans",
+        "threed",
+        "area_plans",
+        "sections",
+        "details",
+        "drafting",
+        "elevations",
+        "source_name",
+        "target_name",
+        "view_type",
+        "target_level",
+        "view_type_name",
+        "source_element_id"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "assign_view_template",
+      "beschrijving": "Een view template aan views koppelen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "mode",
+        "source_document",
+        "dry_run",
+        "save_first",
+        "only_unset",
+        "view_types",
+        "assignments",
+        "template_name",
+        "view_name",
+        "view_id"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nassign_view_template — set View.ViewTemplateId on actual (non-template) views, by name. The\nview-INSTANCE counterpart of relink_type_templates (which sets a view TYPE's default template).\nAfter a cross-document view copy the copied views lose their ViewTemplateId; this re-establishes it.\nparams:\n  target_document : string (required)\n  mode            : \"mirror_from_source\" (default) | \"explicit\"\n  source_document : string (required for mirror) — for each target view, the same-named source\n                    view's applied ViewTemplate NAME is read, and the target template of that same\n                    name is assigned (analogous to relink's name-match).\n  assignments     : [{view_name|view_id, template_name}]  (explicit mode)\n  view_types      : [string] (optional) — restrict to these ViewType names (e.g. Elevation, Section)\n  only_unset      : bool (default true) — only assign where the view currently has NO template\n                    (never silently overwrite a template the user already set)\n  dry_run         : bool (default true)\n  save_first      : bool (default false) — numbered backup before any write\n```",
+      "groep": "views-filters"
+    },
+    {
+      "name": "relink_type_templates",
+      "beschrijving": "De standaard-template van view types opnieuw koppelen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "source_document",
+        "target_document",
+        "dry_run",
+        "save_first"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "set_view_property",
+      "beschrijving": "Een eigenschap van een view zetten (schaal, detailniveau, ...).",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits",
+        "view_id",
+        "view_name",
+        "scale",
+        "detail_level",
+        "discipline",
+        "transparency",
+        "crop_active",
+        "crop_visible",
+        "far_clip_active",
+        "phase",
+        "phase_filter"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "get_filter_rules",
+      "beschrijving": "De regels van view filters.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "name_contains",
+        "param_name"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "create_filter",
+      "beschrijving": "Een view filter maken met categorieën en regels.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "filters",
+        "name",
+        "logic",
+        "rules",
+        "categories"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncreate_filter — create ParameterFilterElements from a reviewed spec. Mirrors the\nget_filter_rules output so a source filter can be re-created in the target: name + category UI-names + a flat\nAND of rules (param_name + evaluator + value). Rules resolve their parameter by shared-parameter name\nin the target doc; a rule whose parameter or evaluator can't be resolved makes the whole filter SKIP\n(reported, never partially built). An existing filter with the same name is skipped as a duplicate.\nparams:\n  target_document : string (required)\n  filters : [{ name, categories:[UI name], rules:[{param_name, evaluator, value, inverted?}] }]\n  dry_run : bool (default true) · save_first : bool (default false)\nparam_name: de naam van een shared parameter, of voor een ingebouwde parameter het negatieve id zoals\nget_filter_rules het toont (bv. \"-1010106\" voor Comments) of de BuiltInParameter-naam\n(ALL_MODEL_INSTANCE_COMMENTS; pas na de build van 25-11-2026 of later). De gewone naam \"Comments\" werkt niet.\nevaluator: FilterStringEquals (standaard), FilterStringContains, FilterStringBeginsWith, FilterStringEndsWith;\neen getal als value geeft een gelijk-aan-regel.\n```",
+      "groep": "views-filters"
+    },
+    {
+      "name": "repoint_filter_parameter",
+      "beschrijving": "De parameter in filterregels vervangen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "delete_source",
+        "mappings",
+        "source",
+        "target"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nrepoint_filter_parameter — rewrite filter rules that target an OLD shared parameter to target a\nNEW one, keeping operator + value (e.g. copied filters that reference\nFireRating/IsExternal/LoadBearing which were swapped to brandwerendheid_eis/buiten/dragend).\nOnly flat-AND filter structures are rewritten (single ElementParameterFilter or a LogicalAndFilter\nof them). Unmatched rules are preserved as-is (their original objects are reused — no lossy\nreconstruction). A filter using OR or a matched rule we cannot safely rebuild (inverse / unknown\nstring evaluator) is SKIPPED and reported, never partially rewritten.\nparams:\n  target_document : string (required) — doc to rewrite (ids collide between docs)\n  mappings        : [{source, target}]  — param names; source=old, target=new (canonical)\n  dry_run         : bool (default true)\n  save_first      : bool (default false) — numbered backup before any write\n  delete_source   : bool (default false) — delete the (now unreferenced) source params after\n```",
+      "groep": "views-filters"
+    },
+    {
+      "name": "assign_view_filter",
+      "beschrijving": "Een filter aan een view of template hangen, met zichtbaarheid en overrides.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "assignments",
+        "overrides"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "set_line_style_graphics",
+      "beschrijving": "Dikte, kleur en patroon van lijnstijlen zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "edits",
+        "category_id",
+        "expected_name",
+        "line_weight",
+        "line_color",
+        "line_pattern"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "query_filled_region_types",
+      "beschrijving": "Filled region types met hun patronen.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "create_filled_region_type",
+      "beschrijving": "Een filled region type maken.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "save_first",
+        "types"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "views-filters"
+    },
+    {
+      "name": "get_sheet_detail",
+      "beschrijving": "Eén sheet: viewports, schedules en titleblock met parameters.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "sheet_name"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nget_sheet_detail: één sheet lezen. params: target_document · sheet_name (deel van nummer of naam).\nAntwoord: sheet_number, sheet_name, viewports [{view_name, view_type, scale, view_template, viewport_type,\ncenter_mm, filters}], schedules [{name, point_mm}], titleblocks [{family, type, parameters}].\n```",
+      "groep": "sheets-export"
+    },
+    {
+      "name": "create_sheet",
+      "beschrijving": "Een sheet maken (nummer, naam, titleblock), optioneel met views op een positie.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "sheet_number",
+        "sheet_name",
+        "titleblock",
+        "dry_run",
+        "views",
+        "view",
+        "x_mm",
+        "y_mm"
+      ],
+      "voorbeeld": "{\"command\": \"create_sheet\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"sheet_number\": \"A101\", \"sheet_name\": \"Plattegrond begane grond\", \"views\": [{\"view\": \"00 begane grond\", \"x_mm\": 400, \"y_mm\": 300}], \"dry_run\": true}}",
+      "toelichting": null,
+      "groep": "sheets-export"
+    },
+    {
+      "name": "export_views_image",
+      "beschrijving": "Views als PNG exporteren naar een map.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "output_dir",
+        "view_names",
+        "view_types",
+        "name_contains",
+        "pixel_size"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nexport_views_image: views als PNG naar een map. Wijzigt het model niet.\nparams: target_document · output_dir · view_names [..] of view_types (standaard [\"DraftingView\",\"FloorPlan\"])\n        · name_contains · pixel_size (2048)\n```",
+      "groep": "sheets-export"
+    },
+    {
+      "name": "create_walls",
+      "beschrijving": "Wanden maken langs lijnen (mm), met type, level en hoogte.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "walls"
+      ],
+      "voorbeeld": "{\"command\": \"create_walls\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"walls\": [{\"wall_type\": \"Generic - 200mm\", \"level\": \"00 begane grond\", \"start_mm\": [0, 0], \"end_mm\": [5000, 0], \"height_mm\": 3000}], \"dry_run\": true}}",
+      "toelichting": "```text\ncreate_walls — wanden maken.\nparams: target_document, dry_run (default TRUE),\n  walls:[{wall_type, level, start_mm:[x,y], end_mm:[x,y], base_offset_mm? (0), top_level? + top_offset_mm? (0) |\n          height_mm (zonder top_level: onverbonden hoogte), location_line? (WallCenterline | CoreCenterline |\n          FinishFaceExterior | FinishFaceInterior | CoreExterior | CoreInterior; default WallCenterline),\n          room_bounding? (bool), structural? (bool, default false), flip? (bool), params?{}, comments?}].\nWall.Create met de lijn als wandas; bij een andere location_line wordt de parameter gezet en de lijn opnieuw\ntoegewezen, zodat die referentielijn op start→eind ligt. Idempotent: Comments gelijk → bestond; zonder Comments\neen wand van hetzelfde type op hetzelfde level met dezelfde eindpunten (≤ 1 mm, beide richtingen) → bestond.\nPer wand: transactie 1 maakt de wand met alle beperkingen (alles of niets), transactie 2 zet params.\nResultaat per wand: {index, status: zou_maken|gemaakt|gemaakt_met_fouten|bestond|fout, element_id, wand (read-back:\ntype, levels, offsets, location_line, room_bounding, start/eind, lengte, dikte), params, fouten}.\n```",
+      "groep": "modelleren"
+    },
+    {
+      "name": "create_room",
+      "beschrijving": "Een ruimte plaatsen op een punt of binnen begrenzing, met naam en nummer.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "level",
+        "number",
+        "name",
+        "phase",
+        "upper_limit",
+        "dry_run",
+        "point_mm",
+        "limit_offset_mm",
+        "base_offset_mm",
+        "parameters"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "modelleren"
+    },
+    {
+      "name": "create_shaft_opening",
+      "beschrijving": "Een schachtsparing maken tussen twee levels.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "openings",
+        "boundary_mm"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncreate_shaft_opening — schachtsparing (shaft opening) die vloeren, daken en plafonds van het eigen model snijdt.\nparams: target_document, dry_run (default TRUE),\n  openings:[{base_level, base_offset_mm? (0), top_level, top_offset_mm? (0), boundary_mm:[[x,y], ...] (≥ 3 punten,\n             gesloten polygoon; een herhaald eerste punt aan het eind mag), params?{}, comments?}].\ndoc.Create.NewOpening(baseLevel, topLevel, CurveArray) met de lijnen op de hoogte van het basislevel, daarna\nWALL_BASE_OFFSET en WALL_TOP_OFFSET (de offsets van een shaft opening; terugval op \"Base Offset\"/\"Top Offset\").\nIdempotent: Comments gelijk → bestond; zonder Comments een shaft opening met hetzelfde basislevel en dezelfde\nhoekpunten (≤ 1 mm, volgorde vrij) → bestond.\nResultaat per sparing: {index, status, element_id, sparing (read-back: levels, offsets, hoekpunten, oppervlak_m2), fouten}.\n```",
+      "groep": "modelleren"
+    },
+    {
+      "name": "list_mep_types",
+      "beschrijving": "Leiding-, kanaal- en systeemtypes.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nlist_mep_types — inventaris van wat create_mep_runs en place_family_instances kunnen gebruiken. Alleen lezen.\nparams: target_document.\nRapport: pipe_types, duct_types {rond, rechthoekig, ovaal}, piping_system_types, mechanical_system_types\n(met system_classification), cable_tray_types, levels {name, elevation_mm, project_elevation_mm} en\nfamilies {categorie: [{family, placement_type, plaatsbaar, types:[{id, name, active}]}]}.\nPipe- en DuctTypes tonen hun routing preferences per regelgroep (onderdelen), want bochten vereisen een\nElbows-regel en leidingen een Segments-regel.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "create_mep_runs",
+      "beschrijving": "Leidingen of kanalen tekenen langs punten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "runs"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncreate_mep_runs — leiding- en kanaalruns uit punten. Per run: segmenten tussen opeenvolgende punten\n(Pipe.Create / Duct.Create), bochten met NewElbowFitting. Rechte doorloop (collineair tussenpunt): het punt\nvervalt en de segmenten worden samengevoegd (geen union). Terugkerende richting: fout.\nparams: target_document, dry_run (default TRUE),\n        runs:[{kind: \"pipe\"|\"duct\", system_type (PipingSystemType / MechanicalSystemType), segment_type (PipeType- of\n               DuctType-naam), level, diameter_mm (pipe, rond kanaal) | width_mm + height_mm (rechthoekig/ovaal kanaal),\n               points_mm:[[x,y,z],...] (z boven het level), connect_start_to?: element_id, connect_end_to?: element_id,\n               segment_diameters_mm?: [d0, d1, ...] (alleen pipe; één diameter per segment points_mm[k] → points_mm[k+1];\n               vervangt diameter_mm)}].\nVerloop (gekozen boven een los insert_transition): met segment_diameters_mm krijgt elk segment zijn eigen\ndiameter. Een collineair tussenpunt met een diameterwissel blijft staan en krijgt NewTransitionFitting (het\nTransitions-onderdeel uit de routing preference; zonder Transitions-regel: run geweigerd); een diameterwissel in een\nbocht wordt geweigerd (zet een tussenpunt op het rechte stuk). Zo plaatst Revit het verloop zelf, in dezelfde\ntransactie als segmenten en bochten (alles of niets), en hoeven er geen bestaande leidingen geknipt te worden.\nEen verbinding (connect_start_to/connect_end_to) krijgt de diameter van het eindsegment aan die kant.\nResultaat extra: segment_diameters_mm, segment_diameters_gelezen_mm, verloop_ids, verlopen_gepland (dry-run).\nVerbinden met een element: de dichtstbijzijnde vrije End-connector van het juiste domein (piping/HVAC). Methoden:\n  direct          — connector valt samen met het run-uiteinde (≤ 1 mm): ConnectTo.\n  verlengen       — connector ligt in het verlengde van het eindsegment en kijkt ertegenin: segment verlengen + ConnectTo.\n  stub            — korte verbinding: stuk langs de connectoras tot het run-uiteinde (of het verlengde ervan), met\n                    één bocht, of met een tussenstuk en twee bochten.\n  Kijkt de connector van de run af of snijdt de as het segment: niet verbonden, gemeld, niet geforceerd.\nPer run een TransactionGroup: transactie 1 maakt segmenten en bochten (alles of niets), transactie 2 en 3\nmaken de begin- en eindverbinding; een mislukte verbinding rolt alleen zichzelf terug.\nVooraf: pipe-type zonder Segments-regel of bochten nodig zonder Elbows-regel in de routing preferences →\nrun niet gemaakt, fout gemeld.\nResultaat per run: {index, status, segment_ids, fitting_ids, lengte_totaal_mm, maat (read-back), verbindingen\n{start, end: {element_id, methode, gelukt, reden}}, fouten, notes}.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "connect_to_pipe",
+      "beschrijving": "Een element aansluiten op een leiding.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "connections",
+        "min_fitting_distance_mm"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "mep"
+    },
+    {
+      "name": "get_connectors",
+      "beschrijving": "Connectoren van een element met positie en status.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "element_ids"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nget_connectors — alleen lezen. params: target_document, element_ids:[...].\nPer element: {element_id, categorie, family, type, connectors:[{index (Connector.Id), connector_type, domein, vorm,\norigin_mm (z absoluut), richting (BasisZ), diameter_mm | breedte_mm + hoogte_mm, systeemclassificatie\n(PipeSystemType / DuctSystemType / ElectricalSystemType), flow_direction, systeem (MEPSystem-naam), systeemtype\n(PipingSystemType-naam), beschrijving, is_connected, verbonden_met:[owner-ids, alleen leidingen/kanalen/fittingen/\nappendages/equipment], verbonden_details:[{id, categorie}]}], open_connectors (aantal vrije End-connectors)}.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "cap_open_ends",
+      "beschrijving": "Open einden van leidingen afdoppen.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "include_fittings",
+        "element_ids",
+        "system",
+        "cap_pipe_type",
+        "within_bbox"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ncap_open_ends — open leidingeinden afdoppen (lasbodem, eindkap) met PlumbingUtils.PlaceCapOnOpenEnds en het\nCaps-onderdeel uit de routing preference van het leidingtype.\nparams: target_document, dry_run (default TRUE), minstens één selectie:\n  element_ids?:[...] (leidingen; met include_fittings ook fittingen/appendages), system?: naam van een PipingSystemType\n  of MEP-systeem (alle leidingen daarvan), within_bbox?: {min_mm:[x,y,z], max_mm:[x,y,z]} (alleen open einden\n  binnen de box), cap_pipe_type?: naam van het PipeType waarvan de Caps-regel geldt (default het type van de\n  leiding zelf), include_fittings? (default false: PlaceCapOnOpenEnds op een fitting/appendage is niet getoetst).\nPlaceCapOnOpenEnds dopt ALLE open einden van een element af; valt maar een deel van de open einden van een leiding in\nwithin_bbox, dan wordt die leiding overgeslagen (status deels_buiten_box).\nPer element één TransactionGroup/transactie; read-back: de einden zijn daarna verbonden met een nieuwe fitting.\nResultaat per element: {index, element_id, status: zou_afdoppen|afgedopt|geen_open_einden|deels_buiten_box|geweigerd|fout,\nopen_einden:[{index, origin_mm, diameter_mm}], cap_type (Caps-regels), cap_ids, fouten}.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "insert_pipe_accessory",
+      "beschrijving": "Een appendage in een leiding zetten.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "items",
+        "min_fitting_distance_mm",
+        "point_mm",
+        "punt_mm"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\ninsert_pipe_accessory — appendage (afsluiter, inregelafsluiter, ontluchter, aftapper) in een bestaande leiding.\nparams: target_document, dry_run (default TRUE), min_fitting_distance_mm (default 100),\n  items:[{pipe_id, family?, type, point_mm:[x,y,z] (alias punt_mm; z absoluut; geprojecteerd op de hartlijn,\n          max_offset_mm default 50), reverse? (bool: stroomrichting omdraaien), at_end? (\"start\"|\"end\"|\"open\"),\n          params?{}, comments?}].\nat_end (aftapper/ontluchter op het laagste/hoogste punt): geen knip; de appendage (1 of 2 leidingconnectors) wordt\nmet haar aansluitconnector op het open einde gezet, langs de leiding naar buiten gericht en verbonden; point_mm is\ndan optioneel (alleen nodig bij at_end open en twee open einden).\nMethode (knippen + aansluiten, zoals de UI het doet): transactie 1 PlumbingUtils.BreakCurve op het punt (commit;\neen directe pipe-op-pipe-koppeling wordt losgemaakt), transactie 2 de appendage plaatsen op het punt\n(NewFamilyInstance op het level van de leiding), de as van de twee leidingconnectors gelijkrichten met de leiding\n(draaien om z; bij een niet-horizontale leiding om de as loodrecht op beide), de maat van de connectors op de\nleidingdiameter zetten (Connector.Radius, waar de family dat toelaat), het midden tussen de connectors op het punt\nschuiven, beide leidinghelften inkorten tot de connectors en verbinden. Nooit een union of fitting in de\nknip-transactie. Faalt transactie 2, dan rolt de groep ook de knip terug.\nGeweigerd: geen Pipe of placeholder; punt verder dan max_offset_mm van de hartlijn; punt binnen\nmin_fitting_distance_mm van een einde of fitting; family zonder twee leidingconnectors; categorie geen\nPipe Accessory (waarschuwing, geen weigering).\nIdempotent: Comments gelijk → bestond; zonder Comments een appendage van hetzelfde type binnen 10 mm van het punt\nen verbonden met de leiding → bestond.\nResultaat per item: {index, status, element_id, pipe_ids_na (beide helften), projectiepunt_mm, diameters, connectors\n(read-back), fouten, waarschuwingen}.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "duplicate_mep_type",
+      "beschrijving": "Een leiding- of kanaaltype dupliceren.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "dry_run",
+        "apply_params_if_exists",
+        "source_type",
+        "bron",
+        "new_name",
+        "nieuwe_naam",
+        "kind",
+        "params"
+      ],
+      "voorbeeld": null,
+      "toelichting": "```text\nduplicate_mep_type — PipeType of PipingSystemType dupliceren.\nparams: target_document, dry_run (default TRUE), source_type (naam; alias bron), new_name (alias nieuwe_naam), kind? (\"pipe_type\" |\n  \"piping_system_type\"; default: gezocht in beide, moet uniek zijn), params?{typeparameter: waarde},\n  apply_params_if_exists? (default false).\nElementType.Duplicate(new_name); bij een PipeType gaan de routing preferences mee (read-back: aantal regels per groep\ngelijk aan de bron; zo niet, dan worden de regels met hun criteria gekopieerd en opnieuw geteld). Typeparameters\nin een tweede transactie met read-back. Bestaat new_name al in dezelfde klasse: status bestond (niets gewijzigd,\nparams alleen met apply_params_if_exists: true, want een typewijziging raakt alle elementen van dat type).\nNamen met \\ : { } [ ] | ; &lt; &gt; ? ` ~ worden geweigerd.\nResultaat: {status: zou_maken|gemaakt|gemaakt_met_fouten|bestond|fout, kind, bron_id, element_id, routing_regels\n{groep: [bron, nieuw]}, params, fouten}.\n```",
+      "groep": "mep"
+    },
+    {
+      "name": "export_ifc",
+      "beschrijving": "IFC exporteren met een export-setup of opties; schrijft een bestand. Met keep_guids=true zet hij de IfcGUID-parameters in het model (een transactie, model daarna gewijzigd); zonder keep_guids blijft het model ongewijzigd.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "folder",
+        "file_name",
+        "ifc_version",
+        "user_pset_file",
+        "view_name",
+        "export_base_quantities",
+        "export_ifc_common_psets",
+        "export_internal_revit_psets",
+        "keep_guids",
+        "dry_run",
+        "config_file",
+        "mapping_file"
+      ],
+      "voorbeeld": "{\"command\": \"export_ifc\", \"params\": {\"target_document\": \"Voorbeeldproject\", \"folder\": \"D:\\\\Export\", \"dry_run\": true}}",
+      "toelichting": null,
+      "groep": "ifc"
+    },
+    {
+      "name": "get_ifc_export_setups",
+      "beschrijving": "De IFC-exportsetups die in het model bewaard zijn, met psetbestand en mappingtabel.",
+      "schrijft": false,
+      "dry_run": false,
+      "params": [
+        "target_document",
+        "raw"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "ifc"
+    },
+    {
+      "name": "create_ifc_export_views",
+      "beschrijving": "3D-views voor IFC-export maken per bouwlaag of deel.",
+      "schrijft": true,
+      "dry_run": true,
+      "params": [
+        "target_document",
+        "prefix",
+        "categories",
+        "skip_levels",
+        "margin_mm",
+        "dry_run",
+        "mode",
+        "exclude_families",
+        "include_families"
+      ],
+      "voorbeeld": null,
+      "toelichting": null,
+      "groep": "ifc"
+    }
+  ]
+}

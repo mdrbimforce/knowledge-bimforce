@@ -8,3 +8,16 @@ pages_build_output_dir = "dist"
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "knowledge-files"
+
+# D1 voor de downloadteller (/skills/dl/<slug>) en de nieuwsbriefaanmelding (/api/nieuwsbrief).
+# Schema: migrations/0001_skills.sql. Bewust uitgecommentarieerd tot de database bestaat:
+# met dit bestand als bron van waarheid valideert Pages de bindings bij elke uitrol, en een
+# verzonnen of lege database_id zou die uitrol kunnen breken. Zonder binding werkt de site
+# gewoon: downloads worden doorgestuurd zonder te tellen, aanmelden meldt "kan nu even niet".
+# Aanzetten: zie README, "Teller en nieuwsbrief aanzetten".
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "knowledge-bimforce"
+# database_id = "<HIER-DE-ID-UIT-wrangler-d1-create>"   # <-- invullen, niet verzinnen
+# migrations_dir = "migrations"

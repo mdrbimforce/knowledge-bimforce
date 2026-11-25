@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "sync:revit-opdrachten": "node scripts/sync-revit-opdrachten.mjs",
     "import:leja-deck": "node scripts/import-slidev-deck.mjs leja-self-introduction-2026-06 leja/presentatie"
   },
   "dependencies": {

@@ -1,0 +1,111 @@
+---
+// Aanmeldblok voor de nieuwsbrief (2026-11-25). Werkt zonder JavaScript: gewone POST
+// naar /api/nieuwsbrief met een redirect naar /nieuwsbrief/<uitkomst>. Met JavaScript
+// verschijnt de uitkomst in het blok zelf.
+// Gebruik: <NieuwsbriefAanmelding bron="skills" />
+export interface Props {
+  /** Waar de aanmelding vandaan komt; alleen kleine letters, cijfers, / en -. */
+  bron: string;
+  titel?: string;
+}
+const { bron, titel = 'Op de hoogte blijven' } = Astro.props;
+const id = `nb-${bron.replace(/[^a-z0-9-]/g, '-')}`;
+---
+
+<section class="rounded-lg bg-off-white p-6 sm:p-7" aria-labelledby={`${id}-titel`}>
+  <h2 id={`${id}-titel`} class="text-xl sm:text-2xl font-bold text-navy m-0 mb-2">{titel}</h2>
+  <p class="text-navy/80 text-[15px] leading-relaxed m-0 mb-5">
+    De nieuwsbrief start binnenkort, onder meer met nieuwe skills en handleidingen. Meld je nu aan; zodra de eerste verzending klaarstaat, krijg je eerst een
+    bevestigingsmail. Pas na je bevestiging sturen we je de nieuwsbrief.
+  </p>
+
+  <form method="post" action="/api/nieuwsbrief" class="nb-form grid gap-4" data-nieuwsbrief>
+    <input type="hidden" name="bron" value={bron} />
+
+    <div class="grid gap-1.5">
+      <label for={`${id}-email`} class="text-sm font-semibold text-navy">E-mailadres</label>
+      <input
+        id={`${id}-email`}
+        name="email"
+        type="email"
+        required
+        maxlength="254"
+        autocomplete="email"
+        inputmode="email"
+        class="w-full rounded border border-grey-light bg-white px-3 py-2 text-navy focus:outline-none focus:ring-2 focus:ring-teal-deep"
+      />
+    </div>
+
+    {/* Honeypot: verborgen voor mensen en schermlezers; een bot die het invult, wordt niet opgeslagen. */}
+    <div class="nb-hp" aria-hidden="true">
+      <label for={`${id}-website`}>Laat dit veld leeg</label>
+      <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <label class="flex items-start gap-3 text-sm text-navy/85 leading-relaxed">
+      <input name="toestemming" type="checkbox" value="ja" required class="mt-1 h-4 w-4 shrink-0 accent-bf-red" />
+      <span>
+        Ik geef toestemming om mijn e-mailadres te bewaren voor de nieuwsbrief van bimforce. Afmelden kan
+        altijd. Zie de <a href="/privacy" class="text-bf-red underline underline-offset-2">privacyverklaring</a>.
+      </span>
+    </label>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        type="submit"
+        class="rounded bg-bf-red px-5 py-2.5 text-sm font-semibold text-white hover:bg-bf-red-dark transition-colors"
+      >
+        Aanmelden
+      </button>
+      <p class="nb-melding text-sm m-0" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<style>
+  .nb-hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const meldingen: Record<string, string> = {
+    aangemeld: 'Dank je. Je aanmelding staat genoteerd; je krijgt een bevestigingsmail zodra de nieuwsbrief start.',
+    ongeldig: 'Controleer je e-mailadres en vink de toestemming aan.',
+    later: 'Aanmelden lukt op dit moment niet. Probeer het later opnieuw of mail ons.',
+  };
+
+  document.querySelectorAll<HTMLFormElement>('form[data-nieuwsbrief]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const melding = form.querySelector<HTMLElement>('.nb-melding');
+      const knop = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      if (knop) knop.disabled = true;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { accept: 'application/json' },
+          body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>),
+        });
+        const data = await res.json().catch(() => ({ uitkomst: 'later' }));
+        const uitkomst = typeof data.uitkomst === 'string' ? data.uitkomst : 'later';
+        if (melding) {
+          melding.textContent = meldingen[uitkomst] ?? meldingen.later;
+          melding.className = 'nb-melding text-sm m-0 ' + (uitkomst === 'aangemeld' ? 'text-teal-deep' : 'text-bf-red');
+        }
+        if (uitkomst === 'aangemeld') form.reset();
+      } catch {
+        if (melding) {
+          melding.textContent = meldingen.later;
+          melding.className = 'nb-melding text-sm m-0 text-bf-red';
+        }
+      } finally {
+        if (knop) knop.disabled = false;
+      }
+    });
+  });
+</script>

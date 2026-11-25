@@ -1,0 +1,167 @@
+---
+// Skills voor Claude (2026-11-25). Inhoud staat in src/data/skills.ts; zips in public/skills/.
+// Downloadknoppen gaan via /skills/dl/<slug> (functions/skills/dl/[slug].js), die telt
+// per skill per dag zonder persoonsgegevens en stuurt door naar de zip.
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NieuwsbriefAanmelding from '../../components/NieuwsbriefAanmelding.astro';
+import { skills, type Skill } from '../../data/skills';
+
+function grootte(bestand: string): string | null {
+  try {
+    const bytes = statSync(join(process.cwd(), 'public', 'skills', bestand)).size;
+    return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1).replace('.', ',')} MB`;
+  } catch {
+    return null;
+  }
+}
+
+function datumNl(iso: string): string {
+  if (!iso) return '';
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+type Kaart = Skill & { meta: string | null; downloadbaar: boolean };
+
+const kaarten: Kaart[] = skills.map((s) => {
+  const g = s.status === 'beschikbaar' ? grootte(s.bestand) : null;
+  if (s.status === 'beschikbaar' && !g) {
+    throw new Error(`Skill ${s.slug}: public/skills/${s.bestand} ontbreekt (status 'beschikbaar').`);
+  }
+  const delen = [s.versie && `versie ${s.versie}`, s.datum && datumNl(s.datum), g && `ZIP, ${g}`].filter(Boolean);
+  return { ...s, meta: delen.length ? delen.join(' · ') : null, downloadbaar: s.status === 'beschikbaar' && !!g };
+});
+
+const categorieen: { naam: string; items: Kaart[] }[] = [];
+for (const k of kaarten) {
+  let c = categorieen.find((x) => x.naam === k.kicker);
+  if (!c) categorieen.push((c = { naam: k.kicker, items: [] }));
+  c.items.push(k);
+}
+---
+
+<BaseLayout
+  title="Skills voor Claude"
+  description="Skills voor Claude om vrij te downloaden: presentaties maken, veilig werken met Neo4j, en werken met Revit en de NLRS. Met handleidingen."
+>
+  <Fragment slot="full">
+
+    <section class="bg-navy text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div class="max-w-3xl">
+          <div class="text-xs uppercase tracking-wider text-bf-red-coral mb-4 font-semibold">
+            werkbank
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-5 leading-[1.05]">
+            Skills voor Claude
+          </h1>
+          <p class="text-lg sm:text-xl text-pale-blue leading-relaxed m-0">
+            Skills uit ons eigen werk, om vrij te downloaden. Elke skill is een zip met een
+            SKILL.md en de bijlagen die erbij horen. Inloggen is niet nodig.
+          </p>
+        </div>
+      </div>
+      <div class="h-1 bg-bf-red"></div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 pt-14">
+      <h2 class="text-2xl font-bold text-navy m-0 mb-3">Wat een skill is</h2>
+      <p class="text-navy/85 text-[15px] leading-relaxed m-0 mb-8">
+        Een skill is een pakketje instructies dat Claude leest wanneer een taak erom vraagt. Het vertelt
+        Claude hoe het die taak goed doet: welke stappen in welke volgorde en welke fouten te vermijden.
+      </p>
+
+      <h2 class="text-2xl font-bold text-navy m-0 mb-4">Installeren</h2>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div class="rounded-lg border border-grey-light/60 p-5">
+          <h3 class="text-lg font-bold text-navy m-0 mb-3">In Claude Desktop of op claude.ai</h3>
+          <ol class="list-decimal pl-5 m-0 grid gap-2 text-[15px] text-navy/85 leading-relaxed">
+            <li>Ga naar <b>Settings &gt; Capabilities</b> en zet <b>Code execution and file creation</b> aan (in een nieuwere indeling: <b>Create and edit files</b>).</li>
+            <li>Ga naar <b>Customize &gt; Skills</b>, klik op <b>+</b> en kies <b>Create skill &gt; Upload a skill</b>.</li>
+            <li>Kies de zip zoals je hem downloadde. Pak hem niet uit: Claude wil de zip zelf.</li>
+            <li>Controleer dat de skill in de lijst staat met de schakelaar aan.</li>
+          </ol>
+        </div>
+        <div class="rounded-lg border border-grey-light/60 p-5">
+          <h3 class="text-lg font-bold text-navy m-0 mb-3">In Claude Code</h3>
+          <ol class="list-decimal pl-5 m-0 grid gap-2 text-[15px] text-navy/85 leading-relaxed">
+            <li>Pak de zip uit.</li>
+            <li>Zet de map van de skill in de map <code>.claude\skills</code> in je gebruikersmap, bijvoorbeeld <code class="break-all">C:\Users\jouw-naam\.claude\skills\neo4j-starter\SKILL.md</code>. Op een Mac: <code class="break-all">~/.claude/skills/neo4j-starter/</code>.</li>
+            <li>Begin een nieuwe sessie. Claude leest een skill bij het begin van een sessie.</li>
+          </ol>
+          <p class="text-sm text-grey-mid m-0 mt-3">
+            Je kunt het ook aan Claude vragen: “In mijn map Downloads staat het bestand neo4j-starter.zip.
+            Pak het uit naar mijn persoonlijke skills-map van Claude.”
+          </p>
+        </div>
+      </div>
+      <p class="text-sm text-grey-mid mt-4 mb-0">
+        De namen van knoppen en menu’s komen uit de documentatie van Anthropic. In jouw versie van Claude
+        kunnen ze iets anders heten of op een andere plek staan. De handleidingen bij de skills lopen elke stap na.
+      </p>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-6 py-14">
+      {categorieen.map((c) => (
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold text-navy m-0 mb-5">{c.naam}</h2>
+          <div class="grid gap-5">
+            {c.items.map((s) => (
+              <article id={s.slug} class={`rounded-lg border border-grey-light/60 overflow-hidden ${s.downloadbaar ? '' : 'bg-cream/60'}`}>
+                <div class={`h-1 ${s.downloadbaar ? 'bg-bf-red' : 'bg-grey-light'}`}></div>
+                <div class="p-6 sm:p-7">
+                  {!s.downloadbaar && (
+                    <div class="mb-2">
+                      <span class="text-xs uppercase tracking-wider rounded bg-grey-light/50 text-navy px-2 py-0.5 font-semibold">binnenkort</span>
+                    </div>
+                  )}
+                  <h3 class="text-xl sm:text-2xl font-bold text-navy m-0 mb-2">{s.titel}</h3>
+                  <p class="text-navy/80 text-[15px] leading-relaxed m-0 mb-4">{s.tekst}</p>
+
+                  {s.vereisten.length > 0 && (
+                    <div class="mb-4">
+                      <div class="text-sm font-semibold text-navy mb-1">Wat je nodig hebt</div>
+                      <ul class="list-disc pl-5 m-0 text-sm text-navy/80 leading-relaxed">
+                        {s.vereisten.map((v) => <li>{v}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                    {s.downloadbaar && (
+                      <a
+                        href={`/skills/dl/${s.slug}`}
+                        class="inline-block rounded bg-bf-red px-4 py-2 font-semibold text-white no-underline hover:bg-bf-red-dark transition-colors"
+                      >
+                        Download {s.bestand}
+                      </a>
+                    )}
+                    {s.meta && <span class="text-grey-mid">{s.meta}</span>}
+                  </div>
+
+                  {s.handleidingen && s.handleidingen.length > 0 && (
+                    <ul class="list-none p-0 m-0 mt-4 grid gap-1 text-sm">
+                      {s.handleidingen.map((h) => (
+                        <li><a href={h.href} class="text-navy/80 hover:text-bf-red hover:underline">{h.label}</a></li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <NieuwsbriefAanmelding bron="skills" />
+
+      <p class="mt-10 text-sm text-grey-mid">
+        We tellen hoe vaak elke skill per dag wordt gedownload, zonder persoonsgegevens. Zie de
+        <a href="/privacy" class="text-bf-red hover:underline">privacyverklaring</a>.
+        Vragen of aanvullingen:
+        <a href="mailto:leja@bimforce.com" class="text-bf-red hover:underline">leja@bimforce.com</a>
+      </p>
+    </section>
+  </Fragment>
+</BaseLayout>

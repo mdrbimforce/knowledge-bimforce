@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Werken met Neo4j</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Opzet: één leeskolom van 44rem; elk hoofdstuk is een blok met een groot cijfer in de marge.
+   Codeblokken en tabellen scrollen binnen hun eigen kader, de pagina zelf nooit. */
+:root {
+  --ground: #f3f5f7; --surface: #fdfdfd; --sunken: #e7ecef;
+  --ink: #1c2a41; --ink-2: #475365; --ink-3: #5f6977;
+  --line: #d9dee4; --line-strong: #788290;
+  --brand: #1c2a41; --on-brand: #e7ecef; --on-brand-2: #9fb0c3; --brand-line: #2e3f5a; --brand-teal: #35b8c4;
+  --accent: #0c6980; --accent-hover: #0a5568; --on-accent: #fdfdfd; --accent-soft: #dff1f4;
+  --spark: #e0a526; --on-spark: #1c2a41; --spark-soft: #fbefd2;
+  --ok: #27724d; --ok-soft: #e1f2e8;
+  --warn: #a8332a; --warn-soft: #f8e3e0;
+  --shadow: 0 8px 28px rgb(12 22 38 / 0.12), 0 2px 6px rgb(12 22 38 / 0.06);
+  --sans: 'Source Sans 3', 'Myriad Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Source Code Pro', Consolas, Monaco, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+    --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+    --line: #2a3a52; --line-strong: #6a7c96;
+    --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-line: #1f2d43; --brand-teal: #35b8c4;
+    --accent: #35b8c4; --accent-hover: #5ccbd5; --on-accent: #0b1320; --accent-soft: #163a44;
+    --spark: #f0b840; --on-spark: #0b1320; --spark-soft: #3a2f14;
+    --ok: #5cc28b; --ok-soft: #173627;
+    --warn: #ef8a7f; --warn-soft: #3d1e1b;
+    --shadow: 0 10px 32px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(42 58 82 / 0.6);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+  --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+  --line: #2a3a52; --line-strong: #6a7c96;
+  --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-line: #1f2d43; --brand-teal: #35b8c4;
+  --accent: #35b8c4; --accent-hover: #5ccbd5; --on-accent: #0b1320; --accent-soft: #163a44;
+  --spark: #f0b840; --on-spark: #0b1320; --spark-soft: #3a2f14;
+  --ok: #5cc28b; --ok-soft: #173627;
+  --warn: #ef8a7f; --warn-soft: #3d1e1b;
+  --shadow: 0 10px 32px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(42 58 82 / 0.6);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.55; margin: 0; overflow-x: hidden; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 3px solid var(--spark); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { line-height: 1.15; text-wrap: balance; margin: 0; }
+h2, h3 { scroll-margin-top: 16px; }
+p { margin: 0; }
+code, kbd { font-family: var(--mono); font-size: 0.9em; }
+code { background: var(--sunken); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+kbd { background: var(--surface); border: 1px solid var(--line-strong); border-bottom-width: 2px; padding: 0 6px; border-radius: 4px; white-space: nowrap; }
+
+.band { background: var(--brand); color: var(--on-brand); }
+.wrap { max-width: 44rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band .wrap { padding-block: 40px 44px; display: flex; flex-direction: column; gap: 18px; }
+.band svg.logo { width: 132px; height: auto; }
+.kicker { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--brand-teal); }
+.band h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 700; }
+.band .lead { color: var(--on-brand-2); font-size: 1.15rem; max-width: 36rem; }
+
+main.wrap { padding-block: 36px 56px; display: flex; flex-direction: column; gap: 48px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.12rem; font-weight: 700; margin-top: 8px; }
+.muted { color: var(--ink-2); }
+ol.do, ul.plain { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: 8px; }
+ol.do li::marker { font-weight: 700; color: var(--accent); }
+dfn { font-style: normal; font-weight: 600; }
+
+/* inhoudsopgave */
+.toc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.toc small { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.toc ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(5, auto); grid-auto-flow: column; gap: 6px 24px; counter-reset: h; }
+.toc li { counter-increment: h; display: grid; grid-template-columns: 1.6rem 1fr; }
+.toc li::before { content: counter(h); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.toc li.pre { counter-increment: none; }
+.toc li.pre::before { content: '·'; }
+@media (max-width: 620px) { .toc ol { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; } }
+
+/* hoofdstukken */
+.step { display: grid; grid-template-columns: 56px 1fr; gap: 0 12px; }
+.step > .num { font-size: 2.6rem; font-weight: 700; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.step > .body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+@media (max-width: 620px) { .step { grid-template-columns: 1fr; gap: 6px; } }
+
+.done { display: grid; grid-template-columns: 22px 1fr; gap: 10px; background: var(--ok-soft); border-radius: 8px; padding: 12px 14px; }
+.done svg { width: 20px; height: 20px; margin-top: 3px; color: var(--ok); }
+.note { border-left: 3px solid var(--spark); background: var(--spark-soft); border-radius: 0 8px 8px 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.warn { border-left: 3px solid var(--warn); background: var(--warn-soft); border-radius: 0 8px 8px 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Cypher-stappen in hoofdstuk 4 */
+.cstep { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cstep h3 { margin: 0; display: flex; gap: 10px; align-items: baseline; }
+.cstep h3 span { color: var(--accent); font-variant-numeric: tabular-nums; }
+.cstep .got { color: var(--ink-2); font-size: 0.98rem; }
+.cstep .got b { color: var(--ink); }
+
+/* codeblokken */
+.code { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; min-width: 0; }
+.code .label { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 12px 0 14px; }
+.code pre { margin: 0; padding: 8px 14px 12px; font-family: var(--mono); font-size: 0.875rem; line-height: 1.6; overflow-x: auto; white-space: pre; color: var(--ink); }
+.code pre .c { color: var(--ink-3); }
+button.copy { font: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 4px; padding: 3px 10px; cursor: pointer; }
+button.copy:hover { background: var(--accent-soft); }
+
+/* resultaattabellen */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ink-3); background: var(--sunken); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.n { font-variant-numeric: tabular-nums; text-align: right; }
+td code, th code { white-space: nowrap; }
+
+/* figuren en tekeningen */
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figcaption { color: var(--ink-3); font-size: 0.9rem; }
+.canvas { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; overflow-x: auto; }
+.gsvg { width: 100%; height: auto; display: block; font-family: var(--sans); }
+.gsvg .n-loc { fill: var(--sunken); stroke: var(--line-strong); stroke-width: 1.5; }
+.gsvg .n-el { fill: var(--spark-soft); stroke: var(--spark); stroke-width: 1.5; }
+.gsvg .n-a { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+.gsvg .n-b { fill: var(--ok-soft); stroke: var(--ok); stroke-width: 1.5; }
+.gsvg .t { fill: var(--ink); font-size: 13.5px; font-weight: 600; text-anchor: middle; }
+.gsvg .lb { fill: var(--ink-2); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
+.gsvg .r { fill: var(--ink-2); font-family: var(--mono); font-size: 11px; }
+.gsvg .e { stroke: var(--line-strong); stroke-width: 1.6; fill: none; }
+.gsvg .ah { fill: var(--line-strong); }
+.gsvg .plate { fill: var(--surface); }
+.gsvg .lens { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 4 4; }
+.gsvg .lt { fill: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; }
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.95rem; }
+.legend li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; }
+.swatch { width: 16px; height: 16px; border-radius: 50%; margin-top: 4px; border: 1.5px solid; }
+.sw-loc { background: var(--sunken); border-color: var(--line-strong); }
+.sw-el { background: var(--spark-soft); border-color: var(--spark); }
+.sw-a { background: var(--accent-soft); border-color: var(--accent); }
+.sw-b { background: var(--ok-soft); border-color: var(--ok); }
+
+/* patroon in tekst, met kleur per onderdeel */
+.pattern { font-family: var(--mono); font-size: 1.05rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: nowrap; }
+.pattern .pn { background: var(--spark-soft); border-radius: 4px; padding: 1px 3px; }
+.pattern .pm { background: var(--sunken); border-radius: 4px; padding: 1px 3px; }
+.pattern .pr { color: var(--accent); font-weight: 600; }
+
+/* CREATE tegenover MERGE */
+.versus { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.versus > div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.versus small { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.versus .runs { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-2); display: flex; flex-direction: column; gap: 4px; }
+.versus .out { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; align-items: center; }
+.pill { display: inline-flex; flex-direction: column; align-items: center; border: 1.5px solid var(--spark); background: var(--spark-soft); border-radius: 999px; padding: 4px 16px; font-size: 0.85rem; line-height: 1.25; }
+.pill i { font-style: normal; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.pill.bad { border-color: var(--warn); background: var(--warn-soft); }
+.versus .verdict { font-size: 0.95rem; color: var(--ink-2); }
+@media (max-width: 620px) { .versus { grid-template-columns: 1fr; } }
+
+/* importpad */
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; }
+.flow .node { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.flow .node svg { width: 30px; height: 30px; color: var(--accent); }
+.flow .node b { font-size: 1rem; }
+.flow .node span { color: var(--ink-2); font-size: 0.9rem; }
+.flow .arrow { align-self: center; color: var(--line-strong); }
+.flow .arrow svg { width: 20px; height: 20px; display: block; }
+@media (max-width: 760px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow .arrow svg { transform: rotate(90deg); margin: 0 auto; }
+}
+
+/* nagebouwde vensters */
+.win { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+.win-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--sunken); border-bottom: 1px solid var(--line); font-size: 0.8125rem; color: var(--ink-2); }
+.win-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); opacity: 0.55; }
+.win-bar span { margin-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.win-split { display: grid; grid-template-columns: 150px 1fr; min-height: 220px; }
+.win-side { background: var(--sunken); border-right: 1px solid var(--line); padding: 14px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; min-width: 0; }
+.win-side small { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.win-side span { padding: 3px 8px; border-radius: 6px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+.win-side span.on { background: var(--surface); color: var(--ink); font-weight: 600; }
+.win-main { padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+@media (max-width: 620px) { .win-split { grid-template-columns: 1fr; } .win-side { border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; } .win-side small { margin-top: 0; width: 100%; } }
+.mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--spark); color: var(--on-spark); font-weight: 700; font-size: 0.8125rem; flex: none; font-variant-numeric: tabular-nums; }
+.ring { outline: 2px solid var(--spark); outline-offset: 3px; }
+.fakebtn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--on-accent); font-weight: 600; padding: 6px 14px; border-radius: 4px; font-size: 0.9rem; }
+.fakebtn.ghost { background: transparent; color: var(--ink-2); border: 1px solid var(--line-strong); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.card { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); min-width: 0; }
+.card .path { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-3); overflow-wrap: anywhere; }
+.tag { border: 1px solid var(--line-strong); border-radius: 999px; padding: 0 10px; font-size: 0.8rem; color: var(--ink-2); }
+.tag.go { border-color: var(--ok); color: var(--ok); }
+.iconbtn { display: inline-flex; width: 30px; height: 30px; border: 1px solid var(--line-strong); border-radius: 6px; align-items: center; justify-content: center; color: var(--ink-2); }
+.iconbtn svg { width: 14px; height: 14px; }
+.editor { font-family: var(--mono); font-size: 0.85rem; border: 1px solid var(--line-strong); border-radius: 6px; padding: 8px 10px; display: flex; gap: 10px; align-items: center; min-width: 0; }
+.editor code { background: none; padding: 0; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.frame { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.frame-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px 10px; background: var(--sunken); font-size: 0.85rem; }
+.tabs { display: flex; gap: 2px; background: var(--ground); padding: 3px; border-radius: 6px; }
+.tabs span { padding: 2px 10px; border-radius: 4px; color: var(--ink-2); font-size: 0.85rem; }
+.tabs .on { background: var(--surface); color: var(--ink); font-weight: 600; }
+.frame-body { display: grid; grid-template-columns: 1fr 150px; gap: 0; }
+.frame-body .gsvg { padding: 6px; }
+.overview { border-left: 1px solid var(--line); padding: 10px; font-size: 0.8rem; display: flex; flex-direction: column; gap: 6px; color: var(--ink-2); }
+.overview b { color: var(--ink); font-size: 0.8rem; }
+.overview .chip { display: inline-block; border-radius: 999px; padding: 0 8px; font-size: 0.75rem; border: 1.5px solid; color: var(--ink); }
+@media (max-width: 620px) { .frame-body { grid-template-columns: 1fr; } .overview { border-left: 0; border-top: 1px solid var(--line); } }
+
+/* veelgemaakte fouten */
+.faq { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq details > div { padding-top: 10px; color: var(--ink-2); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.faq details > div b { color: var(--ink); }
+
+/* bronnen */
+.links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.links li { padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 2px; }
+.links span { color: var(--ink-2); font-size: 0.95rem; }
+
+/* herkomst */
+.origin { background: var(--brand); color: var(--on-brand); border-radius: 8px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
+.origin h2 { font-size: 1.5rem; }
+.origin p { color: var(--on-brand-2); }
+.origin p.say { color: var(--on-brand); font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
+.origin a { color: var(--brand-teal); font-weight: 600; }
+footer.wrap { padding-block: 0 40px; color: var(--ink-3); font-size: 0.9rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: no-preference) { button.copy { transition: background 120ms; } }
+</style>
+</head>
+<body>
+
+
+<header class="band">
+<div class="wrap">
+<svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.64 64" role="img" aria-label="Leja van bimforce"><title>Leja van bimforce</title><g transform="translate(-10 0)"><path d="M36 28L17 32M36 28L32 49M36 28L47 49" fill="none" stroke="#35b8c4" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.7"/><path d="M17 15V49H47" fill="none" stroke="#35b8c4" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="15" r="4.6" fill="#35b8c4"/><circle cx="17" cy="32" r="4.6" fill="#35b8c4"/><circle cx="17" cy="49" r="4.6" fill="#35b8c4"/><circle cx="32" cy="49" r="4.6" fill="#35b8c4"/><circle cx="47" cy="49" r="4.6" fill="#35b8c4"/><circle cx="36" cy="28" r="6.8" fill="#e0a526"/></g><path d="M62.93 37H78.32V32.29H68.51V12.22H62.93ZM90.25 21.99C92.49 21.99 93.36 23.43 93.36 25.41H86.68C87.17 22.83 88.77 21.99 90.25 21.99ZM90.78 37.46C93.02 37.46 95.57 36.7 97.47 35.37L95.64 31.95C94.31 32.74 92.95 33.16 91.54 33.16C89.41 33.16 87.28 32.21 86.68 29.29H97.92C98.04 28.72 98.15 27.73 98.15 26.74C98.15 21.61 95.53 17.7 90.13 17.7C85.61 17.7 81.24 21.46 81.24 27.58C81.24 33.85 85.38 37.46 90.78 37.46ZM101.12 44.45C106.25 44.45 107.84 40.99 107.84 36.89V18.15H102.26V37.04C102.26 39.13 101.76 40.08 100.28 40.08C99.75 40.08 99.29 39.96 98.8 39.81L97.81 43.92C98.57 44.22 99.56 44.45 101.12 44.45ZM105.07 15.38C106.93 15.38 108.22 14.24 108.22 12.45C108.22 10.7 106.93 9.53 105.07 9.53C103.21 9.53 101.91 10.7 101.91 12.45C101.91 14.24 103.21 15.38 105.07 15.38ZM117.72 37.46C119.85 37.46 121.56 36.47 123.19 35.06H123.35L123.73 37H128.29V26.25C128.29 20.43 125.63 17.7 120.8 17.7C117.84 17.7 115.14 18.68 112.74 20.17L114.72 23.81C116.58 22.75 118.14 22.18 119.74 22.18C121.75 22.18 122.59 23.21 122.7 24.84C115.25 25.6 112.1 27.73 112.1 31.76C112.1 34.95 114.26 37.46 117.72 37.46ZM119.58 33.09C118.29 33.09 117.46 32.52 117.46 31.34C117.46 29.89 118.75 28.87 122.7 28.34V31.53C121.75 32.52 120.84 33.09 119.58 33.09Z" fill="#e7ecef"/><path d="M63.71 55H65.1L67.6 47.95H66.42L65.09 51.95C64.89 52.65 64.65 53.36 64.45 54.03H64.39C64.18 53.36 63.94 52.65 63.74 51.95L62.41 47.95H61.17ZM70.87 55.17C71.76 55.17 72.51 54.72 73.21 54.16H73.25L73.35 55H74.34V50.68C74.34 48.92 73.6 47.78 71.89 47.78C70.76 47.78 69.77 48.26 69.12 48.69L69.58 49.5C70.13 49.16 70.87 48.78 71.69 48.78C72.83 48.78 73.14 49.63 73.15 50.52C70.13 50.85 68.8 51.59 68.8 53.17C68.8 54.45 69.7 55.17 70.87 55.17ZM71.21 54.19C70.53 54.19 69.98 53.88 69.98 53.1C69.98 52.19 70.77 51.65 73.15 51.38V53.27C72.47 53.88 71.89 54.19 71.21 54.19ZM76.85 55H78.04V49.9C78.75 49.19 79.24 48.81 79.97 48.81C80.89 48.81 81.3 49.37 81.3 50.69V55H82.49V50.53C82.49 48.74 81.82 47.78 80.34 47.78C79.37 47.78 78.65 48.3 77.98 48.97H77.94L77.83 47.95H76.85ZM91.38 55.17C92.99 55.17 94.42 53.77 94.42 51.36C94.42 49.19 93.45 47.78 91.62 47.78C90.84 47.78 90.06 48.2 89.42 48.77L89.45 47.49V44.68H88.26V55H89.22L89.32 54.27H89.36C89.99 54.84 90.72 55.17 91.38 55.17ZM91.17 54.17C90.71 54.17 90.07 53.97 89.45 53.43V49.74C90.12 49.11 90.74 48.78 91.33 48.78C92.67 48.78 93.19 49.82 93.19 51.38C93.19 53.12 92.33 54.17 91.17 54.17ZM96.57 55H97.76V47.95H96.57ZM97.16 46.5C97.63 46.5 97.96 46.2 97.96 45.72C97.96 45.26 97.63 44.94 97.16 44.94C96.7 44.94 96.37 45.26 96.37 45.72C96.37 46.2 96.7 46.5 97.16 46.5ZM100.43 55H101.61V49.9C102.27 49.17 102.86 48.81 103.38 48.81C104.28 48.81 104.7 49.37 104.7 50.69V55H105.89V49.9C106.54 49.17 107.11 48.81 107.66 48.81C108.55 48.81 108.97 49.37 108.97 50.69V55H110.15V50.53C110.15 48.74 109.46 47.78 108.01 47.78C107.15 47.78 106.43 48.33 105.69 49.13C105.4 48.29 104.82 47.78 103.75 47.78C102.9 47.78 102.17 48.3 101.56 48.97H101.51L101.41 47.95H100.43ZM112.94 55H114.13V48.92H115.62V47.95H114.13V46.84C114.13 45.94 114.45 45.47 115.11 45.47C115.38 45.47 115.62 45.52 115.91 45.6L116.17 44.73C115.87 44.6 115.43 44.5 115 44.5C113.59 44.5 112.94 45.4 112.94 46.84V47.95L111.89 48.03V48.92H112.94ZM120 55.17C121.73 55.17 123.26 53.83 123.26 51.49C123.26 49.13 121.73 47.78 120 47.78C118.27 47.78 116.74 49.13 116.74 51.49C116.74 53.83 118.27 55.17 120 55.17ZM120 54.19C118.8 54.19 117.97 53.1 117.97 51.49C117.97 49.87 118.8 48.77 120 48.77C121.22 48.77 122.03 49.87 122.03 51.49C122.03 53.1 121.22 54.19 120 54.19ZM125.41 55H126.6V50.48C127.08 49.29 127.79 48.85 128.38 48.85C128.67 48.85 128.82 48.88 129.03 48.94L129.29 47.92C129.06 47.82 128.85 47.78 128.54 47.78C127.73 47.78 127 48.34 126.54 49.23H126.5L126.39 47.95H125.41ZM133.53 55.17C134.43 55.17 135.21 54.81 135.79 54.25L135.27 53.52C134.85 53.91 134.27 54.19 133.63 54.19C132.33 54.19 131.44 53.1 131.44 51.49C131.44 49.87 132.38 48.77 133.64 48.77C134.25 48.77 134.7 49 135.07 49.33L135.66 48.61C135.18 48.13 134.53 47.78 133.6 47.78C131.79 47.78 130.21 49.13 130.21 51.49C130.21 53.83 131.64 55.17 133.53 55.17ZM140.3 48.75C141.39 48.75 142.01 49.49 142.01 50.85H138.34C138.53 49.34 139.43 48.75 140.3 48.75ZM140.49 55.17C141.45 55.17 142.2 54.87 142.82 54.45L142.39 53.67C141.9 54 141.3 54.2 140.63 54.2C139.44 54.2 138.43 53.38 138.31 51.8H143.03C143.07 51.56 143.08 51.33 143.08 51.09C143.08 49.08 142.1 47.78 140.29 47.78C138.66 47.78 137.1 49.19 137.1 51.48C137.1 53.81 138.59 55.17 140.49 55.17Z" fill="#abb8c6"/></svg>
+<p class="kicker">Handleiding</p>
+<h1>Werken met Neo4j</h1>
+<p class="lead">Een basishandleiding voor wie met graphs wil beginnen zonder programmeur te zijn. Je installeert Neo4j Desktop, leert Cypher lezen en schrijven, ontwerpt een eigen datastructuur en laadt je eerste gegevens uit Excel.</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<nav class="toc" aria-labelledby="h-toc">
+<small id="h-toc">Inhoud</small>
+<ol>
+<li class="pre"><a href="#h-voorbeeld">Het oefenvoorbeeld</a></li>
+<li><a href="#h-wat">Wat een graph database is</a></li>
+<li><a href="#h-installeren">Neo4j Desktop installeren</a></li>
+<li><a href="#h-querytool">De querytool en de graphweergave</a></li>
+<li><a href="#h-cypher">Cypher in tien stappen</a></li>
+<li><a href="#h-ontwerp">Een datastructuur ontwerpen</a></li>
+<li><a href="#h-import">Data importeren</a></li>
+<li><a href="#h-bewaren">Bewaren en opruimen</a></li>
+<li><a href="#h-fouten">Veelgemaakte fouten</a></li>
+<li><a href="#h-verder">Verder leren</a></li>
+</ol>
+</nav>
+
+<section aria-labelledby="h-voorbeeld">
+<h2 id="h-voorbeeld">Het oefenvoorbeeld</h2>
+<p>Door de hele handleiding loopt één klein voorbeeld: een kantoorgebouw met drie verdiepingen, zes ruimten en acht bouwelementen (wanden, deuren, radiatoren en een luchtbehandelingskast). Elk element is op twee manieren ingedeeld: met een <b>elementcode</b> en met een <b>onderhoudsindeling</b>. Beide indelingen wijzen naar dezelfde elementen.</p>
+<p class="muted">Alle namen en codes zijn verzonnen oefendata. Het zijn geen echte classificatietabellen; de codes lijken expres niet op een bestaand stelsel.</p>
+<figure>
+<div class="canvas">
+<svg class="gsvg" viewBox="0 0 480 486" role="img" aria-labelledby="model-t model-d" style="min-width:380px">
+<title id="model-t">Het graphmodel van het oefenvoorbeeld</title>
+<desc id="model-d">Gebouw Oefenkantoor heeft verdieping Eerste verdieping, die heeft ruimte R1.01 Kantoortuin. Element E03 Radiator staat in die ruimte en is geclassificeerd als EC-VW, die hoort bij stelsel Elementcode, en als OI-2, die hoort bij stelsel Onderhoudsindeling.</desc>
+<defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="lens" x="152" y="336" width="156" height="146" rx="10"/>
+<rect class="lens" x="318" y="336" width="156" height="146" rx="10"/>
+<line class="e" x1="90" y1="64" x2="90" y2="122" marker-end="url(#ah1)"/>
+<text class="r" x="100" y="98">HEEFT_VERDIEPING</text>
+<line class="e" x1="90" y1="174" x2="90" y2="232" marker-end="url(#ah1)"/>
+<text class="r" x="100" y="208">HEEFT_RUIMTE</text>
+<line class="e" x1="240" y1="260" x2="164" y2="260" marker-end="url(#ah1)"/>
+<text class="r" x="202" y="251" text-anchor="middle">STAAT_IN</text>
+<line class="e" x1="290" y1="284" x2="244" y2="342" marker-end="url(#ah1)"/>
+<line class="e" x1="330" y1="284" x2="380" y2="342" marker-end="url(#ah1)"/>
+<rect class="plate" x="246" y="302" width="128" height="17" rx="3"/>
+<text class="r" x="310" y="314" text-anchor="middle">GECLASSIFICEERD_ALS</text>
+<line class="e" x1="230" y1="394" x2="230" y2="424" marker-end="url(#ah1)"/>
+<text class="r" x="240" y="414">HOORT_BIJ</text>
+<line class="e" x1="396" y1="394" x2="396" y2="424" marker-end="url(#ah1)"/>
+<text class="r" x="406" y="414">HOORT_BIJ</text>
+<rect class="n-loc" x="20" y="16" width="140" height="48" rx="24"/><text class="lb" x="90" y="35">:Gebouw</text><text class="t" x="90" y="53">Oefenkantoor</text>
+<rect class="n-loc" x="20" y="126" width="140" height="48" rx="24"/><text class="lb" x="90" y="145">:Verdieping</text><text class="t" x="90" y="163">Eerste verdieping</text>
+<rect class="n-loc" x="20" y="236" width="140" height="48" rx="24"/><text class="lb" x="90" y="255">:Ruimte</text><text class="t" x="90" y="273">R1.01 Kantoortuin</text>
+<rect class="n-el" x="240" y="236" width="140" height="48" rx="24"/><text class="lb" x="310" y="255">:Element</text><text class="t" x="310" y="273">E03 Radiator</text>
+<rect class="n-a" x="160" y="346" width="140" height="48" rx="24"/><text class="lb" x="230" y="365">:Klasse</text><text class="t" x="230" y="383">EC-VW</text>
+<rect class="n-b" x="326" y="346" width="140" height="48" rx="24"/><text class="lb" x="396" y="365">:Klasse</text><text class="t" x="396" y="383">OI-2</text>
+<rect class="n-a" x="160" y="428" width="140" height="48" rx="24"/><text class="lb" x="230" y="447">:Stelsel</text><text class="t" x="230" y="465">Elementcode</text>
+<rect class="n-b" x="326" y="428" width="140" height="48" rx="24"/><text class="lb" x="396" y="447">:Stelsel</text><text class="t" x="396" y="465">Onderhoudsindeling</text>
+<text class="lt" x="160" y="330">LENS 1</text><text class="lt" x="466" y="330" text-anchor="end">LENS 2</text>
+</svg>
+</div>
+<figcaption>Eén radiator uit het voorbeeld, met alles wat eraan vastzit. Bovenaan de locatie, onderaan de twee indelingen ("lenzen") die naast elkaar op hetzelfde element liggen.</figcaption>
+<ul class="legend">
+<li><span class="swatch sw-loc"></span><span>Locatie: gebouw, verdieping, ruimte.</span></li>
+<li><span class="swatch sw-el"></span><span>Bouwelement: wand, deur, radiator, luchtbehandelingskast.</span></li>
+<li><span class="swatch sw-a"></span><span>Lens 1: de elementcode, met vier klassen.</span></li>
+<li><span class="swatch sw-b"></span><span>Lens 2: de onderhoudsindeling, met drie klassen.</span></li>
+</ul>
+</figure>
+<p>De oefendata zit in de skill <code>neo4j-starter</code> als het bestand <code>voorbeelddata.zip</code>: download de skill op <a href="/skills/dl/neo4j-starter">knowledge.bimforce.com/skills</a>, pak hem uit en je vindt de zip in de map <code>neo4j-starter</code>. Pak die ook uit; je krijgt een map <code>voorbeelddata</code> met vier CSV-bestanden (<code>verdiepingen.csv</code>, <code>ruimten.csv</code>, <code>klassen.csv</code>, <code>elementen.csv</code>) en één script, <code>laden.cypher</code>, dat dezelfde graph opbouwt zonder CSV. Beide routes leveren 27 nodes en 40 relationships op. Het script staat ook onderaan hoofdstuk 4, om te kopiëren.</p>
+</section>
+
+<section class="step" aria-labelledby="h-wat">
+<div class="num" aria-hidden="true">1</div>
+<div class="body">
+<h2 id="h-wat">Wat een graph database is en wanneer hij past</h2>
+<p>Een graph database bewaart gegevens als dingen en de verbanden ertussen. Een ding heet een <dfn>node</dfn> (een knooppunt, zoals één ruimte of één radiator). Een verband heet een <dfn>relationship</dfn> (een benoemde pijl tussen twee nodes, zoals <code>STAAT_IN</code>). Elke node krijgt een <dfn>label</dfn> (de soort: <code>Ruimte</code>, <code>Element</code>) en eigenschappen, <dfn>properties</dfn> genoemd (naam-waardeparen zoals <code>oppervlakte: 145</code>). Ook een relationship kan properties hebben. Je vraagt de gegevens op met <dfn>Cypher</dfn>, de querytaal van Neo4j, die een verband opschrijft als een tekening: <code>(radiator)-[:STAAT_IN]-&gt;(ruimte)</code>.</p>
+<p>Het verschil met Excel en met een relationele database zit in waar de verbanden leven.</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th></th><th>Excel</th><th>Relationele database</th><th>Graph database</th></tr></thead>
+<tbody>
+<tr><td><b>Vorm</b></td><td>Tabbladen met rijen</td><td>Tabellen met vaste kolommen</td><td>Nodes en relationships</td></tr>
+<tr><td><b>Verbanden</b></td><td>Een code in een kolom, opzoeken met VERT.ZOEKEN</td><td>Sleutels, samengevoegd met een JOIN tijdens de vraag</td><td>Opgeslagen als relationship; je loopt erlangs</td></tr>
+<tr><td><b>Sterk in</b></td><td>Rekenen, lijsten, snel iets bijhouden</td><td>Veel gelijksoortige records, transacties, rapportages</td><td>Verbanden over meerdere stappen, indelingen naast elkaar, een structuur die nog groeit</td></tr>
+<tr><td><b>Minder sterk in</b></td><td>Meerdere gebruikers, verbanden over meer dan twee lijsten</td><td>Een schema dat vaak verandert, vragen over veel tussenstappen</td><td>Grote berekeningen over kolommen, financiële administratie</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Wanneer hij past</h3>
+<ul class="plain">
+<li>Je vragen gaan over verbanden: welk element zit in welke ruimte, valt onder welke klasse, hoort bij welk onderhoudscontract.</li>
+<li>Hetzelfde ding zit in meer dan één indeling, en je wilt niet kiezen welke de "echte" is.</li>
+<li>De structuur verandert nog. Een nieuw soort verband toevoegen kost geen herbouw van tabellen.</li>
+<li>Je wilt laten zien hoe iets samenhangt. De graphweergave is direct bespreekbaar met collega's.</li>
+</ul>
+<h3>Wanneer niet</h3>
+<ul class="plain">
+<li>Je hebt vooral één lange lijst met kolommen en wilt sommen, filters en grafieken. Dan is Excel of een relationele database eenvoudiger.</li>
+<li>Het gaat om boekhouding of transacties met strenge vaste formulieren. Daar zijn relationele databases voor gemaakt.</li>
+<li>Niemand gaat de graph onderhouden. Een graph met verouderde verbanden misleidt meer dan een verouderde lijst.</li>
+</ul>
+<p class="muted">Meer achtergrond: <a href="https://neo4j.com/docs/getting-started/graph-database/">What is a graph database?</a> in de documentatie van Neo4j (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-installeren">
+<div class="num" aria-hidden="true">2</div>
+<div class="body">
+<h2 id="h-installeren">Neo4j Desktop installeren en je eerste database maken</h2>
+<p>Neo4j Desktop is een gratis programma voor Windows, macOS en Linux waarmee je Neo4j op je eigen computer draait. Deze handleiding gaat uit van <b>Neo4j Desktop 2</b>. Versie 1 ziet er anders uit; oudere uitleg en video's met knoppen als "Add Graph" horen daarbij.</p>
+<p class="muted">Namen van knoppen en menu's komen uit de <a href="https://neo4j.com/docs/desktop/current/">documentatie van Neo4j Desktop</a> (Engels). In jouw versie kunnen ze iets anders heten of op een andere plek staan.</p>
+<h3>Installeren</h3>
+<ol class="do">
+<li>Ga naar het <a href="https://neo4j.com/deployment-center/?desktop-gdb">Deployment Center van Neo4j</a> en download Neo4j Desktop voor jouw computer.</li>
+<li><b>Windows:</b> dubbelklik op het gedownloade installatiebestand en volg de stappen. <b>Mac:</b> open het <code>.dmg</code>-bestand in Downloads en sleep Neo4j Desktop naar de map Programma's.</li>
+<li>Start Neo4j Desktop. Volgens de <a href="https://neo4j.com/docs/desktop/current/installation/">installatie-uitleg</a> heb je Windows 10 met PowerShell 5.1 of hoger nodig, of macOS 10.10 of hoger.</li>
+</ol>
+<h3>Je eerste instance maken</h3>
+<p>Een <dfn>instance</dfn> is één Neo4j-server op je computer. Een instance bevat altijd twee databases: <code>system</code> (voor de server zelf) en <code>neo4j</code> (de jouwe). In <code>neo4j</code> zet je de oefendata.</p>
+<ol class="do">
+<li>Klik bij de eerste keer openen op <b>Get started</b>. Werk je al in een project, gebruik dan de knop <b>Create instance</b>.</li>
+<li>Geef de instance een naam, bijvoorbeeld <code>Oefenkantoor</code>.</li>
+<li>Laat de Neo4j-versie op de standaard staan: de nieuwste. Kies je een andere versie, dan moet Desktop die eerst downloaden.</li>
+<li>Vul een gebruikersnaam en een wachtwoord in. Die gelden voor alle databases in deze instance. Bewaar ze in je wachtwoordbeheerder en gebruik geen wachtwoord dat je ook ergens anders gebruikt.</li>
+<li>Bevestig. De instance verschijnt in de lijst met het etiket <b>New</b>, tot je hem voor het eerst start.</li>
+</ol>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd venster van Neo4j Desktop met links de tools en rechts de instance Oefenkantoor met startknop, Connect-menu en het menu met drie puntjes gemarkeerd">
+<div class="win-bar"><i></i><i></i><i></i><span>Neo4j Desktop</span></div>
+<div class="win-split">
+<div class="win-side">
+<span class="on">All instances</span>
+<small>Tools</small>
+<span>Import</span><span>Query <span class="mark">5</span></span><span>Bloom</span><span>Dashboards</span>
+</div>
+<div class="win-main">
+<div class="row"><b style="font-size:1.1rem">All instances</b><span class="fakebtn ring" style="margin-left:auto">Create instance</span><span class="mark">1</span></div>
+<div class="card">
+<div class="row"><b>Oefenkantoor</b><span class="tag">2026.x</span><span class="tag go">actief</span></div>
+<div class="row">
+<span class="iconbtn ring" title="stoppen"><svg viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" rx="1" fill="currentColor"/></svg></span><span class="mark">2</span>
+<span class="fakebtn ghost ring">Connect ▾</span><span class="mark">3</span>
+<span class="fakebtn ghost ring">…</span><span class="mark">4</span>
+</div>
+<div class="row" style="font-size:0.9rem"><span class="muted">Databases:</span> <code>neo4j</code> <code>system</code></div>
+<div class="path">C:\Users\jouw-naam\.Neo4jDesktop2\Data\dbmss\dbms-…</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd; het echte venster van Neo4j Desktop ziet er anders uit. Versienummer en etiketten zijn voorbeelden.</figcaption>
+<ul class="legend">
+<li><span class="mark">1</span><span><b>Create instance</b>: een nieuwe instance maken.</span></li>
+<li><span class="mark">2</span><span>De knop starten of stoppen. Draait de instance, dan is het een stopknop.</span></li>
+<li><span class="mark">3</span><span><b>Connect</b>: open de instance direct in Query, Bloom of Dashboards.</span></li>
+<li><span class="mark">4</span><span>Het menu met drie puntjes: onder meer <b>Open</b> &gt; <b>Instance folder</b>, <b>Export databases</b>, <b>Load database from file</b> en <b>Delete</b>.</span></li>
+<li><span class="mark">5</span><span>De tools. Query gebruik je in hoofdstuk 3 en 4, Import in hoofdstuk 6.</span></li>
+</ul>
+</figure>
+<h3>Starten en stoppen</h3>
+<ul class="plain">
+<li>Start de instance met de startknop op de kaart. Stoppen doe je met dezelfde knop, opnieuw starten met de herstartknop.</li>
+<li>Er kan in Neo4j Desktop maar één instance tegelijk draaien. Start je een andere, stop dan eerst de lopende.</li>
+<li>Sommige handelingen, zoals een back-up maken, kunnen alleen bij een gestopte instance (hoofdstuk 7).</li>
+</ul>
+<h3>Waar de bestanden staan</h3>
+<p>Neo4j Desktop zet alles in een verborgen map in je gebruikersmap. Volgens de <a href="https://neo4j.com/docs/desktop/current/installation/">installatie-uitleg</a>:</p>
+<ul class="plain">
+<li><b>Windows:</b> <code>%USERPROFILE%\.Neo4jDesktop2\</code>. Elke instance krijgt daarbinnen een eigen map onder <code>Data\dbmss\</code>.</li>
+<li><b>Mac:</b> <code>~/Library/Application Support/neo4j-desktop/Application/</code></li>
+</ul>
+<p>Je hoeft die mappen niet zelf te zoeken. Kies in het menu met drie puntjes van de instance <b>Open</b> &gt; <b>Instance folder</b>. In die map staat onder meer de map <code>import</code>, die je in hoofdstuk 6 nodig hebt. Het pad staat ook op de kaart van de instance.</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> De instance <code>Oefenkantoor</code> draait en via <b>Connect</b> &gt; <b>Query</b> opent de querytool.</p></div>
+<p class="muted">Bronnen: <a href="https://neo4j.com/docs/desktop/current/operations/instance-management/">Instance management</a> en <a href="https://neo4j.com/docs/desktop/current/visual-tour/">Visual tour</a> (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-querytool">
+<div class="num" aria-hidden="true">3</div>
+<div class="body">
+<h2 id="h-querytool">De querytool en de graphweergave</h2>
+<p>De tool <b>Query</b> is waar je Cypher typt en de uitkomst bekijkt. Buiten Desktop heet dezelfde tool Neo4j Browser. Open hem via <b>Connect</b> &gt; <b>Query</b> op de kaart van je instance, of via <b>Query</b> in de zijbalk en kies dan je instance en de database <code>neo4j</code>.</p>
+<p>Zet eerst de oefendata erin. Kopieer het script <a href="#laden">laden.cypher</a> onderaan hoofdstuk 4, plak het in de editor en voer het uit.</p>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd venster van de tool Query met de editor, een resultaatkader met de tabbladen Graph, Table en RAW, een kleine graph en het overzicht met labels">
+<div class="win-bar"><i></i><i></i><i></i><span>Query · Oefenkantoor · neo4j</span></div>
+<div class="win-main">
+<div class="row" style="flex-wrap:nowrap"><div class="editor" style="flex:1"><code>MATCH (n)-[r]-&gt;(m) RETURN n, r, m</code></div><span class="iconbtn ring"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2l9 5-9 5z" fill="currentColor"/></svg></span><span class="mark">1</span></div>
+<div class="frame">
+<div class="frame-head"><div class="tabs"><span class="on">Graph</span><span>Table</span><span>RAW</span></div><span class="mark">2</span><span class="muted" style="margin-left:auto">27 nodes, 40 relationships</span></div>
+<div class="frame-body">
+<svg class="gsvg" viewBox="0 0 320 170" aria-hidden="true">
+<g class="e"><line x1="60" y1="40" x2="130" y2="40"/><line x1="130" y1="40" x2="200" y2="40"/><line x1="200" y1="40" x2="270" y2="40"/><line x1="200" y1="40" x2="190" y2="110"/><line x1="200" y1="40" x2="250" y2="105"/><line x1="190" y1="110" x2="110" y2="125"/><line x1="190" y1="110" x2="230" y2="150"/><line x1="250" y1="105" x2="230" y2="150"/><line x1="250" y1="105" x2="300" y2="140"/><line x1="110" y1="125" x2="60" y2="150"/></g>
+<circle class="n-loc" cx="60" cy="40" r="15"/><circle class="n-loc" cx="130" cy="40" r="15"/><circle class="n-loc" cx="200" cy="40" r="15"/><circle class="n-loc" cx="270" cy="40" r="15"/>
+<circle class="n-el" cx="190" cy="110" r="15" style="stroke-width:3"/><circle class="n-el" cx="250" cy="105" r="15"/>
+<circle class="n-a" cx="110" cy="125" r="15"/><circle class="n-b" cx="230" cy="150" r="15"/><circle class="n-b" cx="300" cy="140" r="13"/><circle class="n-a" cx="60" cy="150" r="13"/>
+</svg>
+<div class="overview">
+<b>Results overview <span class="mark" style="width:18px;height:18px;font-size:0.7rem">3</span></b>
+<div><span class="chip" style="background:var(--sunken);border-color:var(--line-strong)">Ruimte</span> <span class="chip" style="background:var(--spark-soft);border-color:var(--spark)">Element</span> <span class="chip" style="background:var(--accent-soft);border-color:var(--accent)">Klasse</span></div>
+<b>Element <span class="mark" style="width:18px;height:18px;font-size:0.7rem">4</span></b>
+<span>id: E03</span><span>naam: Radiator kantoortuin 1e</span><span>type: radiator</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd; de echte tool ziet er anders uit. De kleuren zijn die van deze handleiding.</figcaption>
+<ul class="legend">
+<li><span class="mark">1</span><span>De editor met de afspeelknop. Elke uitgevoerde query krijgt een eigen resultaatkader eronder.</span></li>
+<li><span class="mark">2</span><span>De weergaven van het resultaat: <b>Graph</b>, <b>Table</b> en <b>RAW</b>.</span></li>
+<li><span class="mark">3</span><span>Het overzicht met de labels en relationship types in het resultaat. Hier pas je kleur en bijschrift aan.</span></li>
+<li><span class="mark">4</span><span>De properties van de node die je aanklikte.</span></li>
+</ul>
+</figure>
+<h3>Een query draaien</h3>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-alles">Kopieer</button></div>
+<pre id="q-alles">MATCH (n)-[r]-&gt;(m)
+RETURN n, r, m</pre>
+</div>
+<ol class="do">
+<li>Plak de query in de editor bovenaan.</li>
+<li>Klik op de afspeelknop. Onder de editor verschijnt een resultaatkader met de query en de uitkomst.</li>
+<li>Je kunt de query in het kader aanpassen en opnieuw uitvoeren. Eerdere queries vind je terug in <b>History</b> in de zijbalk; vaste queries bewaar je met <b>Saved Cypher</b>.</li>
+</ol>
+<h3>Het resultaat lezen</h3>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Weergave</th><th>Wat je ziet</th><th>Handig voor</th></tr></thead>
+<tbody>
+<tr><td><b>Graph</b></td><td>Nodes als bolletjes, relationships als pijlen</td><td>Zien hoe iets samenhangt, met collega's bespreken</td></tr>
+<tr><td><b>Table</b></td><td>Elke rij van het resultaat, met de properties als tekst</td><td>Waarden aflezen, tellingen, lijsten</td></tr>
+<tr><td><b>RAW</b></td><td>Het verzoek, de serverversie en het antwoord als ruwe tekst</td><td>Uitzoeken wat er precies terugkwam</td></tr>
+</tbody>
+</table>
+</div>
+<p>De graphweergave verschijnt alleen als je nodes of relationships teruggeeft (zoals <code>RETURN n, r, m</code>). Vraag je alleen properties op (<code>RETURN r.naam</code>), dan krijg je een tabel.</p>
+<h3>Nodes aanklikken en uitklappen</h3>
+<ul class="plain">
+<li><b>Eén keer klikken</b> op een node toont zijn label en properties in het overzicht naast de graph.</li>
+<li><b>Dubbelklikken</b> klapt de node uit: Neo4j haalt de nodes erbij die er direct aan vastzitten. Nog eens dubbelklikken maakt dat ongedaan.</li>
+<li><b>Rechtsklikken</b> geeft een menu met onder meer uitklappen, inklappen en de node uit beeld halen.</li>
+</ul>
+<h3>Kleuren en bijschriften per label</h3>
+<ol class="do">
+<li>Klik in het overzicht op een label, bijvoorbeeld <code>Element</code>.</li>
+<li>Kies een kleur, een grootte en het bijschrift (<b>Caption</b>): de property die op het bolletje staat. Kies voor <code>Element</code> de property <code>naam</code> en voor <code>Klasse</code> de property <code>code</code>.</li>
+<li>Voor relationship types werkt het net zo, met kleur, lijndikte en bijschrift.</li>
+</ol>
+<p class="muted">Neo4j kiest zelf een bijschrift als je niets instelt. Heeft een node meer labels, dan bepaalt het eerste label in de lijst de opmaak. Bron: <a href="https://neo4j.com/docs/aura/query/operations/">Query operations</a> (Engels; de tool in Desktop is dezelfde als in Aura, op een paar onderdelen na).</p>
+<h3>Het schema bekijken</h3>
+<p>Wil je zien welke soorten nodes en relationships er zijn, zonder alle gegevens: vraag het schema op.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-schema">Kopieer</button></div>
+<pre id="q-schema">CALL db.schema.visualization()</pre>
+</div>
+<p>Je krijgt één bolletje per label en één pijl per soort verband: <code>Gebouw</code>, <code>Verdieping</code>, <code>Ruimte</code>, <code>Element</code>, <code>Klasse</code> en <code>Stelsel</code>, met de pijlen daartussen. Dat is je datamodel, afgeleid uit wat er werkelijk in de database staat. In de zijbalk toont <b>Database information</b> daarnaast het aantal nodes en relationships en alle labels, relationship types en property keys.</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> De eerste query toont 40 rijen in de tabel en een graph met 27 nodes. Het schema toont zes labels.</p></div>
+<p class="muted">Bron: <a href="https://neo4j.com/docs/desktop/current/query/">Query in Neo4j Desktop</a> (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-cypher">
+<div class="num" aria-hidden="true">4</div>
+<div class="body">
+<h2 id="h-cypher">Cypher in tien stappen</h2>
+<p>Cypher beschrijft wat je zoekt als een tekening van haakjes en pijlen. Elke stap hieronder heeft één uitleg, één query en wat je terugkrijgt met de oefendata. Voer ze in volgorde uit: stap 3 tot en met 6 maken en verwijderen een extra element, zodat je aan het eind weer bij de oorspronkelijke 27 nodes uitkomt.</p>
+<p class="muted">De queries zijn geschreven voor Neo4j 5 en nieuwer, en getoetst op een lege oefendatabase met de oefendata. Hoofdletters zijn voor Cypher-woorden niet nodig, maar maken een query leesbaar. Voor labels, relationship types en properties maken hoofdletters wel verschil: <code>Ruimte</code> is iets anders dan <code>ruimte</code>.</p>
+
+<div class="cstep">
+<h3><span>1</span> Het patroon: MATCH en RETURN</h3>
+<p>Met <code>MATCH</code> beschrijf je wat je zoekt, met <code>RETURN</code> wat je terug wilt zien.</p>
+<figure>
+<div class="pattern" aria-label="Het patroon (e:Element)-[:STAAT_IN]->(r:Ruimte)"><span class="pn">(e:Element)</span><span class="pr">-[:STAAT_IN]-&gt;</span><span class="pm">(r:Ruimte)</span></div>
+<div class="canvas">
+<svg class="gsvg" viewBox="0 0 440 130" role="img" aria-label="Tekening van het patroon: een node met label Element, een pijl STAAT_IN, een node met label Ruimte">
+<defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+<line class="e" x1="116" y1="65" x2="322" y2="65" marker-end="url(#ah2)"/>
+<text class="r" x="220" y="56" text-anchor="middle">[:STAAT_IN]</text>
+<text class="r" x="220" y="86" text-anchor="middle" style="font-family:var(--sans)">richting: van element naar ruimte</text>
+<circle class="n-el" cx="70" cy="65" r="44"/><text class="lb" x="70" y="60">(e:Element)</text><text class="t" x="70" y="79">e</text>
+<circle class="n-loc" cx="370" cy="65" r="44"/><text class="lb" x="370" y="60">(r:Ruimte)</text><text class="t" x="370" y="79">r</text>
+</svg>
+</div>
+<figcaption>Ronde haakjes zijn een node, vierkante haken een relationship, het pijltje de richting. De letters <code>e</code> en <code>r</code> zijn namen die je zelf kiest, zodat je er in <code>RETURN</code> naar kunt verwijzen. Achter de dubbele punt staat het label of het relationship type.</figcaption>
+</figure>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-1">Kopieer</button></div>
+<pre id="q-1">MATCH (e:Element)-[:STAAT_IN]-&gt;(r:Ruimte)
+RETURN e.naam, r.naam</pre>
+</div>
+<p class="got"><b>Je krijgt</b> een tabel van 8 rijen: elk element met de naam van zijn ruimte, bijvoorbeeld <i>Radiator kantoortuin 1e</i> en <i>Kantoortuin</i>. Schrijf <code>RETURN e, r</code> in plaats van de properties, dan zie je hetzelfde als graph.</p>
+</div>
+
+<div class="cstep">
+<h3><span>2</span> Filteren met WHERE</h3>
+<p><code>WHERE</code> houdt alleen de treffers over die aan een voorwaarde voldoen.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-2">Kopieer</button></div>
+<pre id="q-2">MATCH (r:Ruimte)
+WHERE r.oppervlakte &gt; 100
+RETURN r.code, r.naam, r.oppervlakte</pre>
+</div>
+<div class="tablewrap"><table><thead><tr><th>r.code</th><th>r.naam</th><th>r.oppervlakte</th></tr></thead><tbody><tr><td>R1.01</td><td>Kantoortuin</td><td class="n">145</td></tr><tr><td>R2.01</td><td>Kantoortuin</td><td class="n">150</td></tr></tbody></table></div>
+<p class="got">Andere voorwaarden: <code>=</code>, <code>&lt;&gt;</code> (niet gelijk), <code>STARTS WITH 'R1'</code>, <code>CONTAINS 'deur'</code>, <code>IN ['wand', 'deur']</code>, en combinaties met <code>AND</code> en <code>OR</code>.</p>
+</div>
+
+<div class="cstep">
+<h3><span>3</span> Iets nieuws maken met CREATE</h3>
+<p><code>CREATE</code> maakt altijd een nieuwe node of relationship, ook als er al precies zo een bestaat.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-3">Kopieer</button></div>
+<pre id="q-3">CREATE (b:Element {id: 'E09', naam: 'Brandblusser entree', type: 'brandblusser'})
+RETURN b</pre>
+</div>
+<p class="got"><b>Je krijgt</b> één nieuwe node. Voer je dezelfde query nog eens uit, dan weigert Neo4j: er bestaat al een <code>Element</code> met <code>id</code> E09. Dat komt door de unieke sleutel die <code>laden.cypher</code> heeft aangemaakt (hoofdstuk 5). Zonder die sleutel had je nu twee brandblussers met hetzelfde id gehad.</p>
+</div>
+
+<div class="cstep">
+<h3><span>4</span> Zoeken of maken met MERGE</h3>
+<p><code>MERGE</code> zoekt eerst het hele patroon en maakt het alleen als het er nog niet is. Daarom is <code>MERGE</code> meestal de betere keuze als je gegevens laadt of aanvult.</p>
+<figure>
+<div class="versus" role="img" aria-label="Links CREATE twee keer uitgevoerd: twee nodes met hetzelfde id. Rechts MERGE twee keer uitgevoerd: één node.">
+<div>
+<small>CREATE, twee keer uitgevoerd</small>
+<div class="runs"><span>1e keer: maak E09</span><span>2e keer: maak E09</span></div>
+<div class="out"><span class="pill bad">Brandblusser<i>E09</i></span><span class="pill bad">Brandblusser<i>E09</i></span></div>
+<p class="verdict">Twee nodes die hetzelfde ding zijn. Zonder unieke sleutel merk je dat pas later, bij tellingen die niet kloppen.</p>
+</div>
+<div>
+<small>MERGE, twee keer uitgevoerd</small>
+<div class="runs"><span>1e keer: zoek E09, niet gevonden, maak</span><span>2e keer: zoek E09, gevonden</span></div>
+<div class="out"><span class="pill">Brandblusser<i>E09</i></span></div>
+<p class="verdict">Eén node. Hoe vaak je de query ook uitvoert, het resultaat blijft gelijk.</p>
+</div>
+</div>
+<figcaption>Hetzelfde verzoek twee keer: CREATE maakt een dubbele, MERGE niet.</figcaption>
+</figure>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-4">Kopieer</button></div>
+<pre id="q-4">MERGE (b:Element {id: 'E09'})
+  ON CREATE SET b.naam = 'Brandblusser entree', b.type = 'brandblusser'
+RETURN b</pre>
+</div>
+<p class="got"><b>Je krijgt</b> de bestaande brandblusser uit stap 3, zonder foutmelding en zonder dubbele. <code>ON CREATE SET</code> vult properties alleen in als de node nieuw is. Een relationship leg je zo, ook als hij er al ligt:</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-4b">Kopieer</button></div>
+<pre id="q-4b">MATCH (b:Element {id: 'E09'}), (r:Ruimte {code: 'R0.01'})
+MERGE (b)-[:STAAT_IN]-&gt;(r)
+RETURN b.naam, r.naam</pre>
+</div>
+<div class="note"><p><b>Zet in MERGE alleen de sleutel.</b> <code>MERGE (b:Element {id: 'E09', naam: 'Blusser'})</code> zoekt een node met precies dat id én die naam. Heet hij anders, dan probeert MERGE een nieuwe te maken. Zoek op de sleutel en zet de rest met <code>SET</code> of <code>ON CREATE SET</code>.</p></div>
+</div>
+
+<div class="cstep">
+<h3><span>5</span> Properties wijzigen met SET</h3>
+<p><code>SET</code> geeft een property een waarde, of voegt hem toe als hij nog niet bestond.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-5">Kopieer</button></div>
+<pre id="q-5">MATCH (b:Element {id: 'E09'})
+SET b.installatiedatum = date('2024-05-01'), b.merk = 'onbekend'
+RETURN b</pre>
+</div>
+<p class="got"><b>Je krijgt</b> de brandblusser met twee nieuwe properties. <code>date('2024-05-01')</code> slaat een echte datum op, geen tekst; daarmee kun je later rekenen en sorteren. Een property weghalen doe je met <code>REMOVE b.merk</code>.</p>
+</div>
+
+<div class="cstep">
+<h3><span>6</span> Verwijderen met DELETE en DETACH DELETE</h3>
+<p><code>DELETE</code> verwijdert een node zonder relationships; <code>DETACH DELETE</code> haalt eerst de relationships weg en daarna de node.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-6">Kopieer</button></div>
+<pre id="q-6">MATCH (b:Element {id: 'E09'})
+DETACH DELETE b</pre>
+</div>
+<p class="got"><b>Je krijgt</b> een melding dat er één node en één relationship zijn verwijderd. Probeer je het met alleen <code>DELETE b</code>, dan weigert Neo4j, omdat de brandblusser nog aan de entree vastzit.</p>
+<div class="warn"><p><b>Er is geen prullenbak.</b> Wat je verwijdert is weg. Draai eerst de <code>MATCH</code> met <code>RETURN</code> in plaats van <code>DELETE</code> en kijk wat je raakt. <code>MATCH (n) DETACH DELETE n</code> zonder voorwaarde leegt de hele database. Maak vóór grote ingrepen een back-up (hoofdstuk 7).</p></div>
+</div>
+
+<div class="cstep">
+<h3><span>7</span> Sorteren en beperken met ORDER BY en LIMIT</h3>
+<p><code>ORDER BY</code> zet de rijen op volgorde, <code>DESC</code> van groot naar klein, <code>LIMIT</code> kapt af na een aantal rijen.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-7">Kopieer</button></div>
+<pre id="q-7">MATCH (r:Ruimte)
+RETURN r.naam, r.oppervlakte
+ORDER BY r.oppervlakte DESC
+LIMIT 3</pre>
+</div>
+<div class="tablewrap"><table><thead><tr><th>r.naam</th><th>r.oppervlakte</th></tr></thead><tbody><tr><td>Kantoortuin</td><td class="n">150</td></tr><tr><td>Kantoortuin</td><td class="n">145</td></tr><tr><td>Entree</td><td class="n">38</td></tr></tbody></table></div>
+<p class="got">Zet <code>LIMIT</code> ook achter verkennende queries op een grote database. Zie hoofdstuk 8.</p>
+</div>
+
+<div class="cstep">
+<h3><span>8</span> Tellen en groeperen</h3>
+<p><code>count()</code> telt, <code>collect()</code> maakt een lijst. Alles in <code>RETURN</code> dat geen telling is, wordt vanzelf de groepering.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-8">Kopieer</button></div>
+<pre id="q-8">MATCH (e:Element)-[:GECLASSIFICEERD_ALS]-&gt;(k:Klasse)-[:HOORT_BIJ]-&gt;(:Stelsel {code: 'OI'})
+RETURN k.omschrijving AS onderhoud, count(e) AS aantal, collect(e.naam) AS elementen
+ORDER BY aantal DESC</pre>
+</div>
+<div class="tablewrap"><table><thead><tr><th>onderhoud</th><th>aantal</th><th>elementen</th></tr></thead><tbody>
+<tr><td>Bouwkundig, jaarlijkse inspectie</td><td class="n">4</td><td>twee binnenwanden, twee deuren</td></tr>
+<tr><td>Installatie, halfjaarlijks onderhoud</td><td class="n">3</td><td>drie radiatoren</td></tr>
+<tr><td>Installatie, kwartaalonderhoud</td><td class="n">1</td><td>Luchtbehandelingskast</td></tr>
+</tbody></table></div>
+<p class="got">De kolom <i>elementen</i> is in werkelijkheid een lijst met namen; hier staat hij samengevat. Met <code>AS</code> geef je een kolom een leesbare naam.</p>
+</div>
+
+<div class="cstep">
+<h3><span>9</span> Paden van variabele lengte</h3>
+<p>Met <code>*1..2</code> in de relationship laat je Neo4j één tot twee stappen ver zoeken; met <code>|</code> sta je meer relationship types toe.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-9">Kopieer</button></div>
+<pre id="q-9">MATCH (:Gebouw {code: 'KG'})-[:HEEFT_VERDIEPING|HEEFT_RUIMTE*1..2]-&gt;(r:Ruimte)
+RETURN r.code, r.naam</pre>
+</div>
+<p class="got"><b>Je krijgt</b> alle zes ruimten van het gebouw, via de verdiepingen. Je hoeft niet te weten hoeveel lagen ertussen zitten. Wil je de weg zelf zien, geef het pad dan een naam:</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-9b">Kopieer</button></div>
+<pre id="q-9b">MATCH pad = (:Gebouw {code: 'KG'})-[*..3]-(:Element {id: 'E06'})
+RETURN pad</pre>
+</div>
+<p class="got"><b>Je krijgt</b> één pad van drie stappen in de graphweergave: Oefenkantoor, Begane grond, Technische ruimte, Luchtbehandelingskast. Zonder pijlpunt in het patroon (<code>-[*..3]-</code>) maakt de richting niet uit. Houd de bovengrens klein: zonder grens zoekt Neo4j door de hele graph.</p>
+</div>
+
+<div class="cstep">
+<h3><span>10</span> Parameters</h3>
+<p>Een parameter is een invulplek in een query, aangegeven met <code>$</code>, zodat je dezelfde query met een andere waarde kunt draaien zonder hem te herschrijven.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-10a">Kopieer</button></div>
+<pre id="q-10a">:param ruimte =&gt; 'R1.02'</pre>
+</div>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-10b">Kopieer</button></div>
+<pre id="q-10b">MATCH (e:Element)-[:STAAT_IN]-&gt;(:Ruimte {code: $ruimte})
+RETURN e.naam</pre>
+</div>
+<p class="got"><b>Je krijgt</b> <i>Deur vergaderruimte</i> en <i>Radiator vergaderruimte</i>. De eerste regel is een opdracht aan de querytool zelf, geen Cypher: hij zet de parameter. Zo werkt het in Neo4j Browser; in Query kun je de parameter ook instellen in de lade <b>Parameters</b> in de zijbalk. Parameters zijn ook de veilige manier om waarden vanuit een ander programma of een AI-assistent door te geven.</p>
+</div>
+
+<h3 id="laden">Het laadscript laden.cypher</h3>
+<p>Dit script bouwt de oefendata op zonder CSV-bestanden. Het eerste blok maakt de unieke sleutels, het tweede de gegevens. Het gebruikt <code>MERGE</code>, dus nog een keer uitvoeren maakt geen dubbelen. Voert de editor maar één statement tegelijk uit, voer dan eerst de zes regels met <code>CREATE CONSTRAINT</code> uit en daarna de rest.</p>
+<div class="faq">
+<details>
+<summary>Toon het script (81 regels)</summary>
+<div>
+<div class="code">
+<div class="label"><span>laden.cypher</span><button class="copy" type="button" data-target="q-laden">Kopieer</button></div>
+<pre id="q-laden"><span class="c">// Werken met Neo4j: oefendata zonder CSV</span>
+<span class="c">// ---------------------------------------</span>
+<span class="c">// Bouwt dezelfde graph op als de vier CSV-bestanden in deze map:</span>
+<span class="c">// 1 gebouw, 3 verdiepingen, 6 ruimten, 8 elementen, 2 stelsels, 7 klassen</span>
+<span class="c">// (27 nodes) en 40 relationships.</span>
+<span class="c">//</span>
+<span class="c">// Alle codes en namen zijn verzonnen oefendata. Het zijn geen echte</span>
+<span class="c">// classificatietabellen.</span>
+<span class="c">//</span>
+<span class="c">// Gebruik: plak het hele bestand in de querytool en voer het uit. Voert je</span>
+<span class="c">// editor maar één statement tegelijk uit, draai dan eerst blok 1 en daarna</span>
+<span class="c">// blok 2. Het script gebruikt MERGE: nog een keer draaien maakt geen dubbelen.</span>
+
+<span class="c">// Blok 1: unieke sleutels (constraints)</span>
+CREATE CONSTRAINT gebouw_code IF NOT EXISTS FOR (n:Gebouw) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT verdieping_code IF NOT EXISTS FOR (n:Verdieping) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT ruimte_code IF NOT EXISTS FOR (n:Ruimte) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT element_id IF NOT EXISTS FOR (n:Element) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT stelsel_code IF NOT EXISTS FOR (n:Stelsel) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT klasse_code IF NOT EXISTS FOR (n:Klasse) REQUIRE n.code IS UNIQUE;
+
+<span class="c">// Blok 2: de data</span>
+MERGE (g:Gebouw {code: 'KG'})
+  SET g.naam = 'Oefenkantoor'
+WITH g
+UNWIND [
+  {code: 'V00', naam: 'Begane grond',      niveau: 0},
+  {code: 'V01', naam: 'Eerste verdieping', niveau: 1},
+  {code: 'V02', naam: 'Tweede verdieping', niveau: 2}
+] AS v
+MERGE (vd:Verdieping {code: v.code})
+  SET vd.naam = v.naam, vd.niveau = v.niveau
+MERGE (g)-[:HEEFT_VERDIEPING]-&gt;(vd)
+WITH count(*) AS stap1
+UNWIND [
+  {verdieping: 'V00', code: 'R0.01', naam: 'Entree',            oppervlakte: 38},
+  {verdieping: 'V00', code: 'R0.02', naam: 'Technische ruimte', oppervlakte: 24},
+  {verdieping: 'V01', code: 'R1.01', naam: 'Kantoortuin',       oppervlakte: 145},
+  {verdieping: 'V01', code: 'R1.02', naam: 'Vergaderruimte',    oppervlakte: 32},
+  {verdieping: 'V02', code: 'R2.01', naam: 'Kantoortuin',       oppervlakte: 150},
+  {verdieping: 'V02', code: 'R2.02', naam: 'Stilteruimte',      oppervlakte: 12}
+] AS r
+MATCH (vd:Verdieping {code: r.verdieping})
+MERGE (ru:Ruimte {code: r.code})
+  SET ru.naam = r.naam, ru.oppervlakte = r.oppervlakte
+MERGE (vd)-[:HEEFT_RUIMTE]-&gt;(ru)
+WITH count(*) AS stap2
+UNWIND [
+  {stelsel: 'EC', stelselNaam: 'Elementcode (oefen)',        code: 'EC-WA', omschrijving: 'Wanden, binnen'},
+  {stelsel: 'EC', stelselNaam: 'Elementcode (oefen)',        code: 'EC-DE', omschrijving: 'Deuren, binnen'},
+  {stelsel: 'EC', stelselNaam: 'Elementcode (oefen)',        code: 'EC-VW', omschrijving: 'Verwarming: afgifte'},
+  {stelsel: 'EC', stelselNaam: 'Elementcode (oefen)',        code: 'EC-LB', omschrijving: 'Luchtbehandeling'},
+  {stelsel: 'OI', stelselNaam: 'Onderhoudsindeling (oefen)', code: 'OI-1',  omschrijving: 'Bouwkundig, jaarlijkse inspectie'},
+  {stelsel: 'OI', stelselNaam: 'Onderhoudsindeling (oefen)', code: 'OI-2',  omschrijving: 'Installatie, halfjaarlijks onderhoud'},
+  {stelsel: 'OI', stelselNaam: 'Onderhoudsindeling (oefen)', code: 'OI-3',  omschrijving: 'Installatie, kwartaalonderhoud'}
+] AS k
+MERGE (s:Stelsel {code: k.stelsel})
+  SET s.naam = k.stelselNaam
+MERGE (kl:Klasse {code: k.code})
+  SET kl.omschrijving = k.omschrijving
+MERGE (kl)-[:HOORT_BIJ]-&gt;(s)
+WITH count(*) AS stap3
+UNWIND [
+  {id: 'E01', naam: 'Binnenwand kantoortuin-vergaderruimte', type: 'wand',                  datum: null,         ruimte: 'R1.01', ec: 'EC-WA', oi: 'OI-1'},
+  {id: 'E02', naam: 'Deur vergaderruimte',                   type: 'deur',                  datum: null,         ruimte: 'R1.02', ec: 'EC-DE', oi: 'OI-1'},
+  {id: 'E03', naam: 'Radiator kantoortuin 1e',               type: 'radiator',              datum: '2019-03-14', ruimte: 'R1.01', ec: 'EC-VW', oi: 'OI-2'},
+  {id: 'E04', naam: 'Radiator vergaderruimte',               type: 'radiator',              datum: '2019-03-14', ruimte: 'R1.02', ec: 'EC-VW', oi: 'OI-2'},
+  {id: 'E05', naam: 'Radiator kantoortuin 2e',               type: 'radiator',              datum: '2021-09-01', ruimte: 'R2.01', ec: 'EC-VW', oi: 'OI-2'},
+  {id: 'E06', naam: 'Luchtbehandelingskast',                 type: 'luchtbehandelingskast', datum: '2019-02-20', ruimte: 'R0.02', ec: 'EC-LB', oi: 'OI-3'},
+  {id: 'E07', naam: 'Deur stilteruimte',                     type: 'deur',                  datum: null,         ruimte: 'R2.02', ec: 'EC-DE', oi: 'OI-1'},
+  {id: 'E08', naam: 'Binnenwand stilteruimte',               type: 'wand',                  datum: null,         ruimte: 'R2.02', ec: 'EC-WA', oi: 'OI-1'}
+] AS e
+MATCH (ru:Ruimte {code: e.ruimte})
+MATCH (ec:Klasse {code: e.ec})
+MATCH (oi:Klasse {code: e.oi})
+MERGE (el:Element {id: e.id})
+  SET el.naam = e.naam, el.type = e.type, el.installatiedatum = date(e.datum)
+MERGE (el)-[:STAAT_IN]-&gt;(ru)
+MERGE (el)-[:GECLASSIFICEERD_ALS]-&gt;(ec)
+MERGE (el)-[:GECLASSIFICEERD_ALS]-&gt;(oi)
+RETURN count(*) AS elementen;</pre>
+</div>
+</div>
+</details>
+</div>
+<p class="muted">Bronnen: <a href="https://neo4j.com/docs/cypher-manual/current/clauses/merge/">MERGE</a>, <a href="https://neo4j.com/docs/cypher-manual/current/clauses/delete/">DELETE</a>, <a href="https://neo4j.com/docs/cypher-manual/current/functions/aggregating/">aggregating functions</a>, <a href="https://neo4j.com/docs/cypher-manual/current/patterns/variable-length-patterns/">variable-length patterns</a> en <a href="https://neo4j.com/docs/cypher-manual/current/syntax/parameters/">parameters</a> in de Cypher-handleiding (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-ontwerp">
+<div class="num" aria-hidden="true">5</div>
+<div class="body">
+<h2 id="h-ontwerp">Een datastructuur ontwerpen</h2>
+<p>Een graph ontwerp je niet vanuit de tabellen die je al hebt, maar vanuit de vragen die je wilt kunnen stellen. Schrijf die vragen eerst in gewone taal op.</p>
+<h3>Van vragen naar nodes, relationships en properties</h3>
+<ol class="do">
+<li><b>Schrijf vijf tot tien vragen op.</b> Voor het oefenkantoor bijvoorbeeld: "Welke elementen hebben kwartaalonderhoud, en op welke verdieping staan ze?" en "Welke elementcode en welke onderhoudsklasse heeft deze radiator?"</li>
+<li><b>Onderstreep de zelfstandige naamwoorden.</b> Gebouw, verdieping, ruimte, element, klasse, stelsel. Dat zijn kandidaten voor een label.</li>
+<li><b>Omcirkel de werkwoorden en voorzetsels.</b> "heeft", "staat in", "valt onder", "hoort bij". Dat worden relationships: <code>HEEFT_VERDIEPING</code>, <code>STAAT_IN</code>, <code>GECLASSIFICEERD_ALS</code>, <code>HOORT_BIJ</code>.</li>
+<li><b>Wat overblijft zijn kenmerken.</b> Naam, oppervlakte, installatiedatum. Dat worden properties.</li>
+<li><b>Teken het</b> en loop elke vraag met je vinger langs de pijlen. Lukt dat niet, dan mist er een node of een relationship.</li>
+</ol>
+<p>Om te tekenen is <a href="https://arrows.app/">arrows.app</a> handig: een gratis tekentool van Neo4j in de browser. Je zet bolletjes en pijlen neer, geeft ze labels en properties, en kunt de tekening als plaatje of als Cypher bewaren.</p>
+<h3>Property of eigen node?</h3>
+<p>De meest gestelde ontwerpvraag. Een vuistregel:</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Maak er een property van als</th><th>Maak er een eigen node van als</th></tr></thead>
+<tbody>
+<tr><td>het alleen een kenmerk is van dit ene ding (<code>oppervlakte</code>, <code>installatiedatum</code>)</td><td>meerdere dingen ernaar verwijzen (vier radiatoren delen klasse EC-VW)</td></tr>
+<tr><td>je er alleen op filtert of sorteert</td><td>je erlangs wilt lopen naar andere gegevens</td></tr>
+<tr><td>het zelf geen kenmerken heeft</td><td>het zelf kenmerken heeft (een klasse heeft een omschrijving en hoort bij een stelsel)</td></tr>
+</tbody>
+</table>
+</div>
+<p>In het voorbeeld is <code>type</code> (wand, deur, radiator) een property van <code>Element</code>. Het had ook een extra label kunnen zijn, zoals <code>:Element:Radiator</code>. Beide werken. Een property is eenvoudiger zolang je er alleen op filtert.</p>
+<h3>Meerdere lenzen op hetzelfde element</h3>
+<p>In een spreadsheet moet je kiezen: welke indeling bepaalt de tabbladen, en welke wordt een extra kolom? Komt er een derde indeling bij, dan komt er weer een kolom, en een vierde. In een graph is elke indeling een eigen stelsel met eigen klassen, en het element wijst naar alle klassen die erop van toepassing zijn. Geen van beide is de hoofdindeling.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-lens1">Kopieer</button></div>
+<pre id="q-lens1">MATCH (e:Element {id: 'E03'})-[:GECLASSIFICEERD_ALS]-&gt;(k:Klasse)-[:HOORT_BIJ]-&gt;(s:Stelsel)
+RETURN s.naam AS stelsel, k.code AS code, k.omschrijving AS omschrijving</pre>
+</div>
+<div class="tablewrap"><table><thead><tr><th>stelsel</th><th>code</th><th>omschrijving</th></tr></thead><tbody><tr><td>Elementcode (oefen)</td><td>EC-VW</td><td>Verwarming: afgifte</td></tr><tr><td>Onderhoudsindeling (oefen)</td><td>OI-2</td><td>Installatie, halfjaarlijks onderhoud</td></tr></tbody></table></div>
+<p>En je kunt van de ene lens naar de andere kijken. Welke elementen met elementcode verwarming zijn er, waar staan ze, en welk onderhoud hebben ze?</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-lens2">Kopieer</button></div>
+<pre id="q-lens2">MATCH (:Klasse {code: 'EC-VW'})&lt;-[:GECLASSIFICEERD_ALS]-(e:Element)-[:GECLASSIFICEERD_ALS]-&gt;(k:Klasse)-[:HOORT_BIJ]-&gt;(:Stelsel {code: 'OI'})
+MATCH (e)-[:STAAT_IN]-&gt;(r:Ruimte)&lt;-[:HEEFT_RUIMTE]-(v:Verdieping)
+RETURN e.naam AS element, r.naam AS ruimte, v.naam AS verdieping, k.omschrijving AS onderhoud</pre>
+</div>
+<p class="got">Je krijgt de drie radiatoren, twee op de eerste en één op de tweede verdieping, alle drie met halfjaarlijks onderhoud. Een derde indeling toevoegen, bijvoorbeeld een indeling naar contract, is een nieuw stelsel met klassen en nieuwe pijlen. Aan de bestaande gegevens verandert niets.</p>
+<h3>Naamgeving</h3>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Wat</th><th>Schrijfwijze</th><th>Voorbeeld</th></tr></thead>
+<tbody>
+<tr><td>Label</td><td>PascalCase: elk woord met hoofdletter, aan elkaar</td><td><code>Ruimte</code>, <code>Verdieping</code>, <code>OnderhoudsContract</code></td></tr>
+<tr><td>Relationship type</td><td>HOOFDLETTERS met liggende streepjes</td><td><code>STAAT_IN</code>, <code>GECLASSIFICEERD_ALS</code></td></tr>
+<tr><td>Property</td><td>camelCase: eerste woord klein, daarna hoofdletter</td><td><code>naam</code>, <code>installatiedatum</code>, <code>ruimteCode</code></td></tr>
+</tbody>
+</table>
+</div>
+<p class="muted">Dit zijn de aanbevelingen uit de <a href="https://neo4j.com/docs/cypher-manual/current/syntax/naming/">Cypher-handleiding</a>. Kies een label in het enkelvoud (<code>Ruimte</code>, niet <code>Ruimten</code>): het label zegt wat één node is. Lees een relationship als een zin: element STAAT_IN ruimte.</p>
+<h3>Een unieke sleutel met een constraint</h3>
+<p>Geef elk label een property die elke node uniek maakt, zoals een code of id. Leg dat vast met een <dfn>constraint</dfn> (een regel die de database bewaakt). Neo4j weigert dan een tweede node met dezelfde waarde, en zoeken op die property gaat snel.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-constraint">Kopieer</button></div>
+<pre id="q-constraint">CREATE CONSTRAINT ruimte_code IF NOT EXISTS
+FOR (n:Ruimte) REQUIRE n.code IS UNIQUE</pre>
+</div>
+<p>Maak de constraints vóór je data laadt. Bestaan er al dubbelen, dan weigert Neo4j de constraint. Bekijk wat er is met <code>SHOW CONSTRAINTS</code>. In het voorbeeld kregen de klassecodes een voorvoegsel (<code>EC-</code>, <code>OI-</code>), zodat codes uit twee stelsels nooit botsen. Kunnen twee stelsels dezelfde code hebben, neem dan de stelselcode op in de sleutel.</p>
+<h3>Indexes</h3>
+<p>Een <dfn>index</dfn> is een opzoeklijst die zoeken op een property versnelt. Een constraint maakt er zelf een. Zoek je vaak op een andere property, maak er dan een:</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-index">Kopieer</button></div>
+<pre id="q-index">CREATE INDEX element_type IF NOT EXISTS
+FOR (e:Element) ON (e.type)</pre>
+</div>
+<p class="muted">Bij een paar duizend nodes merk je het verschil nauwelijks. Bij honderdduizenden wel. <code>SHOW INDEXES</code> toont wat er is.</p>
+<h3>Veelgemaakte ontwerpfouten</h3>
+<ul class="plain">
+<li><b>Een lijst in één property.</b> <code>klassen: 'EC-VW;OI-2'</code> kun je niet volgen als verband. Maak er relationships naar klasse-nodes van.</li>
+<li><b>Een verwijzing als property laten staan.</b> <code>ruimteCode: 'R1.01'</code> op het element is een spreadsheetgewoonte. In de graph wordt het een <code>STAAT_IN</code>-pijl. De kolom uit de CSV gebruik je alleen bij het laden.</li>
+<li><b>Vage relationships.</b> <code>HEEFT</code> of <code>RELATED_TO</code> overal zegt niets. Een specifieke naam (<code>STAAT_IN</code>, <code>HOORT_BIJ</code>) maakt queries leesbaar en snel.</li>
+<li><b>Een node per waarde.</b> Een node voor elke datum of elk getal maakt de graph druk zonder iets toe te voegen. Datums en maten zijn properties.</li>
+<li><b>Geen sleutel.</b> Zonder unieke property en constraint krijg je vroeg of laat dubbele nodes (hoofdstuk 8).</li>
+<li><b>Alles in één label.</b> Eén label <code>Ding</code> met een property <code>soort</code> voor alles maakt elke query trager en onleesbaarder dan aparte labels.</li>
+</ul>
+<p class="muted">Bronnen: <a href="https://neo4j.com/docs/getting-started/data-modeling/">Data modeling</a>, <a href="https://neo4j.com/docs/cypher-manual/current/schema/constraints/">Constraints</a> en <a href="https://neo4j.com/docs/cypher-manual/current/indexes/">Indexes</a> (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-import">
+<div class="num" aria-hidden="true">6</div>
+<div class="body">
+<h2 id="h-import">Data importeren</h2>
+<p>De meeste gegevens die je wilt laden, staan in Excel. De weg naar de graph gaat via een CSV-bestand: platte tekst, één regel per rij, met de kolomnamen in de eerste regel.</p>
+<figure>
+<div class="flow" role="img" aria-label="Importpad: Excel-bestand, dan CSV-bestand, dan de import-map van de instance, dan met LOAD CSV de graph">
+<div class="node"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="22" height="22" rx="2"/><path d="M4 11h22M4 18h22M12 4v22"/></svg><b>Excel</b><span>Eén tabblad per soort ding, kolomnamen in de eerste rij.</span></div>
+<div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h13M11 5l5 5-5 5"/></svg></div>
+<div class="node"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h11l6 6v18H7z"/><path d="M18 3v6h6M11 15h9M11 20h9"/></svg><b>CSV</b><span>Elk tabblad apart opslaan als CSV UTF-8.</span></div>
+<div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h13M11 5l5 5-5 5"/></svg></div>
+<div class="node"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9l3 3h12v15H3z"/></svg><b>import-map</b><span>De map <code>import</code> van je instance.</span></div>
+<div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h13M11 5l5 5-5 5"/></svg></div>
+<div class="node"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="8" r="4"/><circle cx="22" cy="10" r="4"/><circle cx="14" cy="23" r="4"/><path d="M12 8.5l6 1M10 11.500l3 8M20 13.500l-4 6"/></svg><b>Graph</b><span>Met <code>LOAD CSV</code> en <code>MERGE</code>: eerst nodes, dan relationships.</span></div>
+</div>
+<figcaption>Het importpad. Het alternatief zonder Cypher, de tool Import, staat verderop in dit hoofdstuk.</figcaption>
+</figure>
+<h3>Van Excel naar CSV</h3>
+<ol class="do">
+<li>Zet per soort ding één tabblad klaar: verdiepingen, ruimten, klassen, elementen. Eén rij per ding, kolomnamen zonder spaties in de eerste rij.</li>
+<li>Kies <b>Bestand</b> &gt; <b>Opslaan als</b> en als bestandstype <b>CSV UTF-8</b>. UTF-8 zorgt dat letters als é en ë goed overkomen.</li>
+<li>Excel slaat alleen het actieve tabblad op. Herhaal het per tabblad.</li>
+<li>Open het CSV-bestand één keer in Kladblok (Mac: TextEdit) en kijk welk scheidingsteken er staat: een komma of een puntkomma.</li>
+</ol>
+<div class="note"><p><b>Puntkomma in plaats van komma?</b> Met Nederlandse instellingen gebruikt Excel vaak een puntkomma. Dat is geen probleem: zet dan achter de <code>LOAD CSV</code>-regel <code>FIELDTERMINATOR ';'</code>, bijvoorbeeld <code>LOAD CSV WITH HEADERS FROM 'file:///ruimten.csv' AS rij FIELDTERMINATOR ';'</code>. De oefenbestanden gebruiken komma's.</p></div>
+<h3>Waar het bestand moet staan</h3>
+<p><code>LOAD CSV</code> leest bestanden uit de import-map van de instance. Een adres als <code>file:///ruimten.csv</code> betekent: het bestand <code>ruimten.csv</code> in die map.</p>
+<ol class="do">
+<li>Kies in Neo4j Desktop bij je instance het menu met drie puntjes, dan <b>Open</b> &gt; <b>Instance folder</b>.</li>
+<li>Open daarin de map <code>import</code>.</li>
+<li>Kopieer de vier CSV-bestanden uit <code>voorbeelddata</code> naar die map.</li>
+</ol>
+<h3>Laden met LOAD CSV en MERGE</h3>
+<p>Wil je de import zelf oefenen, leeg dan eerst de database als je <code>laden.cypher</code> al had gedraaid (hoofdstuk 7). De volgorde is altijd dezelfde: eerst de constraints, dan alle nodes, dan pas de relationships. Een relationship kan alleen tussen nodes die er al zijn. Voer de blokken één voor één uit.</p>
+<div class="code">
+<div class="label"><span>Stap A · constraints</span><button class="copy" type="button" data-target="q-impA">Kopieer</button></div>
+<pre id="q-impA">CREATE CONSTRAINT gebouw_code IF NOT EXISTS FOR (n:Gebouw) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT verdieping_code IF NOT EXISTS FOR (n:Verdieping) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT ruimte_code IF NOT EXISTS FOR (n:Ruimte) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT element_id IF NOT EXISTS FOR (n:Element) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT stelsel_code IF NOT EXISTS FOR (n:Stelsel) REQUIRE n.code IS UNIQUE;
+CREATE CONSTRAINT klasse_code IF NOT EXISTS FOR (n:Klasse) REQUIRE n.code IS UNIQUE;</pre>
+</div>
+<div class="code">
+<div class="label"><span>Stap B · nodes</span><button class="copy" type="button" data-target="q-impB">Kopieer</button></div>
+<pre id="q-impB">LOAD CSV WITH HEADERS FROM 'file:///verdiepingen.csv' AS rij
+MERGE (g:Gebouw {code: rij.gebouwCode})
+  SET g.naam = rij.gebouwNaam
+MERGE (v:Verdieping {code: rij.code})
+  SET v.naam = rij.naam, v.niveau = toInteger(rij.niveau);
+
+LOAD CSV WITH HEADERS FROM 'file:///ruimten.csv' AS rij
+MERGE (r:Ruimte {code: rij.code})
+  SET r.naam = rij.naam, r.oppervlakte = toInteger(rij.oppervlakte);
+
+LOAD CSV WITH HEADERS FROM 'file:///klassen.csv' AS rij
+MERGE (s:Stelsel {code: rij.stelselCode})
+  SET s.naam = rij.stelselNaam
+MERGE (k:Klasse {code: rij.code})
+  SET k.omschrijving = rij.omschrijving;
+
+LOAD CSV WITH HEADERS FROM 'file:///elementen.csv' AS rij
+MERGE (e:Element {id: rij.id})
+  SET e.naam = rij.naam, e.type = rij.type,
+      e.installatiedatum = date(rij.installatiedatum);</pre>
+</div>
+<div class="code">
+<div class="label"><span>Stap C · relationships</span><button class="copy" type="button" data-target="q-impC">Kopieer</button></div>
+<pre id="q-impC">LOAD CSV WITH HEADERS FROM 'file:///verdiepingen.csv' AS rij
+MATCH (g:Gebouw {code: rij.gebouwCode})
+MATCH (v:Verdieping {code: rij.code})
+MERGE (g)-[:HEEFT_VERDIEPING]-&gt;(v);
+
+LOAD CSV WITH HEADERS FROM 'file:///ruimten.csv' AS rij
+MATCH (v:Verdieping {code: rij.verdiepingCode})
+MATCH (r:Ruimte {code: rij.code})
+MERGE (v)-[:HEEFT_RUIMTE]-&gt;(r);
+
+LOAD CSV WITH HEADERS FROM 'file:///klassen.csv' AS rij
+MATCH (k:Klasse {code: rij.code})
+MATCH (s:Stelsel {code: rij.stelselCode})
+MERGE (k)-[:HOORT_BIJ]-&gt;(s);
+
+LOAD CSV WITH HEADERS FROM 'file:///elementen.csv' AS rij
+MATCH (e:Element {id: rij.id})
+MATCH (r:Ruimte {code: rij.ruimteCode})
+MATCH (ec:Klasse {code: rij.elementcode})
+MATCH (oi:Klasse {code: rij.onderhoudsklasse})
+MERGE (e)-[:STAAT_IN]-&gt;(r)
+MERGE (e)-[:GECLASSIFICEERD_ALS]-&gt;(ec)
+MERGE (e)-[:GECLASSIFICEERD_ALS]-&gt;(oi);</pre>
+</div>
+<p>Zo lees je een blok: <code>LOAD CSV WITH HEADERS</code> leest het bestand regel voor regel en noemt elke regel <code>rij</code>. Met <code>rij.code</code> pak je de waarde uit de kolom <code>code</code>; de kolomnaam moet precies zo geschreven zijn als in de eerste regel van het bestand. Omdat alles met <code>MERGE</code> gaat, mag je een blok gerust nog eens uitvoeren.</p>
+<h3>Typen omzetten</h3>
+<p><code>LOAD CSV</code> leest elke waarde als tekst. Een getal of datum zet je zelf om, anders vergelijkt Neo4j tekst met getallen en vind je niets.</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>In de CSV</th><th>Omzetten met</th><th>Resultaat</th></tr></thead>
+<tbody>
+<tr><td><code>145</code></td><td><code>toInteger(rij.oppervlakte)</code></td><td>het getal 145</td></tr>
+<tr><td><code>42.5</code></td><td><code>toFloat(rij.waarde)</code></td><td>het getal 42,5 (in de CSV met een punt)</td></tr>
+<tr><td><code>2019-03-14</code></td><td><code>date(rij.installatiedatum)</code></td><td>een datum; schrijf datums in de CSV als jaar-maand-dag</td></tr>
+<tr><td><code>ja</code> / <code>nee</code></td><td><code>rij.actief = 'ja'</code></td><td>waar of onwaar</td></tr>
+<tr><td>leeg veld</td><td>niets nodig</td><td>de property wordt niet opgeslagen</td></tr>
+</tbody>
+</table>
+</div>
+<p class="muted">Een leeg veld komt binnen als "geen waarde", en Neo4j slaat geen lege properties op. Daarom hebben de wanden en deuren in het voorbeeld geen <code>installatiedatum</code>.</p>
+<h3>Controleren met tellingen</h3>
+<p>Tel na elke import wat er staat en vergelijk het met het aantal regels in je bestanden.</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-tel1">Kopieer</button></div>
+<pre id="q-tel1">MATCH (n)
+RETURN labels(n)[0] AS label, count(*) AS aantal
+ORDER BY label</pre>
+</div>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-tel2">Kopieer</button></div>
+<pre id="q-tel2">MATCH ()-[r]-&gt;()
+RETURN type(r) AS type, count(*) AS aantal
+ORDER BY type</pre>
+</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Label</th><th>Aantal</th><th>Komt uit</th></tr></thead>
+<tbody>
+<tr><td>Element</td><td class="n">8</td><td>8 regels in <code>elementen.csv</code></td></tr>
+<tr><td>Gebouw</td><td class="n">1</td><td>3 regels in <code>verdiepingen.csv</code>, met dezelfde gebouwcode (MERGE)</td></tr>
+<tr><td>Klasse</td><td class="n">7</td><td>7 regels in <code>klassen.csv</code></td></tr>
+<tr><td>Ruimte</td><td class="n">6</td><td>6 regels in <code>ruimten.csv</code></td></tr>
+<tr><td>Stelsel</td><td class="n">2</td><td>2 verschillende stelselcodes in <code>klassen.csv</code></td></tr>
+<tr><td>Verdieping</td><td class="n">3</td><td>3 regels in <code>verdiepingen.csv</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Relationship type</th><th>Aantal</th><th>Komt uit</th></tr></thead>
+<tbody>
+<tr><td>GECLASSIFICEERD_ALS</td><td class="n">16</td><td>8 elementen, elk twee klassen</td></tr>
+<tr><td>HEEFT_RUIMTE</td><td class="n">6</td><td>één per ruimte</td></tr>
+<tr><td>HEEFT_VERDIEPING</td><td class="n">3</td><td>één per verdieping</td></tr>
+<tr><td>HOORT_BIJ</td><td class="n">7</td><td>één per klasse</td></tr>
+<tr><td>STAAT_IN</td><td class="n">8</td><td>één per element</td></tr>
+</tbody>
+</table>
+</div>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> In totaal 27 nodes en 40 relationships, gelijk aan wat <code>laden.cypher</code> oplevert. Minder relationships dan verwacht betekent meestal een code die in de ene CSV anders is geschreven dan in de andere.</p></div>
+<h3>Zonder Cypher: de tool Import</h3>
+<p>Neo4j Desktop heeft ook een importeerhulp met muis en formulier: <b>Import</b> in de zijbalk, onder Tools. Buiten Desktop heet hij Data Importer.</p>
+<ol class="do">
+<li>Open <b>Import</b> en kies je instance.</li>
+<li>Sleep de CSV-bestanden in het venster, of blader ernaar.</li>
+<li>Teken het model: een bolletje per label, een pijl per relationship.</li>
+<li>Koppel elk bolletje en elke pijl aan het bestand en de kolommen waar de gegevens in staan, en kies per label de sleutelkolom.</li>
+<li>Start de import en controleer daarna met de tellingen hierboven.</li>
+</ol>
+<p class="muted">Import is prettig voor een eerste keer. <code>LOAD CSV</code> is beter als je dezelfde import vaker wilt herhalen, omdat je de query kunt bewaren. Bronnen: <a href="https://neo4j.com/docs/desktop/current/import/">Import in Neo4j Desktop</a>, <a href="https://neo4j.com/docs/data-importer/current/">Data Importer</a> en <a href="https://neo4j.com/docs/cypher-manual/current/clauses/load-csv/">LOAD CSV</a> (Engels).</p>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-bewaren">
+<div class="num" aria-hidden="true">7</div>
+<div class="body">
+<h2 id="h-bewaren">Bewaren en opruimen</h2>
+<h3>Een back-up maken: een dump</h3>
+<p>Een <dfn>dump</dfn> is één bestand met de hele inhoud van een database. Daarmee zet je een database later terug, of geef je hem aan een collega.</p>
+<ol class="do">
+<li>Stop de instance. Exporteren kan alleen bij een gestopte instance.</li>
+<li>Kies in het menu met drie puntjes <b>Export databases</b>.</li>
+<li>Vink de database <code>neo4j</code> aan. De database <code>system</code> kan niet mee.</li>
+<li>Klik op <b>Export .dump</b> en kies een map. Je krijgt een bevestiging met een snelkoppeling naar de map.</li>
+</ol>
+<h3>Een dump terugzetten</h3>
+<ol class="do">
+<li>Stop de instance en kies in het menu met drie puntjes <b>Load database from file</b>.</li>
+<li>Kies het <code>.dump</code>-bestand en klik op <b>Import</b>. De database krijgt de naam van het bestand. Die naam mag in de instance nog niet bestaan: terugzetten overschrijft nooit een bestaande database.</li>
+<li>De instance start daarna vanzelf. Kies in Query de nieuwe database.</li>
+</ol>
+<p class="muted">Je kunt ook een nieuwe instance maken vanuit een dump-bestand. Bron: <a href="https://neo4j.com/docs/desktop/current/operations/database-management/">Database management</a> (Engels).</p>
+<h3>Een database leegmaken</h3>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-leeg">Kopieer</button></div>
+<pre id="q-leeg">MATCH (n)
+DETACH DELETE n</pre>
+</div>
+<p>Dit verwijdert alle nodes en relationships. Constraints en indexes blijven staan. Voor de oefendata is dat prima. Wil je ook die weg, bekijk ze dan met <code>SHOW CONSTRAINTS</code> en <code>SHOW INDEXES</code> en verwijder ze bij naam:</p>
+<div class="code">
+<div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-drop">Kopieer</button></div>
+<pre id="q-drop">DROP CONSTRAINT ruimte_code</pre>
+</div>
+<p class="muted">Bij een database met honderdduizenden nodes is één grote verwijderopdracht te zwaar. Verwijder dan in porties: <code>MATCH (n) CALL (n) { DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS</code>. Meldt de querytool dat dit niet in een gewone transactie kan, zet er dan <code>:auto</code> voor. Bron: <a href="https://neo4j.com/docs/cypher-manual/current/subqueries/subqueries-in-transactions/">CALL subqueries in transactions</a> (Engels).</p>
+<h3>Opnieuw beginnen</h3>
+<ul class="plain">
+<li><b>Alleen de gegevens opnieuw:</b> maak de database leeg en draai <code>laden.cypher</code> of je import opnieuw.</li>
+<li><b>Een tweede database naast de eerste:</b> start de instance, maak met de knop op de kaart een nieuwe database aan en geef hem een naam. Je kiest hem daarna in Query.</li>
+<li><b>Helemaal schoon:</b> kies in het menu met drie puntjes <b>Delete</b>. Dat verwijdert de instance met alle databases erin. Maak eerst een dump als je iets wilt bewaren.</li>
+</ul>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-fouten">
+<div class="num" aria-hidden="true">8</div>
+<div class="body">
+<h2 id="h-fouten">Veelgemaakte fouten en wat je dan ziet</h2>
+<p class="muted">Eerste hulp bij een foutmelding: lees de eerste regel van de melding. Die zegt meestal precies wat er mis is, met de plek in de query.</p>
+<div class="faq">
+<details><summary>Dubbele nodes door CREATE</summary><div>
+<p><b>Wat je ziet:</b> tellingen die te hoog zijn, of in de graph twee bolletjes met dezelfde naam. Vaak na een import die twee keer is uitgevoerd met <code>CREATE</code>.</p>
+<p><b>Wat je doet:</b> gebruik <code>MERGE</code> op de sleutel en leg een constraint aan (hoofdstuk 5). Dubbelen vind je zo:</p>
+<div class="code"><div class="label"><span>Cypher</span><button class="copy" type="button" data-target="q-dub">Kopieer</button></div><pre id="q-dub">MATCH (e:Element)
+WITH e.id AS id, count(*) AS aantal
+WHERE aantal &gt; 1
+RETURN id, aantal</pre></div>
+<p>Bij een kleine oefendatabase is leegmaken en opnieuw laden het snelst.</p>
+</div></details>
+<details><summary>Een cartesisch product: veel te veel rijen</summary><div>
+<p><b>Wat je ziet:</b> een resultaat met veel meer rijen dan je verwacht. <code>MATCH (e:Element), (r:Ruimte) RETURN count(*)</code> geeft 48: elke combinatie van 8 elementen en 6 ruimten, of ze nu iets met elkaar te maken hebben of niet. De querytool waarschuwt er vaak voor.</p>
+<p><b>Wat je doet:</b> verbind de twee delen met een relationship: <code>MATCH (e:Element)-[:STAAT_IN]-&gt;(r:Ruimte)</code>. Twee losse patronen met een komma zijn alleen bedoeld als je echt alle combinaties wilt, of als je beide op een sleutel vastzet (zoals in stap 4 van hoofdstuk 4).</p>
+</div></details>
+<details><summary>De richting vergeten of omgedraaid</summary><div>
+<p><b>Wat je ziet:</b> geen enkele rij, zonder foutmelding. <code>MATCH (e:Element)&lt;-[:STAAT_IN]-(r:Ruimte)</code> zoekt pijlen van ruimte naar element, en die bestaan niet.</p>
+<p><b>Wat je doet:</b> kijk in het schema (<code>CALL db.schema.visualization()</code>) welke kant de pijl op wijst. Twijfel je, laat de pijlpunt dan weg: <code>-[:STAAT_IN]-</code> vindt het verband in beide richtingen. Bij het aanmaken met <code>CREATE</code> of <code>MERGE</code> is een richting wel verplicht.</p>
+</div></details>
+<details><summary>Alles ophalen zonder LIMIT</summary><div>
+<p><b>Wat je ziet:</b> een querytool die lang laadt of vastloopt, of een graph die één grijze kluwen is. <code>MATCH (n) RETURN n</code> op een database met honderdduizenden nodes vraagt het onmogelijke van je scherm.</p>
+<p><b>Wat je doet:</b> begin verkennen altijd met <code>LIMIT 25</code>, tel eerst (<code>RETURN count(*)</code>) en vraag daarna gericht op. De instelling voor het maximale aantal nodes in de graphweergave beschermt je deels, maar de query draait wel.</p>
+</div></details>
+<details><summary>Getallen die als tekst zijn geladen</summary><div>
+<p><b>Wat je ziet:</b> <code>WHERE r.oppervlakte &gt; 100</code> geeft niets, terwijl er grote ruimten zijn. De oppervlakte is als tekst <code>'145'</code> geladen, en tekst is niet te vergelijken met een getal.</p>
+<p><b>Wat je doet:</b> zet het om bij het laden met <code>toInteger()</code> of <code>toFloat()</code>, of herstel het achteraf: <code>MATCH (r:Ruimte) SET r.oppervlakte = toInteger(r.oppervlakte)</code>.</p>
+</div></details>
+<details><summary>LOAD CSV vindt het bestand niet</summary><div>
+<p><b>Wat je ziet:</b> een melding als <i>Couldn't load the external resource at: file:///ruimten.csv</i>.</p>
+<p><b>Wat je doet:</b> controleer of het bestand in de map <code>import</code> van de <b>draaiende</b> instance staat (menu met drie puntjes, <b>Open</b> &gt; <b>Instance folder</b>), en of de naam precies klopt, ook hoofdletters en de extensie. Windows verbergt extensies soms: <code>ruimten.csv.txt</code> ziet eruit als <code>ruimten.csv</code>.</p>
+</div></details>
+<details><summary>DELETE wordt geweigerd</summary><div>
+<p><b>Wat je ziet:</b> een melding dat de node niet verwijderd kan worden omdat hij nog relationships heeft.</p>
+<p><b>Wat je doet:</b> gebruik <code>DETACH DELETE</code> als je de verbanden ook kwijt wilt. Bekijk eerst met <code>RETURN</code> wat eraan vastzit.</p>
+</div></details>
+<details><summary>De database is niet gestart</summary><div>
+<p><b>Wat je ziet:</b> de querytool maakt geen verbinding, of meldt dat de database niet beschikbaar is.</p>
+<p><b>Wat je doet:</b> start de instance in Neo4j Desktop met de startknop op de kaart en verbind daarna opnieuw via <b>Connect</b> &gt; <b>Query</b>. Er kan maar één instance tegelijk draaien; als je er net een andere hebt gestart, is de vorige gestopt.</p>
+</div></details>
+</div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-verder">
+<div class="num" aria-hidden="true">9</div>
+<div class="body">
+<h2 id="h-verder">Verder leren</h2>
+<ul class="links">
+<li><a href="https://graphacademy.neo4j.com/">GraphAcademy</a><span>Gratis online cursussen van Neo4j, in je eigen tempo (Engels). Begin met <a href="https://graphacademy.neo4j.com/courses/neo4j-fundamentals/">Neo4j Fundamentals</a>, daarna <a href="https://graphacademy.neo4j.com/courses/cypher-fundamentals/">Cypher Fundamentals</a> en <a href="https://graphacademy.neo4j.com/courses/modeling-fundamentals/">Graph Data Modeling Fundamentals</a>.</span></li>
+<li><a href="https://neo4j.com/docs/cypher-manual/current/">Cypher-handleiding</a><span>De volledige naslag van de querytaal (Engels). Zoek op de naam van een clause, zoals MERGE of LOAD CSV.</span></li>
+<li><a href="https://neo4j.com/docs/cypher-cheat-sheet/current/">Cypher Cheat Sheet</a><span>Alle Cypher-onderdelen op één pagina, met korte voorbeelden (Engels). Goed om naast je werk open te hebben.</span></li>
+<li><a href="https://neo4j.com/docs/desktop/current/">Documentatie van Neo4j Desktop</a><span>Installatie, instances, back-ups en de tools (Engels).</span></li>
+<li><a href="https://arrows.app/">arrows.app</a><span>Tekentool voor graphmodellen, in de browser.</span></li>
+</ul>
+<div class="note"><p><b>Volgende stap: Claude koppelen aan Neo4j.</b> Als je met deze basis vertrouwd bent, kun je een AI-assistent vragen laten stellen aan je eigen graph. Hoe je dat inricht, staat in de aparte handleiding "Claude koppelen aan Neo4j".</p></div>
+</div>
+</section>
+
+<section class="origin" aria-labelledby="h-herkomst">
+<p class="kicker">Waar deze handleiding vandaan komt</p>
+<h2 id="h-herkomst">Uit de eigen praktijk</h2>
+<p>bimforce bouwt Leja: een kennisgeheugen op een knowledge graph in Neo4j. Beslissingen, lessen en verbanden uit het werk blijven daarin staan, zodat elk model en elke collega verder werkt waar de vorige ophield. Deze handleiding is geschreven vanuit wat we zelf tegenkwamen bij het opzetten en vullen van die graph: dezelfde vragen, dezelfde fouten, dezelfde oplossingen.</p>
+<p>Het oefenkantoor in deze handleiding is klein, maar het patroon is hetzelfde als in de praktijk: één element, meerdere indelingen, en de vrijheid om er een indeling bij te zetten zonder de rest om te bouwen.</p>
+<p class="say">Modellen wisselen. Het geheugen blijft.</p>
+<p>Hoe dat eruitziet, staat op <a href="https://leja.bimforce.com/">leja.bimforce.com</a>.</p>
+</section>
+
+</main>
+
+<footer class="wrap">
+<p>Leja van bimforce · <a href="https://bimforce.com/">bimforce.com</a> · Neo4j, Neo4j Desktop en Cypher zijn producten van Neo4j, Inc. Deze handleiding is onafhankelijk geschreven. De oefendata is verzonnen.</p>
+</footer>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function () { btn.textContent = 'Gekopieerd'; setTimeout(function () { btn.textContent = 'Kopieer'; }, 1800); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Geselecteerd, druk Ctrl+C';
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+
+</body>
+</html>
