@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude koppelen aan Neo4j</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Opzet: één leeskolom van 44rem; elke stap is een blok met een groot cijfer in de marge,
+   een nagebouwd venster als illustratie en een regel waaraan je ziet dat het gelukt is. */
+:root {
+  --ground: #f3f5f7; --surface: #fdfdfd; --sunken: #e7ecef;
+  --ink: #1c2a41; --ink-2: #475365; --ink-3: #5f6977;
+  --line: #d9dee4; --line-strong: #788290;
+  --brand: #1c2a41; --on-brand: #e7ecef; --on-brand-2: #9fb0c3; --brand-line: #2e3f5a; --brand-teal: #35b8c4;
+  --accent: #0c6980; --accent-hover: #0a5568; --on-accent: #fdfdfd; --accent-soft: #dff1f4;
+  --spark: #e0a526; --on-spark: #1c2a41; --spark-soft: #fbefd2;
+  --ok: #27724d; --ok-soft: #e1f2e8;
+  --warn: #a3412b; --warn-soft: #f8e4de;
+  --shadow: 0 8px 28px rgb(12 22 38 / 0.12), 0 2px 6px rgb(12 22 38 / 0.06);
+  --sans: 'Source Sans 3', 'Myriad Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Source Code Pro', Consolas, Monaco, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+    --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+    --line: #2a3a52; --line-strong: #6a7c96;
+    --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-line: #1f2d43; --brand-teal: #35b8c4;
+    --accent: #35b8c4; --accent-hover: #5ccbd5; --on-accent: #0b1320; --accent-soft: #163a44;
+    --spark: #f0b840; --on-spark: #0b1320; --spark-soft: #3a2f14;
+    --ok: #5cc28b; --ok-soft: #173627;
+    --warn: #ef8f78; --warn-soft: #3d1f19;
+    --shadow: 0 10px 32px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(42 58 82 / 0.6);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+  --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+  --line: #2a3a52; --line-strong: #6a7c96;
+  --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-line: #1f2d43; --brand-teal: #35b8c4;
+  --accent: #35b8c4; --accent-hover: #5ccbd5; --on-accent: #0b1320; --accent-soft: #163a44;
+  --spark: #f0b840; --on-spark: #0b1320; --spark-soft: #3a2f14;
+  --ok: #5cc28b; --ok-soft: #173627;
+  --warn: #ef8f78; --warn-soft: #3d1f19;
+  --shadow: 0 10px 32px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(42 58 82 / 0.6);
+}
+
+* { box-sizing: border-box; }
+body { background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.55; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 3px solid var(--spark); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { line-height: 1.15; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+code, kbd { font-family: var(--mono); font-size: 0.9em; }
+code { background: var(--sunken); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+kbd { background: var(--surface); border: 1px solid var(--line-strong); border-bottom-width: 2px; padding: 0 6px; border-radius: 4px; white-space: nowrap; }
+
+.band { background: var(--brand); color: var(--on-brand); }
+.wrap { max-width: 44rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band .wrap { padding-block: 40px 44px; display: flex; flex-direction: column; gap: 18px; }
+.band svg.logo { width: 132px; height: auto; }
+.kicker { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--brand-teal); }
+.band h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 700; }
+.band .lead { color: var(--on-brand-2); font-size: 1.15rem; max-width: 36rem; }
+
+main.wrap { padding-block: 36px 56px; display: flex; flex-direction: column; gap: 44px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+.muted { color: var(--ink-2); }
+ol.do, ul.plain { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: 8px; }
+ol.do li::marker { font-weight: 700; color: var(--accent); }
+
+/* schema: jouw computer met drie onderdelen */
+.pc { border: 2px dashed var(--line-strong); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.pc > small { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+.pc > small svg { width: 18px; height: 18px; }
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.flow .node { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.flow .node svg { width: 34px; height: 34px; color: var(--accent); }
+.flow .node b { font-size: 1.05rem; }
+.flow .node span { color: var(--ink-2); font-size: 0.95rem; }
+.flow .arrow { align-self: center; color: var(--line-strong); }
+.flow .arrow svg { width: 22px; height: 22px; display: block; }
+.cloud { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; background: var(--sunken); border-radius: 8px; padding: 12px 14px; font-size: 0.95rem; color: var(--ink-2); }
+.cloud svg { width: 30px; height: 30px; color: var(--ink-3); }
+@media (max-width: 620px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow .arrow svg { transform: rotate(90deg); margin: 0 auto; }
+}
+
+/* benodigdheden */
+.needs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.needs li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.needs svg { width: 22px; height: 22px; margin-top: 3px; color: var(--accent); }
+.needs b { display: block; }
+.needs span { color: var(--ink-2); }
+
+/* stappen */
+.step { display: grid; grid-template-columns: 56px 1fr; gap: 0 12px; }
+.step > .num { font-size: 2.6rem; font-weight: 700; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.step > .body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+@media (max-width: 620px) { .step { grid-template-columns: 1fr; gap: 6px; } }
+
+.done { display: grid; grid-template-columns: 22px 1fr; gap: 10px; background: var(--ok-soft); border-radius: 8px; padding: 12px 14px; }
+.done svg { width: 20px; height: 20px; margin-top: 3px; color: var(--ok); }
+.note { border-left: 3px solid var(--spark); background: var(--spark-soft); border-radius: 0 8px 8px 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.mac { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.mac > b:first-child { font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+.mac > b:first-child svg { width: 16px; height: 16px; }
+.unsure { font-size: 0.9rem; color: var(--ink-3); border-top: 1px dashed var(--line); padding-top: 8px; }
+
+/* nagebouwde vensters */
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figcaption { color: var(--ink-3); font-size: 0.9rem; }
+.win { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+.win-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--sunken); border-bottom: 1px solid var(--line); font-size: 0.8125rem; color: var(--ink-2); }
+.win-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); opacity: 0.55; }
+.win-bar span { margin-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.win-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.win-side { display: grid; grid-template-columns: 9rem 1fr; min-height: 0; }
+.win-side nav { background: var(--sunken); border-right: 1px solid var(--line); padding: 12px 8px; display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; color: var(--ink-2); }
+.win-side nav span { padding: 4px 8px; border-radius: 6px; }
+.win-side nav .on { background: var(--surface); color: var(--ink); font-weight: 600; }
+@media (max-width: 520px) { .win-side { grid-template-columns: 1fr; } .win-side nav { flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line); } }
+.mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--spark); color: var(--on-spark); font-weight: 700; font-size: 0.8125rem; flex: none; font-variant-numeric: tabular-nums; }
+.ring { outline: 2px solid var(--spark); outline-offset: 3px; }
+.fakebtn { display: inline-block; background: var(--accent); color: var(--on-accent); font-weight: 600; padding: 8px 16px; border-radius: 4px; }
+.fakebtn.ghost { background: transparent; color: var(--ink-2); border: 1px solid var(--line-strong); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { border: 1px solid var(--line-strong); border-radius: 6px; padding: 8px 12px; color: var(--ink-2); font-size: 0.95rem; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.field.big { min-height: 64px; align-items: flex-start; }
+.field label { color: var(--ink-3); font-size: 0.8125rem; min-width: 6.5rem; }
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.95rem; }
+.legend li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; }
+.menu { display: inline-flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 4px; min-width: 0; }
+.menu span { padding: 6px 12px; border-radius: 6px; font-size: 0.95rem; display: flex; gap: 8px; align-items: center; }
+.menu .on { background: var(--sunken); font-weight: 600; }
+.card { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; background: var(--surface); min-width: 0; }
+.card .meta { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-3); overflow-wrap: anywhere; }
+.pill { font-size: 0.8125rem; font-weight: 600; border-radius: 999px; padding: 1px 10px; background: var(--ok-soft); color: var(--ok); }
+.pill.off { background: var(--sunken); color: var(--ink-3); }
+.play { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.play svg { width: 12px; height: 12px; color: var(--on-accent); }
+.toolrow { display: flex; justify-content: space-between; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); padding: 6px 0; font-family: var(--mono); font-size: 0.875rem; }
+.toolrow:last-child { border-bottom: 0; }
+
+/* code en te kopiëren blokken */
+.prompt { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.prompt .label { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.prompt p { font-size: 1rem; }
+.prompt em { font-style: normal; background: var(--spark-soft); padding: 0 4px; border-radius: 3px; }
+.prompt pre { margin: 0; font-family: var(--mono); font-size: 0.85rem; line-height: 1.6; white-space: pre; overflow-x: auto; background: var(--sunken); border-radius: 6px; padding: 10px 12px; max-width: 100%; }
+.prompt pre mark { background: var(--spark-soft); color: var(--ink); padding: 0 2px; border-radius: 3px; }
+button.copy { font: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 4px; padding: 3px 10px; cursor: pointer; flex: none; }
+button.copy:hover { background: var(--accent-soft); }
+
+/* veilig werken */
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rules li { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rules li b { font-size: 1.02rem; }
+.rules li span { color: var(--ink-2); font-size: 0.95rem; }
+@media (max-width: 620px) { .rules { grid-template-columns: 1fr; } }
+
+/* problemen */
+.faq { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq details > div { padding-top: 8px; color: var(--ink-2); display: flex; flex-direction: column; gap: 8px; }
+
+/* herkomst */
+.origin { background: var(--brand); color: var(--on-brand); border-radius: 8px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
+.origin h2 { font-size: 1.5rem; }
+.origin p { color: var(--on-brand-2); }
+.origin p.say { color: var(--on-brand); font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
+.origin a { color: var(--brand-teal); font-weight: 600; }
+.next { border-top: 2px solid var(--line-strong); padding-top: 24px; }
+.next .kicker { color: var(--accent); }
+footer.wrap { padding-block: 0 40px; color: var(--ink-3); font-size: 0.9rem; }
+@media (prefers-reduced-motion: no-preference) { button.copy { transition: background 120ms; } }
+</style>
+</head>
+<body>
+
+
+<header class="band">
+<div class="wrap">
+<svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.64 64" role="img" aria-label="Leja van bimforce"><title>Leja van bimforce</title><g transform="translate(-10 0)"><path d="M36 28L17 32M36 28L32 49M36 28L47 49" fill="none" stroke="#35b8c4" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.7"/><path d="M17 15V49H47" fill="none" stroke="#35b8c4" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="15" r="4.6" fill="#35b8c4"/><circle cx="17" cy="32" r="4.6" fill="#35b8c4"/><circle cx="17" cy="49" r="4.6" fill="#35b8c4"/><circle cx="32" cy="49" r="4.6" fill="#35b8c4"/><circle cx="47" cy="49" r="4.6" fill="#35b8c4"/><circle cx="36" cy="28" r="6.8" fill="#e0a526"/></g><path d="M62.93 37H78.32V32.29H68.51V12.22H62.93ZM90.25 21.99C92.49 21.99 93.36 23.43 93.36 25.41H86.68C87.17 22.83 88.77 21.990 90.25 21.99ZM90.78 37.46C93.02 37.46 95.57 36.7 97.47 35.37L95.64 31.95C94.31 32.74 92.95 33.16 91.54 33.16C89.41 33.16 87.28 32.21 86.68 29.29H97.92C98.04 28.72 98.15 27.73 98.15 26.74C98.15 21.61 95.53 17.7 90.13 17.7C85.61 17.7 81.24 21.46 81.24 27.58C81.24 33.85 85.38 37.46 90.78 37.46ZM101.12 44.45C106.25 44.45 107.84 40.99 107.84 36.89V18.15H102.26V37.04C102.26 39.13 101.76 40.08 100.28 40.08C99.75 40.08 99.29 39.96 98.8 39.81L97.81 43.92C98.57 44.22 99.56 44.45 101.12 44.45ZM105.07 15.38C106.93 15.38 108.22 14.24 108.22 12.45C108.22 10.7 106.93 9.53 105.07 9.53C103.21 9.53 101.91 10.7 101.91 12.45C101.91 14.24 103.21 15.38 105.07 15.38ZM117.72 37.46C119.85 37.46 121.56 36.47 123.19 35.06H123.35L123.73 37H128.29V26.25C128.29 20.43 125.63 17.7 120.8 17.7C117.84 17.7 115.14 18.68 112.74 20.17L114.72 23.81C116.58 22.75 118.14 22.18 119.74 22.18C121.75 22.18 122.59 23.21 122.7 24.84C115.25 25.6 112.1 27.73 112.1 31.76C112.1 34.95 114.26 37.46 117.72 37.46ZM119.58 33.09C118.29 33.09 117.46 32.52 117.46 31.34C117.46 29.89 118.75 28.87 122.7 28.34V31.53C121.75 32.52 120.84 33.09 119.58 33.09Z" fill="#e7ecef"/><path d="M63.71 55H65.1L67.6 47.95H66.42L65.09 51.95C64.89 52.65 64.65 53.36 64.45 54.03H64.39C64.18 53.36 63.94 52.65 63.74 51.95L62.41 47.95H61.17ZM70.87 55.17C71.76 55.17 72.51 54.72 73.21 54.16H73.25L73.35 55H74.34V50.68C74.34 48.92 73.6 47.78 71.89 47.78C70.76 47.78 69.77 48.26 69.12 48.69L69.58 49.5C70.13 49.16 70.87 48.78 71.69 48.78C72.83 48.78 73.14 49.63 73.15 50.52C70.13 50.85 68.8 51.59 68.8 53.17C68.8 54.45 69.7 55.17 70.87 55.17ZM71.21 54.19C70.53 54.19 69.98 53.88 69.98 53.1C69.98 52.19 70.77 51.65 73.15 51.38V53.27C72.47 53.88 71.89 54.19 71.21 54.19ZM76.85 55H78.04V49.9C78.75 49.19 79.24 48.81 79.97 48.81C80.89 48.81 81.3 49.37 81.3 50.69V55H82.49V50.53C82.49 48.74 81.82 47.78 80.34 47.78C79.37 47.78 78.65 48.3 77.98 48.97H77.94L77.83 47.95H76.85ZM91.38 55.17C92.99 55.17 94.42 53.77 94.42 51.36C94.42 49.19 93.45 47.78 91.62 47.78C90.84 47.78 90.06 48.2 89.42 48.77L89.45 47.49V44.68H88.26V55H89.22L89.32 54.27H89.36C89.99 54.84 90.72 55.17 91.38 55.17ZM91.17 54.17C90.71 54.17 90.07 53.97 89.45 53.43V49.74C90.12 49.11 90.74 48.78 91.33 48.78C92.67 48.78 93.19 49.82 93.19 51.38C93.19 53.12 92.33 54.17 91.17 54.17ZM96.57 55H97.76V47.95H96.57ZM97.16 46.5C97.63 46.5 97.96 46.2 97.96 45.72C97.96 45.26 97.63 44.94 97.16 44.94C96.7 44.94 96.37 45.26 96.37 45.72C96.37 46.2 96.7 46.5 97.16 46.5ZM100.43 55H101.61V49.9C102.27 49.17 102.86 48.81 103.38 48.81C104.28 48.81 104.7 49.37 104.7 50.69V55H105.89V49.9C106.54 49.17 107.11 48.81 107.66 48.81C108.55 48.81 108.97 49.37 108.97 50.69V55H110.15V50.53C110.15 48.74 109.46 47.78 108.01 47.78C107.15 47.78 106.43 48.33 105.69 49.13C105.4 48.29 104.82 47.78 103.75 47.78C102.9 47.78 102.17 48.3 101.56 48.97H101.51L101.41 47.95H100.43ZM112.94 55H114.13V48.92H115.62V47.95H114.13V46.84C114.13 45.94 114.45 45.47 115.11 45.47C115.38 45.47 115.62 45.52 115.91 45.6L116.17 44.73C115.87 44.6 115.43 44.5 115 44.5C113.59 44.5 112.94 45.4 112.94 46.84V47.95L111.89 48.03V48.92H112.94ZM120 55.17C121.73 55.17 123.26 53.83 123.26 51.49C123.26 49.13 121.73 47.78 120 47.78C118.27 47.78 116.74 49.13 116.74 51.49C116.74 53.83 118.27 55.17 120 55.17ZM120 54.19C118.8 54.19 117.97 53.1 117.97 51.49C117.97 49.87 118.8 48.77 120 48.77C121.22 48.77 122.03 49.87 122.03 51.49C122.03 53.1 121.22 54.19 120 54.19ZM125.41 55H126.6V50.48C127.08 49.29 127.79 48.85 128.38 48.85C128.67 48.85 128.82 48.88 129.03 48.94L129.29 47.92C129.06 47.82 128.85 47.78 128.54 47.78C127.73 47.78 127 48.34 126.54 49.23H126.5L126.39 47.95H125.41ZM133.53 55.17C134.43 55.17 135.21 54.81 135.79 54.25L135.27 53.52C134.85 53.91 134.27 54.19 133.630 54.19C132.33 54.19 131.44 53.1 131.44 51.49C131.44 49.87 132.38 48.77 133.64 48.77C134.25 48.77 134.7 49 135.07 49.33L135.66 48.61C135.18 48.13 134.53 47.78 133.6 47.78C131.79 47.78 130.21 49.13 130.21 51.49C130.21 53.83 131.64 55.17 133.53 55.17ZM140.3 48.75C141.39 48.75 142.01 49.49 142.01 50.85H138.34C138.53 49.34 139.43 48.75 140.3 48.75ZM140.49 55.17C141.45 55.17 142.2 54.87 142.82 54.45L142.39 53.67C141.9 54 141.3 54.2 140.63 54.2C139.44 54.2 138.43 53.38 138.31 51.8H143.03C143.07 51.56 143.08 51.33 143.08 51.09C143.08 49.08 142.1 47.78 140.29 47.78C138.66 47.78 137.1 49.19 137.1 51.48C137.1 53.81 138.59 55.17 140.49 55.17Z" fill="#abb8c6"/></svg>
+<p class="kicker">Handleiding</p>
+<h1>Claude koppelen aan Neo4j</h1>
+<p class="lead">Je zet een knowledge graph op je eigen computer en laat Claude erin kijken. Daarna stel je in gewone taal vragen aan je gegevens, en bouw je samen met Claude een eerste model op.</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<section aria-labelledby="h-hoe">
+<h2 id="h-hoe">Wat het oplevert</h2>
+<p><a href="https://neo4j.com/">Neo4j</a> is een database die gegevens opslaat als een graph: dingen (nodes) en de verbanden ertussen (relaties). Een NL-SfB-code die onder een hoofdgroep valt, een bouwdeel dat bij een ruimte hoort, een eis die op een element van toepassing is: zulke verbanden zijn in een graph geen bijzaak maar de kern. Na deze handleiding kan Claude Desktop die graph lezen, en later ook beschrijven.</p>
+<figure>
+<div class="pc" role="img" aria-label="Schema: op jouw computer praat Claude Desktop via een klein koppelprogramma met Neo4j Desktop. Alleen wat Claude uit de antwoorden leest, gaat mee naar Anthropic.">
+<small><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="14" height="9" rx="1.5"/><path d="M6 15h6M9 12v3"/></svg>Jouw computer</small>
+<div class="flow">
+<div class="node">
+<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h22v15H16l-6 5v-5H6z"/><path d="M11 12h12M11 17h8"/></svg>
+<b>Claude Desktop</b><span>Jij stelt een vraag. Claude bedenkt een query en vraagt de koppeling hem uit te voeren.</span>
+</div>
+<div class="arrow" aria-hidden="true"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h16M14 4l4 4-4 4M20 14H4M8 10l-4 4 4 4"/></svg></div>
+<div class="node">
+<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v8M22 6v8M8 14h18v4a9 9 0 0 1-18 0z"/><path d="M17 27v4"/></svg>
+<b>De koppeling</b><span>Een klein programma (een MCP-server) dat Claude Desktop zelf start. Het geeft de query door aan Neo4j.</span>
+</div>
+<div class="arrow" aria-hidden="true"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h16M14 4l4 4-4 4M20 14H4M8 10l-4 4 4 4"/></svg></div>
+<div class="node">
+<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="4"/><circle cx="25" cy="11" r="4"/><circle cx="15" cy="26" r="4"/><path d="M13 9.500l8 1M23 14.500l-6 8M10.500 13l3 9"/></svg>
+<b>Neo4j Desktop</b><span>De database met je graph. Hij draait alleen op je eigen computer.</span>
+</div>
+</div>
+<div class="cloud">
+<svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 22h13a5 5 0 0 0 .5-10A7 7 0 0 0 9 13a4.500 4.500 0 0 0 0 9z"/></svg>
+<p>De database zelf blijft op je computer. Wat Claude uit de antwoorden van de database leest, gaat wel mee in het gesprek naar Anthropic, net als alles wat je zelf typt.</p>
+</div>
+</div>
+<figcaption>Het schema laat zien welke onderdelen er zijn en wat er waarheen gaat.</figcaption>
+</figure>
+<p><b>MCP</b> (Model Context Protocol) is de afgesproken manier waarop Claude met andere programma's praat. De koppeling in het midden is zo'n MCP-server. Je installeert hem niet los: je zet in een instellingenbestand van Claude Desktop hoe hij gestart moet worden, en Claude Desktop doet de rest.</p>
+<p class="muted">We gebruiken in deze handleiding de koppeling <a href="https://github.com/neo4j-contrib/mcp-neo4j/tree/main/servers/mcp-neo4j-cypher">mcp-neo4j-cypher</a>, uit de verzameling van Neo4j Labs. Die gebruiken we zelf dagelijks. Hij heeft een stand waarin Claude alleen mag lezen; daarmee begin je.</p>
+</section>
+
+<section aria-labelledby="h-nodig">
+<h2 id="h-nodig">Wat je nodig hebt</h2>
+<ul class="needs">
+<li><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="16" height="12" rx="2"/><path d="M8 20h6"/></svg><div><b>Claude Desktop</b><span>De app voor Windows of Mac, die je al hebt. Niet de browserversie: alleen de app kan een programma op je computer starten. Houd hem bijgewerkt via <a href="https://claude.com/download">claude.com/download</a>.</span></div></li>
+<li><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="9" cy="17" r="3"/><path d="M9 6.500l4 1M14.500 10.500l-4 4M7 9l1.500 5"/></svg><div><b>Neo4j Desktop</b><span>Gratis, voor gebruik door jezelf op één computer. Installeren doe je in stap 1.</span></div></li>
+<li><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2l8 4.500v9L11 20l-8-4.500v-9z"/></svg><div><b>uv</b><span>Een gratis hulpprogramma dat de koppeling ophaalt en start. Installeren doe je in stap 4.</span></div></li>
+<li><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M11 6v5l3 2"/></svg><div><b>Drie kwartier</b><span>Het meeste is wachten op downloads. Je typt twee opdrachten en past één bestand aan.</span></div></li>
+</ul>
+<div class="mac"><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="9" rx="1.5"/><path d="M5 14h6"/></svg>Op een Mac</b><p>Alles werkt ook op een Mac. Waar het anders gaat, staat het in een kader zoals dit.</p></div>
+<p class="muted">De namen van knoppen en menu's komen uit de documentatie van Anthropic en Neo4j. In jouw versie kunnen ze iets anders heten of op een andere plek staan. Wat we niet zelf op de nieuwste versie hebben nagelopen, staat erbij als <i>nog niet getoetst</i>.</p>
+</section>
+
+<section class="step" aria-labelledby="h-s1">
+<div class="num" aria-hidden="true">1</div>
+<div class="body">
+<h2 id="h-s1">Installeer Neo4j Desktop</h2>
+<ol class="do">
+<li>Ga naar de downloadpagina van Neo4j: <a href="https://neo4j.com/deployment-center/?desktop-gdb">neo4j.com/deployment-center</a>, onderdeel <b>Neo4j Desktop</b>.</li>
+<li>Download de versie voor Windows. Neo4j vraagt soms om je naam en e-mailadres voordat de download begint.</li>
+<li>Dubbelklik op het gedownloade installatiebestand en klik de stappen door. De standaardinstellingen zijn goed.</li>
+<li>Start Neo4j Desktop.</li>
+</ol>
+<div class="mac"><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="9" rx="1.5"/><path d="M5 14h6"/></svg>Op een Mac</b><p>Dubbelklik op het <code>.dmg</code>-bestand in Downloads, sleep Neo4j Desktop naar de map Apps (Applications) en start het daar. De database zelf wordt op een Mac pas gedownload als je hem voor het eerst nodig hebt; zorg dan voor internet.</p></div>
+<p class="muted">Deze handleiding volgt Neo4j Desktop 2 (de <a href="https://neo4j.com/docs/desktop/current/installation/">installatie-uitleg van Neo4j</a>, Engels). Uitleg die je elders vindt over Desktop 1 klopt niet meer: de schermen zijn anders.</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> Neo4j Desktop is open en toont een leeg scherm met een knop om een instance te maken.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s2">
+<div class="num" aria-hidden="true">2</div>
+<div class="body">
+<h2 id="h-s2">Maak een oefendatabase en start hem</h2>
+<p>Een <b>instance</b> is een database-server op je computer. Je maakt er één, alleen om te oefenen.</p>
+<ol class="do">
+<li>Klik op <b>Get started</b> (de eerste keer) of op <b>Create instance</b>.</li>
+<li>Geef de instance een naam, bijvoorbeeld <code>oefenen</code>. Laat de voorgestelde Neo4j-versie staan.</li>
+<li>Kies een wachtwoord. <b>Neem een nieuw wachtwoord dat je nergens anders gebruikt.</b> Het komt straks leesbaar in een instellingenbestand te staan. Schrijf het op; je hebt het in stap 6 nodig.</li>
+<li>Noteer ook de gebruikersnaam. Die is normaal <code>neo4j</code>.</li>
+<li>Klik op <b>Create</b>. De instance krijgt het label <b>New</b>.</li>
+<li>Start de instance met de afspeelknop op de kaart. Wacht tot hij draait.</li>
+<li>Kijk op de kaart van de instance naar het adres. Het eindigt op <code>:7687</code>. Dat is de poort waarop de koppeling straks aanklopt.</li>
+</ol>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd venster van Neo4j Desktop met de kaart van de instance oefenen: de afspeelknop, het label en het adres gemarkeerd">
+<div class="win-bar"><i></i><i></i><i></i><span>Neo4j Desktop</span></div>
+<div class="win-body">
+<div class="row"><b style="font-size:1.2rem">Local instances</b><span class="fakebtn ghost" style="margin-left:auto">Create instance</span></div>
+<div class="card">
+<div class="row"><span class="play ring"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 1.500v9l7-4.500z"/></svg></span><span class="mark">1</span><b>oefenen</b><span class="pill">Running</span><span class="mark">2</span><span class="fakebtn ghost" style="margin-left:auto;padding:4px 10px">Connect ▾</span><span class="mark">3</span></div>
+<div class="row"><span class="meta ring">neo4j://127.0.0.1:7687</span><span class="mark">4</span><span class="meta">· versie 2025.x</span></div>
+</div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd; de echte app ziet er anders uit en het versienummer is een voorbeeld.</figcaption>
+<ul class="legend">
+<li><span class="mark">1</span><span>De afspeelknop: starten en stoppen.</span></li>
+<li><span class="mark">2</span><span>De stand van de instance. Hij moet draaien voordat Claude erbij kan.</span></li>
+<li><span class="mark">3</span><span>Connect: hier open je straks het Query-venster.</span></li>
+<li><span class="mark">4</span><span>Het adres met poort 7687.</span></li>
+</ul>
+</figure>
+<div class="note"><p><b>De app open hebben is niet genoeg.</b> De instance moet zelf gestart zijn. En hij draait alleen zolang Neo4j Desktop openstaat. Sluit je Neo4j Desktop, dan stopt de database en kan Claude er niet meer bij.</p></div>
+<h3>Even kijken in het Query-venster</h3>
+<p>Kies op de kaart <b>Connect</b> &gt; <b>Query</b>. Je krijgt een venster waarin je zelf opdrachten aan de database kunt geven. Typ <code>RETURN 1</code> en druk op de afspeelknop of <kbd>Ctrl</kbd>+<kbd>Enter</kbd>. Krijg je <code>1</code> terug, dan werkt de database. Dit venster is ook handig om straks na te kijken wat Claude heeft gedaan.</p>
+<p class="muted">Bron: <a href="https://neo4j.com/docs/desktop/current/operations/instance-management/">Instance management</a> in de documentatie van Neo4j Desktop (Engels).</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> De instance draait, en <code>RETURN 1</code> geeft in het Query-venster <code>1</code> terug.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s3">
+<div class="num" aria-hidden="true">3</div>
+<div class="body">
+<h2 id="h-s3">Zet de uitbreiding APOC aan</h2>
+<p>APOC is een uitbreiding van Neo4j. De koppeling heeft hem nodig om Claude de opbouw van je graph te laten zien: welke soorten nodes en relaties er zijn. Zonder APOC kan Claude wel queries draaien, maar niet het overzicht ophalen.</p>
+<ol class="do">
+<li>Open op de kaart van je instance het menu <b>[…]</b> en kies <b>Plugins</b>.</li>
+<li>Kies <b>APOC</b> en klik op <b>Install</b>. Wacht tot de installatie klaar is.</li>
+<li>Herstart de instance (stoppen en weer starten), zodat hij APOC laadt.</li>
+</ol>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd menu met de keuze Plugins en de uitbreiding APOC met een knop Install">
+<div class="win-bar"><i></i><i></i><i></i><span>Neo4j Desktop · oefenen</span></div>
+<div class="win-body">
+<div class="row"><span class="menu"><span>Overview</span><span class="on ring">Plugins</span><span>…</span></span><span class="mark">1</span></div>
+<div class="card"><div class="row"><b>APOC</b><span class="pill off">Not installed</span><span class="fakebtn ring" style="margin-left:auto;padding:4px 12px">Install</span><span class="mark">2</span></div></div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd. Volgens de documentatie staan bij een lokale instance APOC, Bloom, Gen AI en GDS in de lijst.</figcaption>
+</figure>
+<p class="unsure">Nog niet getoetst: de precieze knoppen in het Plugins-scherm van de nieuwste Neo4j Desktop. De documentatie zegt alleen dat je via <b>[…]</b> &gt; <b>Plugins</b> uitbreidingen installeert.</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> In het Query-venster geeft <code>RETURN apoc.version()</code> een versienummer terug in plaats van een foutmelding.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s4">
+<div class="num" aria-hidden="true">4</div>
+<div class="body">
+<h2 id="h-s4">Installeer uv en haal de koppeling alvast op</h2>
+<p>uv is het hulpprogramma waarmee Claude Desktop de koppeling start. Het bijbehorende commando heet <code>uvx</code>: het haalt een programma op en start het, zonder dat je zelf iets hoeft te installeren of bij te houden.</p>
+<ol class="do">
+<li>Druk op <kbd>Windows</kbd>, typ <code>PowerShell</code> en open <b>Windows PowerShell</b>. Je krijgt een venster met een knipperende cursor.</li>
+<li>Plak de opdracht hieronder en druk op <kbd>Enter</kbd>. Hij komt van de <a href="https://docs.astral.sh/uv/getting-started/installation/">officiële installatiepagina van uv</a> (Engels).</li>
+</ol>
+<div class="prompt">
+<div class="label"><span>Plak dit in PowerShell</span><button class="copy" type="button" data-target="p-uv">Kopieer</button></div>
+<pre id="p-uv">powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</pre>
+</div>
+<ol class="do" start="3">
+<li>Sluit PowerShell en open een nieuw venster. Pas dan kent Windows het nieuwe commando.</li>
+<li>Plak de tweede opdracht. Die haalt de koppeling op en laat zijn hulptekst zien. Zo staat hij klaar voor Claude Desktop, en weet je dat uv werkt.</li>
+</ol>
+<div class="prompt">
+<div class="label"><span>Plak dit in PowerShell</span><button class="copy" type="button" data-target="p-test">Kopieer</button></div>
+<pre id="p-test">uvx mcp-neo4j-cypher@0.6.0 --help</pre>
+</div>
+<p class="muted"><code>@0.6.0</code> legt de versie van de koppeling vast. Zo gedraagt hij zich morgen hetzelfde als vandaag. De eerste keer duurt het een halve minuut; uv haalt dan zo'n zestig onderdelen op.</p>
+<div class="mac"><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="9" rx="1.5"/><path d="M5 14h6"/></svg>Op een Mac</b><p>Open <b>Terminal</b> (via Spotlight: <kbd>Cmd</kbd>+<kbd>spatie</kbd>, typ Terminal) en plak in plaats van de eerste opdracht:</p><p><code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></p><p>Open daarna een nieuw Terminal-venster en plak dezelfde tweede opdracht als op Windows.</p></div>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> Je ziet een hulptekst die begint met <code>usage: mcp-neo4j-cypher</code>, met daarin onder meer <code>--read-only</code>. Een paar waarschuwingsregels erboven (<i>DeprecationWarning</i>) kun je negeren.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s5">
+<div class="num" aria-hidden="true">5</div>
+<div class="body">
+<h2 id="h-s5">Open het instellingenbestand van Claude Desktop</h2>
+<p>Claude Desktop leest bij het opstarten een bestand met de naam <code>claude_desktop_config.json</code>. Daarin staat welke koppelingen het moet starten.</p>
+<ol class="do">
+<li>Open Claude Desktop.</li>
+<li>Open <b>Settings</b> via het menu van de app (op Windows het menu linksboven, of je naam linksonder; op een Mac het menu <b>Claude</b> in de menubalk).</li>
+<li>Kies in de linkerkolom <b>Developer</b>.</li>
+<li>Klik op <b>Edit Config</b>. Er opent een map met het bestand <code>claude_desktop_config.json</code>, of het bestand opent meteen.</li>
+<li>Open het bestand met Kladblok: rechtsklik &gt; <b>Openen met</b> &gt; <b>Kladblok</b>.</li>
+</ol>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd instellingenvenster van Claude Desktop met Developer in de zijbalk en de knop Edit Config gemarkeerd">
+<div class="win-bar"><i></i><i></i><i></i><span>Settings</span></div>
+<div class="win-side">
+<nav><span>General</span><span>Account</span><span>Desktop app</span><span class="on ring">Developer</span></nav>
+<div class="win-body">
+<div class="row"><span class="mark">1</span><b>Local MCP servers</b></div>
+<p class="muted" style="font-size:0.95rem">Koppelingen die Claude Desktop op deze computer start.</p>
+<div class="row"><span class="fakebtn ring">Edit Config</span><span class="mark">2</span></div>
+</div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd; de indeling van de instellingen verandert geregeld.</figcaption>
+<ul class="legend">
+<li><span class="mark">1</span><span>Developer in de zijbalk.</span></li>
+<li><span class="mark">2</span><span>Edit Config: maakt het bestand aan als het er nog niet is en laat zien waar het staat.</span></li>
+</ul>
+</figure>
+<div class="note"><p><b>Zie je geen Developer?</b> In een nieuwere indeling staat het beheer van lokale koppelingen onder <b>Settings</b> &gt; <b>Desktop app</b>, bij <b>Extensions</b>. Je kunt het bestand ook direct openen: druk op <kbd>Windows</kbd>+<kbd>R</kbd>, typ <code>%APPDATA%\Claude</code> en druk op <kbd>Enter</kbd>.</p></div>
+<div class="mac"><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="9" rx="1.5"/><path d="M5 14h6"/></svg>Op een Mac</b><p>Het bestand staat in <code>~/Library/Application Support/Claude/</code>. Open het met TextEdit en kies in het menu <b>Opmaak</b> &gt; <b>Maak platte tekst</b>, zodat er geen opmaak in sluipt.</p></div>
+<p class="muted">Bronnen: <a href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">Connect to local MCP servers</a> en <a href="https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop">Getting started with local MCP servers</a> (beide Engels).</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> Het bestand <code>claude_desktop_config.json</code> staat open in Kladblok. Het kan leeg zijn, <code>{}</code> bevatten, of al wat tekst hebben.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s6">
+<div class="num" aria-hidden="true">6</div>
+<div class="body">
+<h2 id="h-s6">Zet de koppeling in het bestand</h2>
+<h3>Is het bestand leeg of staat er alleen <code>{}</code>?</h3>
+<p>Vervang alles door de tekst hieronder. Zet op de gemarkeerde plek het wachtwoord van je oefendatabase uit stap 2, tussen de aanhalingstekens. Sla op met <kbd>Ctrl</kbd>+<kbd>S</kbd>.</p>
+<div class="prompt">
+<div class="label"><span>Plak dit in claude_desktop_config.json</span><button class="copy" type="button" data-target="p-config">Kopieer</button></div>
+<pre id="p-config">{
+  "mcpServers": {
+    "neo4j-oefenen": {
+      "command": "uvx",
+      "args": ["mcp-neo4j-cypher@0.6.0", "--transport", "stdio"],
+      "env": {
+        "NEO4J_URI": "bolt://localhost:7687",
+        "NEO4J_USERNAME": "neo4j",
+        "NEO4J_PASSWORD": "<mark>jouw-oefenwachtwoord</mark>",
+        "NEO4J_DATABASE": "neo4j",
+        "NEO4J_READ_ONLY": "true"
+      }
+    }
+  }
+}</pre>
+</div>
+<h3>Wat er staat</h3>
+<ul class="plain">
+<li><code>neo4j-oefenen</code>: de naam waaronder je de koppeling in Claude terugziet. Kies gerust een andere, zonder spaties.</li>
+<li><code>uvx</code> en <code>mcp-neo4j-cypher@0.6.0</code>: start de koppeling die je in stap 4 hebt opgehaald.</li>
+<li><code>bolt://localhost:7687</code>: het adres van de database op je eigen computer.</li>
+<li><code>NEO4J_DATABASE</code>: de database binnen de instance. Een nieuwe instance heeft er één met de naam <code>neo4j</code>.</li>
+<li><code>NEO4J_READ_ONLY</code> op <code>"true"</code>: Claude mag alleen lezen. Hoe je schrijven later aanzet, staat bij het eerste gesprek.</li>
+</ul>
+<h3>Stond er al tekst in het bestand?</h3>
+<p>Dan heb je al andere koppelingen of instellingen. Vervang dan niets, maar laat het Claude doen in een gewoon gesprek:</p>
+<div class="prompt">
+<div class="label"><span>Plak dit in Claude</span><button class="copy" type="button" data-target="p-merge">Kopieer</button></div>
+<p id="p-merge">Hieronder staat de inhoud van mijn claude_desktop_config.json, met daaronder een nieuwe koppeling. Voeg de koppeling neo4j-oefenen toe binnen "mcpServers", zonder iets van het bestaande te veranderen, en geef me het hele bestand terug als geldige JSON. <em>[plak hier je huidige bestand]</em> <em>[plak hier het blok hierboven]</em></p>
+</div>
+<p class="muted">Laat daarbij je wachtwoord weg (zet <code>jouw-oefenwachtwoord</code> neer) en vul het pas in Kladblok zelf in.</p>
+<p class="muted">Bron voor de namen van de instellingen: de <a href="https://github.com/neo4j-contrib/mcp-neo4j/tree/main/servers/mcp-neo4j-cypher">uitleg bij mcp-neo4j-cypher</a> (Engels).</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> Het bestand is opgeslagen. Elke accolade die opent, sluit ook weer, en elke regel binnen een blok eindigt op een komma, behalve de laatste.</p></div>
+</div>
+</section>
+
+<section class="step" aria-labelledby="h-s7">
+<div class="num" aria-hidden="true">7</div>
+<div class="body">
+<h2 id="h-s7">Herstart Claude Desktop helemaal en controleer</h2>
+<ol class="do">
+<li>Sluit Claude Desktop <b>volledig</b> af. Op Windows: klik rechtsonder in het systeemvak (bij de klok, soms achter het pijltje <b>^</b>) met de rechtermuisknop op het pictogram van Claude en kies <b>Quit</b>. Het venster sluiten met het kruisje is niet genoeg: dan blijft Claude op de achtergrond draaien en leest het het bestand niet opnieuw.</li>
+<li>Controleer dat Neo4j Desktop open is en je instance draait.</li>
+<li>Start Claude Desktop opnieuw en open een nieuw gesprek.</li>
+<li>Klik linksonder in het invoerveld op de knop <b>+</b> en ga naar <b>Connectors</b>. Daar staat <code>neo4j-oefenen</code>.</li>
+<li>Bekijk de tools van de koppeling. In de alleen-lezen-stand zijn dat er twee.</li>
+</ol>
+<figure>
+<div class="win" role="img" aria-label="Nagebouwd venster van Claude met het menu Connectors open: de koppeling neo4j-oefenen met twee tools">
+<div class="win-bar"><i></i><i></i><i></i><span>Claude</span></div>
+<div class="win-body">
+<div class="row"><span class="menu"><span>Add files or photos</span><span class="on ring">Connectors ›</span></span><span class="mark">1</span><span class="menu"><span class="on">neo4j-oefenen <span class="pill" style="margin-left:6px">aan</span></span></span><span class="mark">2</span></div>
+<div class="card">
+<div class="toolrow"><span>get_neo4j_schema</span><span class="muted" style="font-family:var(--sans)">opbouw van de graph</span></div>
+<div class="toolrow"><span>read_neo4j_cypher</span><span class="muted" style="font-family:var(--sans)">lezen</span></div>
+</div>
+<div class="row"><span class="mark">3</span><span class="muted" style="font-size:0.95rem">Geen <code>write_neo4j_cypher</code>: schrijven staat uit.</span></div>
+<div class="field big"><b style="font-size:1.1rem;color:var(--ink)">+</b> Typ hier je vraag aan Claude</div>
+</div>
+</div>
+<figcaption>Het venster is nagebouwd; in jouw versie kan het menu anders heten of anders zijn ingedeeld.</figcaption>
+<ul class="legend">
+<li><span class="mark">1</span><span>Via de knop + in het invoerveld kom je bij Connectors.</span></li>
+<li><span class="mark">2</span><span>De koppeling met de naam uit je instellingenbestand.</span></li>
+<li><span class="mark">3</span><span>In de alleen-lezen-stand ontbreekt de tool om te schrijven. Dat is precies de bedoeling.</span></li>
+</ul>
+</figure>
+<div class="mac"><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="9" rx="1.5"/><path d="M5 14h6"/></svg>Op een Mac</b><p>Afsluiten doe je met <kbd>Cmd</kbd>+<kbd>Q</kbd> terwijl Claude actief is, of via het menu <b>Claude</b> &gt; <b>Quit Claude</b>.</p></div>
+<p class="unsure">Nog niet getoetst: de precieze namen in het menu Connectors van de nieuwste Claude Desktop. Wij zagen bij een eigen inrichting dat de tools pas na een volledige herstart verschenen.</p>
+<div class="done"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.500l4 4 8-9"/></svg><p><b>Gelukt?</b> <code>neo4j-oefenen</code> staat bij Connectors, met de tools <code>get_neo4j_schema</code> en <code>read_neo4j_cypher</code>.</p></div>
+</div>
+</section>
+
+<section aria-labelledby="h-gesprek">
+<h2 id="h-gesprek">Een eerste gesprek</h2>
+<p>Drie vragen om de koppeling te leren kennen. Claude vraagt de eerste keer dat het een tool gebruikt om je toestemming. Lees wat het wil doen en keur het goed als het past bij je vraag.</p>
+
+<h3>Vraag 1: wat staat er in de database?</h3>
+<div class="prompt">
+<div class="label"><span>Plak dit in Claude</span><button class="copy" type="button" data-target="p-q1">Kopieer</button></div>
+<p id="p-q1">Gebruik de koppeling neo4j-oefenen. Haal de opbouw van mijn graph op: welke soorten nodes, relaties en eigenschappen zijn er, en hoeveel nodes zijn er in totaal? Leg in gewone taal uit wat je ziet en welke query je daarvoor gebruikte.</p>
+</div>
+<p class="muted">Een nieuwe database is leeg. Claude zal dat ook zo zeggen. Daarmee weet je dat de koppeling werkt.</p>
+
+<h3>Tussendoor: schrijven aanzetten</h3>
+<p>Om iets in de graph te zetten moet Claude mogen schrijven. Doe dit pas als vraag 1 werkte.</p>
+<ol class="do">
+<li>Open <code>claude_desktop_config.json</code> opnieuw, zoals in stap 5.</li>
+<li>Verander <code>"NEO4J_READ_ONLY": "true"</code> in <code>"NEO4J_READ_ONLY": "false"</code> en sla op.</li>
+<li>Sluit Claude Desktop volledig af via het systeemvak (<b>Quit</b>) en start het opnieuw.</li>
+<li>Bij Connectors staat nu een derde tool: <code>write_neo4j_cypher</code>.</li>
+</ol>
+<p class="muted">Klaar met oefenen? Zet het terug op <code>"true"</code>. Lezen is de veilige stand om in te werken.</p>
+
+<h3>Vraag 2: een paar nodes maken, na jouw akkoord</h3>
+<div class="prompt">
+<div class="label"><span>Plak dit in Claude</span><button class="copy" type="button" data-target="p-q2">Kopieer</button></div>
+<p id="p-q2">Ik wil een klein stukje NL-SfB oefenen in de graph. Maak een node voor hoofdgroep <em>(2-) Ruwbouw</em> en nodes voor de elementen <em>(21) Buitenwanden</em>, <em>(22) Binnenwanden</em> en <em>(23) Vloeren</em>, elk met een relatie naar de hoofdgroep. Gebruik de code als sleutel en zorg dat dezelfde code nooit twee keer kan voorkomen. Laat me eerst de query zien en leg in gewone woorden uit wat hij doet. Voer niets uit voordat ik akkoord geef.</p>
+</div>
+<p class="muted">Claude laat een query zien en wacht. Pas als jij “akkoord” zegt, voert het hem uit en meldt het hoeveel nodes en relaties er zijn bijgekomen. Kijk gerust na in het Query-venster van Neo4j Desktop met <code>MATCH (n) RETURN n</code>: je ziet de nodes dan als bolletjes met lijnen.</p>
+
+<h3>Vraag 3: een vraag aan je gegevens</h3>
+<div class="prompt">
+<div class="label"><span>Plak dit in Claude</span><button class="copy" type="button" data-target="p-q3">Kopieer</button></div>
+<p id="p-q3">Welke elementen vallen onder hoofdgroep (2-)? Geef ze gesorteerd op code, en laat ook de query zien die je gebruikte, met een korte uitleg per regel.</p>
+</div>
+<p>Je krijgt nu je eigen gegevens terug, opgehaald via de graph. Met de uitleg per regel leer je ondertussen de querytaal van Neo4j lezen. Die heet <a href="https://neo4j.com/docs/cypher-manual/current/introduction/">Cypher</a>.</p>
+</section>
+
+<section aria-labelledby="h-veilig">
+<h2 id="h-veilig">Veilig werken</h2>
+<ul class="rules">
+<li><b>Een aparte oefendatabase</b><span>Begin in een instance die alleen voor oefenen is. Gaat er iets mis, dan verwijder je hem en maak je een nieuwe. Echte gegevens zet je er pas in als je weet wat je doet.</span></li>
+<li><b>Standaard alleen lezen</b><span>Met <code>NEO4J_READ_ONLY</code> op <code>"true"</code> heeft Claude geen tool om te schrijven, en weigert de koppeling elke query die iets zou veranderen. Zet schrijven alleen aan als je het nodig hebt.</span></li>
+<li><b>Het wachtwoord staat leesbaar</b><span>Iedereen die het instellingenbestand kan openen, ziet het wachtwoord. Gebruik daarom een eigen wachtwoord voor de oefendatabase, nooit een dat je elders gebruikt. Deel het bestand niet en plak het niet met wachtwoord en al in een gesprek.</span></li>
+<li><b>Eerst laten voorlezen</b><span>Vraag Claude bij elke wijziging eerst de query te tonen en in gewone woorden te zeggen wat er verandert, hoeveel nodes het raakt en of het terug te draaien is. Pas daarna geef je akkoord.</span></li>
+</ul>
+<div class="note"><p><b>Weggooien gaat snel.</b> Eén query kan alles wissen. Een goede gewoonte: laat Claude vóór elke verwijdering eerst tellen wat er weg zou gaan, en kijk naar dat aantal voordat je akkoord geeft.</p></div>
+</section>
+
+<section aria-labelledby="h-mis">
+<h2 id="h-mis">Als het niet werkt</h2>
+<p class="muted">Eerste hulp bij elke foutmelding: kopieer de melding en plak hem bij Claude met de vraag wat er misgaat. Laat het wachtwoord daarbij weg.</p>
+<div class="faq">
+<details><summary>Claude meldt dat de verbinding met localhost:7687 geweigerd wordt</summary><div><p>Meestal is de database niet gestart. Neo4j Desktop open hebben is niet genoeg: de instance moet op de kaart als draaiend staan. Start hem met de afspeelknop en vraag Claude het opnieuw te proberen. Draait er een andere instance, dan staat die op dezelfde poort; er kan er maar één tegelijk draaien.</p></div></details>
+<details><summary>De koppeling staat niet bij Connectors</summary><div><p>Sluit Claude Desktop volledig af via het systeemvak (<b>Quit</b>) en start opnieuw. Een venster sluiten is niet genoeg: dan wordt het instellingenbestand niet opnieuw gelezen.</p><p>Staat hij er daarna nog niet, dan zit er waarschijnlijk een tikfout in het bestand. Plak de inhoud (zonder wachtwoord) bij Claude en vraag: “Is dit geldige JSON? Wijs de fout aan.”</p></div></details>
+<details><summary>De koppeling staat er, maar meldt een fout zoals “uvx not found” of start niet</summary><div><p>Claude Desktop vindt het programma <code>uvx</code> niet. Zet dan het volledige pad in het bestand. Op Windows staat het meestal op <code>C:\Users\<i>jouw-naam</i>\.local\bin\uvx.exe</code>; typ in PowerShell <code>where.exe uvx</code> om het zeker te weten. In het bestand schrijf je elke backslash dubbel: <code>"command": "C:\\Users\\jouw-naam\\.local\\bin\\uvx.exe"</code>.</p><p>Op een Mac geeft <code>which uvx</code> in Terminal het pad. Programma's die je via het Dock start, kennen niet altijd dezelfde paden als Terminal. (Op een Mac nog niet getoetst.)</p></div></details>
+<details><summary>Ik heb het wachtwoord veranderd, maar Claude blijft “authentication failure” melden</summary><div><p>Na een paar keer herstarten kunnen oude exemplaren van de koppeling op de achtergrond blijven draaien, met het oude wachtwoord nog in hun geheugen. Sluit Claude Desktop af, open Taakbeheer (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd>), zoek bij Processen naar <code>mcp-neo4j-cypher</code>, <code>uvx</code> of <code>python</code>, en beëindig die. Of herstart de computer; dat is de zekerste weg.</p></div></details>
+<details><summary>Claude kan de opbouw van de graph niet ophalen</summary><div><p>De tool <code>get_neo4j_schema</code> heeft de uitbreiding APOC nodig. Installeer APOC zoals in stap 3 en herstart de instance. Gewone queries werken ook zonder APOC.</p></div></details>
+<details><summary>Claude zegt dat het niet kan schrijven</summary><div><p>Dat klopt in de alleen-lezen-stand. Zet <code>NEO4J_READ_ONLY</code> op <code>"false"</code> zoals bij het eerste gesprek, en herstart Claude Desktop volledig.</p></div></details>
+<details><summary>De eerste start duurt lang of loopt vast</summary><div><p>Bij de allereerste start haalt uv de koppeling op. Doe stap 4 opnieuw (de opdracht met <code>--help</code>) zodat alles al klaarstaat, en herstart Claude Desktop daarna.</p></div></details>
+<details><summary>Waar staan de logbestanden?</summary><div><p>Claude Desktop schrijft per koppeling een logbestand: op Windows in <code>%APPDATA%\Claude\logs</code>, op een Mac in <code>~/Library/Logs/Claude</code>. Het bestand <code>mcp-server-neo4j-oefenen.log</code> laat zien wat de koppeling meldde. Bron: <a href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">Connect to local MCP servers</a> (Engels).</p></div></details>
+</div>
+</section>
+
+<section class="origin" aria-labelledby="h-herkomst">
+<p class="kicker">Waar deze handleiding vandaan komt</p>
+<h2 id="h-herkomst">Uit ons eigen werk</h2>
+<p>Bij bimforce werkt Claude dagelijks met Neo4j, op precies deze manier. De valkuilen in “Als het niet werkt” zijn de valkuilen waar wij zelf in liepen: een database die niet gestart was, een venster dat dicht ging terwijl Claude bleef draaien, een oud wachtwoord dat bleef hangen. Leja legde ze vast terwijl het werk liep. Daardoor staan ze nu hier.</p>
+<p>Een AI-model begint elk gesprek opnieuw. Wat het gisteren met je uitzocht, weet het vandaag niet meer. Leja is het bedrijfsgeheugen dat daartussen zit: een knowledge graph op een eigen server, waarin beslissingen en lessen blijven staan en waar elk model en elke collega op verder werkt.</p>
+<p class="say">Modellen wisselen. Het geheugen blijft.</p>
+<p>Hoe dat eruitziet, staat op <a href="https://leja.bimforce.com/">leja.bimforce.com</a>.</p>
+</section>
+
+<section class="next" aria-labelledby="h-verder">
+<p class="kicker">Hierna</p>
+<h2 id="h-verder">Verder met de handleiding “Werken met Neo4j”</h2>
+<p>De koppeling werkt. In de vervolghandleiding <b>Werken met Neo4j</b> leer je hoe je een eigen datamodel opzet vanuit de vragen die je wilt kunnen stellen, gegevens uit Excel of CSV inleest, en de taal Cypher stap voor stap leest en schrijft, steeds samen met Claude.</p>
+</section>
+
+</main>
+
+<footer class="wrap">
+<p>Leja van bimforce · <a href="https://bimforce.com/">bimforce.com</a> · Neo4j is een merk van Neo4j, Inc. De koppeling mcp-neo4j-cypher is open source software van Neo4j Labs. Claude is een product van Anthropic.</p>
+</footer>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function () { btn.textContent = 'Gekopieerd'; setTimeout(function () { btn.textContent = 'Kopieer'; }, 1800); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Geselecteerd, druk Ctrl+C';
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+
+</body>
+</html>
