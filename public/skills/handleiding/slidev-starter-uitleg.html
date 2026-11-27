@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slidev-starter: uitleg</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Gemaakt met een script uit een markdown-bron. Niet met de hand bijwerken: pas de bron aan
+   en maak de pagina opnieuw. Ook te plaatsen als losse pagina op de website. */
+:root {
+  --ground: #f3f5f7; --surface: #fdfdfd; --sunken: #e7ecef;
+  --ink: #1c2a41; --ink-2: #475365; --ink-3: #5f6977;
+  --line: #d9dee4; --line-strong: #788290;
+  --brand: #1c2a41; --on-brand: #e7ecef; --on-brand-2: #9fb0c3; --brand-teal: #35b8c4;
+  --accent: #0c6980; --accent-hover: #0a5568; --accent-soft: #dff1f4;
+  --spark: #e0a526; --spark-soft: #fbefd2;
+  --ok: #27724d; --ok-soft: #e1f2e8;
+  --warn: #a3412b; --warn-soft: #f8e4de;
+  --sans: 'Source Sans 3', 'Myriad Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Source Code Pro', Consolas, Monaco, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+    --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+    --line: #2a3a52; --line-strong: #6a7c96;
+    --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-teal: #35b8c4;
+    --accent: #35b8c4; --accent-hover: #5ccbd5; --accent-soft: #163a44;
+    --spark: #f0b840; --spark-soft: #3a2f14;
+    --ok: #5cc28b; --ok-soft: #173627;
+    --warn: #ef8f78; --warn-soft: #3d1f19;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #0f1826; --surface: #172234; --sunken: #1f2d43;
+  --ink: #e7ecef; --ink-2: #abb8c6; --ink-3: #8c99a8;
+  --line: #2a3a52; --line-strong: #6a7c96;
+  --brand: #0b1320; --on-brand: #e7ecef; --on-brand-2: #8593a3; --brand-teal: #35b8c4;
+  --accent: #35b8c4; --accent-hover: #5ccbd5; --accent-soft: #163a44;
+  --spark: #f0b840; --spark-soft: #3a2f14;
+  --ok: #5cc28b; --ok-soft: #173627;
+  --warn: #ef8f78; --warn-soft: #3d1f19;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.55; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 3px solid var(--spark); outline-offset: 2px; border-radius: 4px; }
+h1, h2 { line-height: 1.15; margin: 0; }
+p { margin: 0; }
+code { font-family: var(--mono); font-size: 0.9em; background: var(--sunken); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.band { background: var(--brand); color: var(--on-brand); }
+.wrap { max-width: 44rem; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+.band .wrap { padding-block: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.kicker { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--brand-teal); }
+.band h1 { font-size: clamp(1.9rem, 5vw, 2.5rem); font-weight: 700; }
+.band .lead { color: var(--on-brand-2); font-size: 1.15rem; max-width: 36rem; }
+main.wrap { padding-block: 32px 48px; display: flex; flex-direction: column; gap: 40px; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+h2 { font-size: 1.45rem; font-weight: 700; }
+ul.plain, ul.check { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: 8px; }
+ul.check { list-style: none; padding-left: 0; }
+ul.check li { position: relative; padding-left: 1.6rem; }
+ul.check li::before { content: ''; position: absolute; left: 0.2rem; top: 0.5em; width: 0.55rem; height: 0.3rem; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 0 12px; align-items: baseline; }
+.step > .num { font-size: 2.2rem; font-weight: 700; line-height: 1; color: var(--accent); }
+.step > .body { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.note { border-left: 3px solid var(--spark); background: var(--spark-soft); border-radius: 0 8px 8px 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.prompt { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.prompt .label { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.prompt pre { margin: 0; font-family: var(--mono); font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--sunken); border-radius: 6px; padding: 8px 12px; }
+button.copy { font: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 4px; padding: 3px 10px; cursor: pointer; }
+button.copy:hover { background: var(--accent-soft); }
+footer.wrap { padding-block: 0 36px; color: var(--ink-3); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<header class="band">
+<div class="wrap">
+<p class="kicker">bimforce · uitleg bij een skill</p>
+<h1>Slidev-starter</h1>
+<p class="lead">Claude zet een presentatie op in Slidev, schrijft de slides met je mee, toont ze in de browser en exporteert naar PDF en PowerPoint. Voor wie een presentatormodus, eigen kleuren en een uitgebreidere export wil.</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<section aria-labelledby="wat">
+<h2 id="wat">Wat het doet</h2>
+<ul class="check">
+<li>Controleert of Node.js er staat en zegt wat je moet doen als het ontbreekt.</li>
+<li>Vraagt eerst naar de boodschap, de zaal en de duur, en laat een opzet in kopjes zien.</li>
+<li>Zet een nieuw deck op in een map die jij kiest, in een rustige zakelijke stijl.</li>
+<li>Opent de presentatie in je browser, met een presentatormodus voor notities, de volgende slide en een klok.</li>
+<li>Controleert de slides op lege regels die een deel van een slide laten verdwijnen.</li>
+<li>Exporteert naar PDF en PowerPoint.</li>
+</ul>
+</section>
+
+<section aria-labelledby="nodig">
+<h2 id="nodig">Wat je nodig hebt</h2>
+<div class="card">
+<ul class="plain">
+<li>Claude Desktop met een betaald abonnement (onderdeel Code).</li>
+<li>Node.js 22.22 of hoger.</li>
+<li>Het bestand slidev-starter.zip.</li>
+<li>Internet en wat schijfruimte: Claude installeert Slidev in de map van de presentatie, en bij de eerste export een onzichtbare browser van ruim 100 MB.</li>
+</ul>
+</div>
+</section>
+
+<section aria-labelledby="beginnen">
+<h2 id="beginnen">Zo begin je</h2>
+<div class="step"><div class="num">1</div><div class="body"><p>Installeer Node.js (de LTS-versie van nodejs.org) en herstart Claude Desktop.</p></div></div>
+<div class="step"><div class="num">2</div><div class="body"><p>Maak een map voor je presentaties en open die in Claude Desktop, onderdeel Code.</p></div></div>
+<div class="step"><div class="num">3</div><div class="body"><p>Download slidev-starter.zip op knowledge.bimforce.com/skills en vraag Claude de skill uit te pakken naar je persoonlijke skills-map.</p></div></div>
+<div class="step"><div class="num">4</div><div class="body"><p>Begin een nieuwe sessie in dezelfde map en vraag om je eerste presentatie.</p></div></div>
+</section>
+
+<section aria-labelledby="vragen">
+<h2 id="vragen">Voorbeelden van vragen</h2>
+<div class="prompt"><div class="label">Typ in Claude <button type="button" class="copy" data-target="vraag-1">Kopieer</button></div><pre id="vraag-1">Maak een presentatie van 20 minuten over [onderwerp] voor [publiek]. Laat eerst een opzet in kopjes zien.</pre></div>
+<div class="prompt"><div class="label">Typ in Claude <button type="button" class="copy" data-target="vraag-2">Kopieer</button></div><pre id="vraag-2">Open de presentatie in mijn browser.</pre></div>
+<div class="prompt"><div class="label">Typ in Claude <button type="button" class="copy" data-target="vraag-3">Kopieer</button></div><pre id="vraag-3">Gebruik de kleuren van ons bedrijf.</pre></div>
+<div class="prompt"><div class="label">Typ in Claude <button type="button" class="copy" data-target="vraag-4">Kopieer</button></div><pre id="vraag-4">Exporteer naar PDF en PowerPoint.</pre></div>
+</section>
+
+<section aria-labelledby="grenzen">
+<h2 id="grenzen">Grenzen</h2>
+<div class="note">
+<ul class="plain">
+<li>Claude schrijft geen slides voordat je de opzet hebt goedgekeurd.</li>
+<li>Voor je presentatie wijzigt Claude niets buiten de map van de presentatie, en Claude past geen beveiligingsinstellingen van Windows aan.</li>
+<li>Notities die je zelf schreef, overschrijft Claude niet.</li>
+<li>In de PowerPoint is elke slide een afbeelding: tekst is daar niet te bewerken. Sprekersnotities gaan wel mee.</li>
+<li>Claude Desktop vraagt toestemming voordat Claude een programma start of een bestand wijzigt; lees de vraag en keur hem goed als hij past.</li>
+</ul>
+</div>
+</section>
+
+<section aria-labelledby="meer">
+<h2 id="meer">Meer lezen</h2>
+<ul class="plain">
+<li><a href="https://knowledge.bimforce.com/skills#slidev-starter" target="_blank" rel="noopener noreferrer">De skill op knowledge.bimforce.com</a></li>
+<li><a href="https://knowledge.bimforce.com/skills/handleiding/presentatie-met-claude.html" target="_blank" rel="noopener noreferrer">Handleiding: een presentatie bouwen met Claude (deel 2)</a></li>
+<li><a href="https://sli.dev" target="_blank" rel="noopener noreferrer">Documentatie van Slidev</a></li>
+</ul>
+</section>
+
+</main>
+
+<footer class="wrap"><p>Bij de skill <code>slidev-starter</code>. Een korte uitleg; de skill zelf bevat de volledige werkwijze.</p></footer>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function () { btn.textContent = 'Gekopieerd'; setTimeout(function () { btn.textContent = 'Kopieer'; }, 1800); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Geselecteerd, druk Ctrl+C';
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+</body>
+</html>
