@@ -42,7 +42,10 @@ export const skills: Skill[] = [
       'Claude in de browser of in de app, ook op het gratis abonnement',
       'De instelling voor bestanden maken staat aan',
     ],
-    handleidingen: [{ label: 'Handleiding: een presentatie bouwen met Claude', href: '/skills/handleiding/presentatie-met-claude.html' }],
+    handleidingen: [
+      { label: 'Uitleg in het kort', href: '/skills/handleiding/presentatie-starter-uitleg.html' },
+      { label: 'Handleiding: een presentatie bouwen met Claude', href: '/skills/handleiding/presentatie-met-claude.html' },
+    ],
     status: 'beschikbaar',
   },
   {
@@ -59,7 +62,10 @@ export const skills: Skill[] = [
       'Claude Desktop met een betaald abonnement (onderdeel Code)',
       'Node.js 22.22 of hoger',
     ],
-    handleidingen: [{ label: 'Handleiding: een presentatie bouwen met Claude (deel 2)', href: '/skills/handleiding/presentatie-met-claude.html' }],
+    handleidingen: [
+      { label: 'Uitleg in het kort', href: '/skills/handleiding/slidev-starter-uitleg.html' },
+      { label: 'Handleiding: een presentatie bouwen met Claude (deel 2)', href: '/skills/handleiding/presentatie-met-claude.html' },
+    ],
     status: 'beschikbaar',
   },
   {
@@ -102,7 +108,10 @@ export const skills: Skill[] = [
       'Revit 2025 of 2026 met de Revit Agent-addin',
       'Python 3.10 of hoger',
     ],
-    handleidingen: [{ label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' }],
+    handleidingen: [
+      { label: 'Uitleg in het kort', href: '/skills/handleiding/revit-agent-uitleg.html' },
+      { label: 'Naslag: alle opdrachten van de addin', href: '/skills/revit-agent/opdrachten/' },
+    ],
     status: 'beschikbaar',
   },
   {
@@ -121,6 +130,7 @@ export const skills: Skill[] = [
       'Python 3.10 of hoger',
       'Voor het uitlezen en herstellen van een model: Revit 2025 of 2026 met de Revit Agent-addin',
     ],
+    handleidingen: [{ label: 'Uitleg in het kort', href: '/skills/handleiding/nlrs-agent-uitleg.html' }],
     status: 'beschikbaar',
   },
   {
@@ -139,6 +149,7 @@ export const skills: Skill[] = [
       'Python 3.10 of hoger; de skill installeert IfcOpenShell in een eigen omgeving',
       'Voor de export zelf: Revit 2025 of 2026 met de Revit Agent-addin',
     ],
+    handleidingen: [{ label: 'Uitleg in het kort', href: '/skills/handleiding/ifc-ils-export-uitleg.html' }],
     status: 'beschikbaar',
   },
   {
@@ -157,6 +168,7 @@ export const skills: Skill[] = [
       'Python 3.10 of hoger; de skill installeert IfcOpenShell en ifctester in een eigen omgeving',
       'Voor de controle in het model: Revit 2025 of 2026 met de Revit Agent-addin',
     ],
+    handleidingen: [{ label: 'Uitleg in het kort', href: '/skills/handleiding/ils-check-uitleg.html' }],
     status: 'beschikbaar',
   },
   {
